@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="1.0.0" group="system" method="upgrade">
+    <name>PLG_YTDYNAMICS</name>
+    <creationDate>24.03.2024</creationDate>
+    <author>Tsymbal</author>
+    <authorEmail>cymbal@delo-design.ru</authorEmail>
+    <authorUrl>https://delo-design.ru</authorUrl>
+    <copyright>Copyright © 2020 Delo Design. All rights reserved.</copyright>
+    <license>commerce</license>
+    <version>1.0.0</version>
+    <description>PLG_YTDYNAMICS_XML_DESCRIPTION</description>
+    <namespace path="src">Joomla\Plugin\System\YTDynamics</namespace>
+    <files>
+        <folder>services</folder>
+        <folder plugin="ytdynamics">src</folder>
+    </files>
+    <config>
+        <fields name="params">
+            <fieldset name="basic"></fieldset>
+        </fields>
+    </config>
+</extension>
