@@ -128,7 +128,7 @@ class ProductsQueryType
 
 	public static function resolve($root, array $args)
 	{
-		$model = Factory::getApplication()->bootComponent('com_rz')
+		$model = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
 			->createModel('Products', 'Administrator', ['ignore_request' => true]);
 
