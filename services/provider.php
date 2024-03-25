@@ -6,29 +6,29 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
-use Joomla\Plugin\System\YTDynamics\Extension\Yoomultisite;
+use Joomla\Plugin\System\YTDynamics\Extension\YTDynamics;
 
 return new class implements ServiceProviderInterface {
 
-    /**
-     * Registers the service provider with a DI container.
-     *
-     * @param   Container  $container  The DI container.
-     *
-     * @since   1.0.0
-     */
-    public function register(Container $container)
-    {
-        $container->set(PluginInterface::class,
-            function (Container $container) {
-                $plugin  = PluginHelper::getPlugin('system', 'ytdynamics');
-                $subject = $container->get(DispatcherInterface::class);
+	/**
+	 * Registers the service provider with a DI container.
+	 *
+	 * @param   Container  $container  The DI container.
+	 *
+	 * @since   1.0.0
+	 */
+	public function register(Container $container)
+	{
+		$container->set(PluginInterface::class,
+			function (Container $container) {
+				$plugin  = PluginHelper::getPlugin('system', 'ytdynamics');
+				$subject = $container->get(DispatcherInterface::class);
 
-                $plugin = new YTDynamics($subject, (array) $plugin);
-                $plugin->setApplication(Factory::getApplication());
+				$plugin = new YTDynamics($subject, (array) $plugin);
+				$plugin->setApplication(Factory::getApplication());
 
-                return $plugin;
-            }
-        );
-    }
+				return $plugin;
+			}
+		);
+	}
 };
