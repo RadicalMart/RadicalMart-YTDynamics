@@ -1,9 +1,9 @@
-<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme;
+<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class ProductsQueryType
+class CustomProductsQueryType
 {
 	/**
 	 * @return array
@@ -12,7 +12,7 @@ class ProductsQueryType
 	{
 		return [
 			'fields' => [
-				'Offices' => [
+				'CustomProducts' => [
 					'type' => [
 						'listOf' => 'ProductType'
 					],
@@ -41,8 +41,8 @@ class ProductsQueryType
 					],
 
 					'metadata' => [
-						'label'  => trans('Products'),
-						'group'  => trans('Custom'),
+						'label'  => trans('Custom Product'),
+						'group'  => trans('RadicalMart'),
 						'fields' => [
 							'category'       => [
 								'label'   => trans('Filter by category'),

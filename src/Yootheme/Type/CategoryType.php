@@ -1,4 +1,4 @@
-<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme;
+<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
 use function YOOtheme\trans;
 
