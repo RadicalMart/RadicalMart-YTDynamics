@@ -23,16 +23,21 @@ class MatchTemplate
 
 		$context = $view->get('context');
 
-		if ($context === 'com_radicalmart.product') {
-			$item = $view->get('item');
+		if ($context === 'com_radicalmart.product')
+		{
+			$item        = $view->get('item');
+			$variability = $view->get('variability');
 
 			return [
-				'type' => $context,
-				'query' => [
+				'type'    => $context,
+				'query'   => [
 					'catid' => $item->catid,
-					'lang' => $this->language,
+					'lang'  => $this->language,
 				],
-				'params' => ['item' => $item],
+				'params'  => [
+					'item'        => $item,
+					'variability' => $variability
+				],
 				'editUrl' => $item->params->get('access-edit')
 					? Route::_(
 						RouteHelper::getFormRoute($item->id) .

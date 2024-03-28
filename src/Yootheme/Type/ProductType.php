@@ -27,6 +27,13 @@ class ProductType
 					],
 				],
 
+				'fulltext' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Fulltext'),
+					],
+				],
+
 				'in_stock' => [
 					'type'     => 'String',
 					'metadata' => [
@@ -89,6 +96,15 @@ class ProductType
 					'extensions' => [
 						'call' => __CLASS__ . '::media',
 					],
+				],
+
+				'fields' => [
+					'type'       => [
+						'listOf' => 'FieldType'
+					],
+					'metadata'   => [
+						'label' => trans('Fields'),
+					],
 				]
 			],
 
@@ -111,6 +127,7 @@ class ProductType
 
 	public static function media($item, $args)
 	{
+
 		$media   = $item->media;
 		$gallery = $media->get('gallery');
 
