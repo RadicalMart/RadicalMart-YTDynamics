@@ -14,10 +14,12 @@ class LoadSourceTypes
 			Type\CustomCategoriesQueryType::config(),
 			Type\CustomProductsQueryType::config(),
 			Type\ProductsQueryType::config(),
+			Type\ProductQueryType::config(),
 		];
 
 		$types = [
 			['CategoryType', Type\CategoryType::config()],
+			['ProductListType', Type\ProductListType::config()],
 			['ProductType', Type\ProductType::config()],
 			['PriceType', Type\PriceType::config()],
 			['ImageType', Type\ImageType::config()],

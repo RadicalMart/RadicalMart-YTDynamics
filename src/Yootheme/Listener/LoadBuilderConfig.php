@@ -37,21 +37,31 @@ class LoadBuilderConfig
 			'show'         => 'yootheme.builder.languages.length > 1 || lang',
 		];
 
-		$category = [
-			'label'       => trans('Limit by Categories'),
-			'description' => trans(
-				'The template is only assigned to articles from the selected categories. Articles from child categories are not included. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple categories.',
-			),
-			'type'        => 'select',
-			'default'     => [],
-			'options'     => [['evaluate' => 'yootheme.builder.radicalmart_categories']],
-			'attrs'       => [
-				'multiple' => true,
-				'class'    => 'uk-height-small',
-			],
-		];
-
 		$templates = [
+			'com_radicalmart.product' => [
+				'label'    => trans('Single Product'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'catid' => ($category = [
+								'label'       => trans('Limit by Categories'),
+								'description' => trans(
+									'The template is only assigned to articles from the selected categories. Articles from child categories are not included. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple categories.',
+								),
+								'type'        => 'select',
+								'default'     => [],
+								'options'     => [['evaluate' => 'yootheme.builder.radicalmart_categories']],
+								'attrs'       => [
+									'multiple' => true,
+									'class'    => 'uk-height-small',
+								],
+							]),
+							'lang'  => $languageField,
+						],
+					],
+				],
+			],
+
 			'com_radicalmart.category' => [
 				'label'    => trans('Category RadicalMart'),
 				'fieldset' => [

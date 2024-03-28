@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class ProductType
+class ProductListType
 {
 	/**
 	 * @return array
@@ -80,9 +80,7 @@ class ProductType
 				],
 
 				'media' => [
-					'type'       => [
-						'listOf' => 'ImageType'
-					],
+					'type'       => 'ImageType',
 					'metadata'   => [
 						'label' => trans('Media'),
 					],
@@ -113,8 +111,9 @@ class ProductType
 	{
 		$media   = $item->media;
 		$gallery = $media->get('gallery');
+		$first   = array_shift($gallery);
 
-		return (array) $gallery;
+		return (array) $first;
 	}
 
 }

@@ -12,7 +12,7 @@ class ProductsQueryType
 		return [
 			'fields' => [
 				'product'  => [
-					'type'       => 'ProductType',
+					'type'       => 'ProductListType',
 					'args'       => [
 						'offset' => [
 							'type' => 'Int',
@@ -44,7 +44,7 @@ class ProductsQueryType
 				],
 				'products' => [
 					'type'       => [
-						'listOf' => 'ProductType',
+						'listOf' => 'ProductListType',
 					],
 					'args'       => [
 						'offset' => [

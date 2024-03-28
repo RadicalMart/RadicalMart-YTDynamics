@@ -1,6 +1,9 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Listener;
 
 use Joomla\CMS\Document\Document;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
 
 class MatchTemplate
 {
@@ -18,8 +21,27 @@ class MatchTemplate
 			return null;
 		}
 
-		$layout  = $view->getLayout();
 		$context = $view->get('context');
+
+		if ($context === 'com_radicalmart.product') {
+			$item = $view->get('item');
+
+			return [
+				'type' => $context,
+				'query' => [
+					'catid' => $item->catid,
+					'lang' => $this->language,
+				],
+				'params' => ['item' => $item],
+				'editUrl' => $item->params->get('access-edit')
+					? Route::_(
+						RouteHelper::getFormRoute($item->id) .
+						'&return=' .
+						base64_encode(Uri::getInstance()),
+					)
+					: null,
+			];
+		}
 
 		if ($context === 'com_radicalmart.category')
 		{
