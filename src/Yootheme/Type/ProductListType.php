@@ -80,7 +80,7 @@ class ProductListType
 				],
 
 				'media' => [
-					'type'       => 'ImageType',
+					'type'       => 'ProductImageType',
 					'metadata'   => [
 						'label' => trans('Media'),
 					],

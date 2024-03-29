@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class ImageType
+class ProductImageType
 {
 
 	public static function config()

@@ -13,6 +13,21 @@ class ProductType
 
 		return [
 			'fields' => [
+
+				'id' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('ID'),
+					],
+				],
+
+				'link' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Link'),
+					],
+				],
+
 				'title' => [
 					'type'     => 'String',
 					'metadata' => [
@@ -62,7 +77,16 @@ class ProductType
 					],
 				],
 
-				'categories' => [
+				'prices' => [
+					'type'     => [
+						'listOf' => 'PriceType'
+					],
+					'metadata' => [
+						'label' => trans('Prices'),
+					],
+				],
+
+				'category' => [
 					'type'       => 'CategoryType',
 					'metadata'   => [
 						'label' => trans('Category'),
@@ -72,23 +96,18 @@ class ProductType
 					],
 				],
 
-				'link' => [
-					'type'     => 'String',
-					'metadata' => [
-						'label' => trans('Link'),
+				'categories' => [
+					'type'     => [
+						'listOf' => 'CategoryType'
 					],
-				],
-
-				'id' => [
-					'type'     => 'String',
 					'metadata' => [
-						'label' => trans('ID'),
+						'label' => trans('Categories'),
 					],
 				],
 
 				'media' => [
 					'type'       => [
-						'listOf' => 'ImageType'
+						'listOf' => 'ProductImageType'
 					],
 					'metadata'   => [
 						'label' => trans('Media'),
@@ -98,11 +117,21 @@ class ProductType
 					],
 				],
 
+				'params' => [
+					'type'       => 'ParamsType',
+					'metadata'   => [
+						'label' => trans('Params'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::params',
+					],
+				],
+
 				'fields' => [
-					'type'       => [
+					'type'     => [
 						'listOf' => 'FieldType'
 					],
-					'metadata'   => [
+					'metadata' => [
 						'label' => trans('Fields'),
 					],
 				]
@@ -118,11 +147,7 @@ class ProductType
 
 	public static function category($item)
 	{
-		$model = Factory::getApplication()->bootComponent('com_radicalmart')
-			->getMVCFactory()
-			->createModel('Categories', 'Administrator', ['ignore_request' => true]);
-
-		return $model->getItem($item->catid);
+		return $item->category;
 	}
 
 	public static function media($item, $args)
@@ -133,5 +158,11 @@ class ProductType
 
 		return (array) $gallery;
 	}
+
+	public static function params($item, $args)
+	{
+		return $item->params->toArray();
+	}
+
 
 }

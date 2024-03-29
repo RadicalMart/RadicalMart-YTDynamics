@@ -11,6 +11,18 @@ class CategoryType
 	{
 		return [
 			'fields' => [
+				'id' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('ID'),
+					],
+				],
+				'alias' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Alias'),
+					],
+				],
 				'title' => [
 					'type'     => 'String',
 					'metadata' => [
@@ -18,14 +30,12 @@ class CategoryType
 						'filters' => ['limit'],
 					],
 				],
-
-				'id' => [
+				'link' => [
 					'type'     => 'String',
 					'metadata' => [
-						'label' => trans('ID'),
+						'label' => trans('Link'),
 					],
 				],
-
 			],
 
 			'metadata' => [

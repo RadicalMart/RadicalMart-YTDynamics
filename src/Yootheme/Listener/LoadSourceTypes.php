@@ -22,8 +22,9 @@ class LoadSourceTypes
 			['ProductListType', Type\ProductListType::config()],
 			['ProductType', Type\ProductType::config()],
 			['PriceType', Type\PriceType::config()],
-			['ImageType', Type\ImageType::config()],
+			['ProductImageType', Type\ProductImageType::config()],
 			['FieldType', Type\FieldType::config()],
+			['ParamsType', Type\ParamsType::config()],
 		];
 
 		foreach ($query as $args)
