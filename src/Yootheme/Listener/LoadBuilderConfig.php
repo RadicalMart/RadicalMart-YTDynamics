@@ -62,6 +62,17 @@ class LoadBuilderConfig
 				],
 			],
 
+			'com_radicalmart.categories' => [
+				'label'    => trans('List All Categories'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
 			'com_radicalmart.category' => [
 				'label'    => trans('Category RadicalMart'),
 				'fieldset' => [

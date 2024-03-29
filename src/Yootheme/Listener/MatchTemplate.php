@@ -31,8 +31,7 @@ class MatchTemplate
 			return [
 				'type'    => $context,
 				'query'   => [
-					'catid' => $item->catid,
-					'lang'  => $this->language,
+					'lang' => $this->language,
 				],
 				'params'  => [
 					'item'        => $item,
@@ -45,6 +44,23 @@ class MatchTemplate
 						base64_encode(Uri::getInstance()),
 					)
 					: null,
+			];
+		}
+
+		if ($context === 'com_radicalmart.categories')
+		{
+			$pagination = $view->get('pagination');
+
+			return [
+				'type'   => $context,
+				'query'  => [
+					'pages' => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
+					'lang'  => $this->language,
+				],
+				'params' => [
+					'items'      => $view->get('items'),
+					'pagination' => $pagination,
+				],
 			];
 		}
 
@@ -62,7 +78,7 @@ class MatchTemplate
 				],
 				'params' => [
 					'category'   => $category,
-					'items'      => array_merge($view->get('items')),
+					'items'      => $view->get('items'),
 					'pagination' => $pagination,
 				],
 			];

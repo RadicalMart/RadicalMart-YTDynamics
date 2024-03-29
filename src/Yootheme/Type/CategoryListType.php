@@ -2,7 +2,7 @@
 
 use function YOOtheme\trans;
 
-class CategoryType
+class CategoryListType
 {
 	/**
 	 * @return array
@@ -37,6 +37,15 @@ class CategoryType
 						'filters' => ['limit'],
 					],
 				],
+				'media'     => [
+					'type'       => 'String',
+					'metadata'   => [
+						'label' => trans('Media'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::media',
+					],
+				],
 				'link'      => [
 					'type'     => 'String',
 					'metadata' => [
@@ -50,6 +59,11 @@ class CategoryType
 				'label' => trans('Category'),
 			],
 		];
+	}
+
+	public static function media($item)
+	{
+		return $item->media->get('image');
 	}
 
 }
