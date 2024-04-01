@@ -11,6 +11,7 @@
     <description>PLG_YTDYNAMICS_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Plugin\System\YTDynamics</namespace>
     <files>
+        <folder>elements</folder>
         <folder>services</folder>
         <folder plugin="ytdynamics">src</folder>
     </files>

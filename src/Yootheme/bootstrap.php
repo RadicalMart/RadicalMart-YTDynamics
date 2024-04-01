@@ -5,6 +5,7 @@ use Joomla\Plugin\System\YTDynamics\Yootheme\Listener\LoadSourceTypes;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Listener\LoadTemplate;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Listener\MatchTemplate;
 use YOOtheme\Builder\BuilderConfig;
+use YOOtheme\Builder;
 
 return [
 
@@ -23,5 +24,10 @@ return [
 		'onLoadTemplate' => [LoadTemplate::class => '@handle'],
 	],
 
+	'extend' => [
+		Builder::class => function (Builder $builder) {
+			$builder->addTypePath(JPATH_ROOT . '/plugins/system/ytdynamics/elements/*/element.json');
+		},
+	]
 
 ];
