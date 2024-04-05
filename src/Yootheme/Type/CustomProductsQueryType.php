@@ -130,7 +130,7 @@ class CustomProductsQueryType
 	{
 		$model = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
-			->createModel('Products', 'Administrator', ['ignore_request' => true]);
+			->createModel('Products', 'Site', ['ignore_request' => true]);
 
 		if (!empty($args['category']))
 		{

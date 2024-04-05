@@ -13,7 +13,7 @@ class CategoriesQueryType
 			'fields' => [
 				'categories' => [
 					'type'       => [
-						'listOf' => 'CategoryListType',
+						'listOf' => 'CategoryType',
 					],
 					'args'       => [
 						'offset' => [

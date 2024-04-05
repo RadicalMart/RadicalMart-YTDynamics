@@ -116,7 +116,7 @@ class CustomCategoriesQueryType
     {
         $model = Factory::getApplication()->bootComponent('com_radicalmart')
             ->getMVCFactory()
-            ->createModel('Categories', 'Administrator', ['ignore_request' => true]);
+            ->createModel('Categories', 'Site', ['ignore_request' => true]);
 
         return $model->getItems();
     }
