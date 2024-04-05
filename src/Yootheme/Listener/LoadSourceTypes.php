@@ -21,7 +21,6 @@ class LoadSourceTypes
 		$types = [
 			['CategoryType', Type\CategoryType::config()],
 			['CategoryMediaType', Type\CategoryMediaType::config()],
-			['ProductListType', Type\ProductListType::config()],
 			['ProductType', Type\ProductType::config()],
 			['PriceType', Type\PriceType::config()],
 			['ProductImageType', Type\ProductImageType::config()],

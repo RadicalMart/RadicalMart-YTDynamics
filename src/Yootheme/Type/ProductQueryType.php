@@ -24,7 +24,7 @@ class ProductQueryType
 				],
 				'productMeta' => [
 					'type'       => [
-						'listOf' => 'ProductListType'
+						'listOf' => 'ProductType'
 					],
 					'metadata'   => [
 						'label' => trans('ProductMeta'),
