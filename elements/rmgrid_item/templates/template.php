@@ -1,9 +1,17 @@
-<?php \defined('_JEXEC') or die; ?>
+<?php
 
-<?php if ($productsListTemplate === 'grid'): ?>
-	<?php echo $this->render("{$__dir}/template-grid", compact('props', 'productsListTemplate', 'productsListOrdering')); ?>
-<?php endif; ?>
+// Add elements inline css above the content to ensure css is present when rendered
+if (!empty($props['css'])) {
+    $css = preg_replace('/[\r\n\t\h]+/u', ' ', $props['css']);
+    echo "<style class=\"uk-margin-remove-adjacent\">{$css}</style>";
+}
 
-<?php if ($productsListTemplate === 'list'): ?>
-	<?php echo $this->render("{$__dir}/template-list", compact('props', 'productsListTemplate', 'productsListOrdering')); ?>
-<?php endif; ?>
+$content = $builder->render($children);
+
+if (!$props['root']) {
+    $content = $this->el($props['html_element'] ?: 'div', [
+        'class' => ['uk-panel']
+    ])($props, $attrs, $content);
+}
+
+echo $content;

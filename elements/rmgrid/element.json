@@ -59,14 +59,7 @@
     "content": {
       "label": "Items",
       "type": "content-items",
-      "item": "rmgrid_item",
-      "media": {
-        "type": "image",
-        "item": {
-          "title": "title",
-          "image": "src"
-        }
-      }
+      "item": "rmgrid_item"
     },
     "show_title": {
       "label": "Display",

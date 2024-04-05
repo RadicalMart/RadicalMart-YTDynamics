@@ -79,6 +79,16 @@ class ProductListType
 					],
 				],
 
+				'params' => [
+					'type'       => 'ParamsType',
+					'metadata'   => [
+						'label' => trans('Params'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::params',
+					],
+				],
+
 				'media' => [
 					'type'       => 'ProductImageType',
 					'metadata'   => [
@@ -114,6 +124,11 @@ class ProductListType
 		$first   = array_shift($gallery);
 
 		return (array) $first;
+	}
+
+	public static function params($item, $args)
+	{
+		return $item->params->toArray();
 	}
 
 }
