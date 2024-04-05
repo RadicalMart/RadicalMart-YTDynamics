@@ -13,10 +13,24 @@ class ProductListType
 
 		return [
 			'fields' => [
+				'id' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('ID'),
+					],
+				],
+
 				'title' => [
 					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('Title'),
+					],
+				],
+
+				'link' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Link'),
 					],
 				],
 
@@ -65,17 +79,13 @@ class ProductListType
 					],
 				],
 
-				'link' => [
-					'type'     => 'String',
-					'metadata' => [
-						'label' => trans('Link'),
-					],
-				],
 
-				'id' => [
-					'type'     => 'String',
+				'fields' => [
+					'type'     => [
+						'listOf' => 'FieldType'
+					],
 					'metadata' => [
-						'label' => trans('ID'),
+						'label' => trans('Fields'),
 					],
 				],
 

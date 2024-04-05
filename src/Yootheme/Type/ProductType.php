@@ -105,6 +105,16 @@ class ProductType
 					],
 				],
 
+				'mediafirst' => [
+					'type'       => 'ProductImageType',
+					'metadata'   => [
+						'label' => trans('Media first'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::mediaFirst',
+					],
+				],
+
 				'media' => [
 					'type'       => [
 						'listOf' => 'ProductImageType'
@@ -148,6 +158,15 @@ class ProductType
 	public static function category($item)
 	{
 		return $item->category;
+	}
+
+	public static function mediaFirst($item, $args)
+	{
+		$media   = $item->media;
+		$gallery = $media->get('gallery');
+		$first   = array_shift($gallery);
+
+		return (array) $first;
 	}
 
 	public static function media($item, $args)

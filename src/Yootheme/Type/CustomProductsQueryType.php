@@ -14,7 +14,7 @@ class CustomProductsQueryType
 			'fields' => [
 				'CustomProducts' => [
 					'type' => [
-						'listOf' => 'ProductListType'
+						'listOf' => 'ProductType'
 					],
 
 					'args' => [

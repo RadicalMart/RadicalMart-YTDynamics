@@ -33,6 +33,10 @@
       "type": "text",
       "source": true
     },
+    "show_count": {
+      "label": "Show count",
+      "type": "checkbox"
+    },
     "position": "${builder.position}",
     "position_left": "${builder.position_left}",
     "position_right": "${builder.position_right}",
@@ -85,6 +89,7 @@
               "label": "Button",
               "type": "group",
               "fields": [
+                "show_count",
                 "product_id",
                 "step",
                 "min",
