@@ -43,6 +43,15 @@ class CategoryType
 						'label' => trans('Link'),
 					],
 				],
+				'media'      => [
+					'type'     => 'CategoryMediaType',
+					'metadata' => [
+						'label' => trans('Media'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::media',
+					],
+				],
 			],
 
 			'metadata' => [
@@ -50,6 +59,11 @@ class CategoryType
 				'label' => trans('Category'),
 			],
 		];
+	}
+
+	public static function media($item)
+	{
+		return $item->media->toArray();
 	}
 
 }
