@@ -128,7 +128,7 @@ class ProductType
 				],
 
 				'params' => [
-					'type'       => 'ParamsType',
+					'type'       => 'ProductParamsType',
 					'metadata'   => [
 						'label' => trans('Params'),
 					],
@@ -182,6 +182,5 @@ class ProductType
 	{
 		return $item->params->toArray();
 	}
-
 
 }

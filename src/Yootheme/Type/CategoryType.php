@@ -43,13 +43,22 @@ class CategoryType
 						'label' => trans('Link'),
 					],
 				],
-				'media'      => [
-					'type'     => 'CategoryMediaType',
-					'metadata' => [
+				'media'     => [
+					'type'       => 'CategoryMediaType',
+					'metadata'   => [
 						'label' => trans('Media'),
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::media',
+					],
+				],
+				'params'    => [
+					'type'       => 'CategoryParamsType',
+					'metadata'   => [
+						'label' => trans('Params'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::params',
 					],
 				],
 			],
@@ -64,6 +73,11 @@ class CategoryType
 	public static function media($item)
 	{
 		return $item->media->toArray();
+	}
+
+	public static function params($item, $args)
+	{
+		return $item->params->toArray();
 	}
 
 }

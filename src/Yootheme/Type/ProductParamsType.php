@@ -4,7 +4,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use function YOOtheme\trans;
 
-class ParamsType
+class ProductParamsType
 {
 
 	public static function config()

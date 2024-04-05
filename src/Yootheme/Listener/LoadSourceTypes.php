@@ -20,12 +20,13 @@ class LoadSourceTypes
 
 		$types = [
 			['CategoryType', Type\CategoryType::config()],
+			['CategoryParamsType', Type\CategoryParamsType::config()],
 			['CategoryMediaType', Type\CategoryMediaType::config()],
 			['ProductType', Type\ProductType::config()],
 			['PriceType', Type\PriceType::config()],
 			['ProductImageType', Type\ProductImageType::config()],
 			['FieldType', Type\FieldType::config()],
-			['ParamsType', Type\ParamsType::config()],
+			['ProductParamsType', Type\ProductParamsType::config()],
 		];
 
 		foreach ($query as $args)
