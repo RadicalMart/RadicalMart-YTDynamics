@@ -14,10 +14,6 @@ if ($productsListTemplate !== 'list')
 	return;
 }
 
-?>
-
-<?php \defined('_JEXEC') or die;
-
 $el = $this->el('div', [
 
 ]);
@@ -31,7 +27,7 @@ $grid = $this->el('div', [
 		$props['grid_column_gap'] == $props['grid_row_gap'] ? 'uk-grid-{grid_column_gap}' : '[uk-grid-column-{grid_column_gap}] [uk-grid-row-{grid_row_gap}]',
 	],
 
-	'uk-grid' => ' ',
+	'uk-grid' => true,
 
 ]);
 

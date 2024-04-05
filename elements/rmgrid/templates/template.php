@@ -14,13 +14,7 @@ if ($productsListTemplate !== 'grid')
 	return;
 }
 
-?>
-
-<?php \defined('_JEXEC') or die;
-
-$el = $this->el('div', [
-
-]);
+$el = $this->el('div', []);
 
 // Grid
 $grid = $this->el('div', [
@@ -39,7 +33,7 @@ $grid = $this->el('div', [
 		'uk-grid-match',
 	],
 
-	'uk-grid' => ' ',
+	'uk-grid' => true,
 
 ]);
 
