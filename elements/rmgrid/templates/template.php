@@ -19,7 +19,7 @@ $el = $this->el('div', []);
 // Grid
 $grid = $this->el('div', [
 
-	'class' => [
+	'class'            => [
 		'uk-grid',
 		'uk-child-width-[1-{@!grid_default: auto}]{grid_default}',
 		'uk-child-width-[1-{@!grid_small: auto}]{grid_small}@s',
@@ -32,9 +32,8 @@ $grid = $this->el('div', [
 		'uk-grid-divider {@grid_divider} {@!grid_column_gap:collapse} {@!grid_row_gap:collapse}' => count($children) > 1,
 		'uk-grid-match',
 	],
-
-	'uk-grid' => true,
-
+	'uk-grid'          => true,
+	'radicalmart-ajax' => 'products'
 ]);
 
 ?>
