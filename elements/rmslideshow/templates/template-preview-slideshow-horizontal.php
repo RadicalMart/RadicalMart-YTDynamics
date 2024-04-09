@@ -1,15 +1,8 @@
 <?php ?>
 
-<div class="rmslideshow rmslideshow-<?php echo $config['mode']; ?>" uk-slideshow="min-height: 500;" type="<?php echo $config['type']; ?>">
+<div class="rmslideshow" type="preview" uk-slideshow="min-height: 500;">
 
-    <div class="uk-margin slider" >
-        <div uk-slider="draggable: false;">
-		    <?php echo $this->render("{$__dir}/template-nav", compact('props')) ?>
-        </div>
-    </div>
-
-
-    <div class="uk-position-relative items">
+    <div class="uk-position-relative">
 
         <div class="uk-slideshow-items uk-background-primary">
             <div class="uk-text-center">
@@ -46,21 +39,9 @@
             </div>
         </div>
 
-		<?php if ($config['type'] === 'main') : ?>
-            <div class="uk-hidden@s uk-light">
-                <a class="uk-position-center-left uk-position-small" href uk-slidenav-previous
-                   uk-slideshow-item="previous"></a>
-                <a class="uk-position-center-right uk-position-small" href uk-slidenav-next
-                   uk-slideshow-item="next"></a>
-            </div>
-
-            <div class="uk-visible@s">
-                <a class="uk-position-center-left-out uk-position-small" href uk-slidenav-previous
-                   uk-slideshow-item="previous"></a>
-                <a class="uk-position-center-right-out uk-position-small" href uk-slidenav-next
-                   uk-slideshow-item="next"></a>
-            </div>
-		<?php endif; ?>
     </div>
 
+    <div class="uk-margin" uk-slider>
+        <?php echo $this->render("{$__dir}/template-preview-slider-horizontal", compact('props')) ?>
+    </div>
 </div>

@@ -3,6 +3,8 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
+$mode = 'horizontal';
+
 $el = $this->el('div', [
 
 	'class' => [
@@ -48,7 +50,7 @@ $config = [
 	'mode' => 'vertical',
 	'type' => 'preview',
 ];
-echo $this->render("{$__dir}/template-slideshow", compact('props', 'config'));
+echo $this->render("{$__dir}/template-preview-slideshow-" . $mode, compact('props'));
 ?>
 
 <?php echo $el->end() ?>
@@ -59,11 +61,7 @@ echo $this->render("{$__dir}/template-slideshow", compact('props', 'config'));
         <div class="uk-padding-small">
             <div class="uk-container uk-container-center">
 				<?php
-				$config = [
-					'mode' => 'vertical',
-					'type' => 'main'
-				];
-				echo $this->render("{$__dir}/template-slideshow", compact('props', 'config'));
+				echo $this->render("{$__dir}/template-full-slideshow-" . $mode, compact('props'));
 				?>
             </div>
         </div>
@@ -82,6 +80,7 @@ echo $this->render("{$__dir}/template-slideshow", compact('props', 'config'));
             });
         }
 
+		<?php if($mode === 'vertical') : ?>
         let slider = document.querySelectorAll('[uk-slider]');
         for (let i = 0; i < slider.length; i++) {
 
@@ -110,6 +109,7 @@ echo $this->render("{$__dir}/template-slideshow", compact('props', 'config'));
             }
 
         }
+		<?php endif; ?>
     });
 
 
