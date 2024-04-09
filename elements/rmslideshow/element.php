@@ -1,0 +1,5 @@
+<?php
+
+namespace YOOtheme;
+
+return [];

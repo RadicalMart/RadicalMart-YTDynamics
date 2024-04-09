@@ -1,0 +1,177 @@
+{
+  "@import": "./element.php",
+  "name": "rmslideshow",
+  "title": "RM slideshow",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "panel_style": {
+      "label": "Style",
+      "description": "Select one of the boxed card or tile styles or a blank panel.",
+      "type": "select",
+      "options": {
+        "None": "",
+        "Card Default": "card-default",
+        "Card Primary": "card-primary",
+        "Card Secondary": "card-secondary",
+        "Card Hover": "card-hover",
+        "Tile Default": "tile-default",
+        "Tile Muted": "tile-muted",
+        "Tile Primary": "tile-primary",
+        "Tile Secondary": "tile-secondary",
+        "Tile Checked": "tile-checked"
+      }
+    },
+    "panel_link": {
+      "label": "Link",
+      "description": "Link the whole panel if a link exists.",
+      "type": "checkbox",
+      "text": "Link panel",
+      "enable": "show_link"
+    },
+    "panel_padding": {
+      "label": "Padding",
+      "description": "Set the padding.",
+      "type": "select",
+      "options": {
+        "None": "",
+        "Small": "small",
+        "Default": "default",
+        "Large": "large"
+      },
+      "enable": "panel_style || (!panel_style && show_image && image_align != 'between')"
+    },
+    "panel_image_no_padding": {
+      "description": "Top, left or right aligned images can be attached to the panel edge. If the image is aligned to the left or right, it will also extend to cover the whole space.",
+      "type": "checkbox",
+      "text": "Align image without padding",
+      "show": "panel_style",
+      "enable": "show_image && image_align != 'between'"
+    },
+    "item_maxwidth": {
+      "type": "select",
+      "label": "Max Width",
+      "description": "Set the maximum width.",
+      "options": {
+        "None": "",
+        "Small": "small",
+        "Medium": "medium",
+        "Large": "large",
+        "X-Large": "xlarge",
+        "2X-Large": "2xlarge"
+      }
+    },
+    "panel_content_width": {
+      "label": "1 Column Content Width",
+      "description": "Set an optional content width which doesn't affect the image if there is just one column.",
+      "type": "select",
+      "options": {
+        "Auto": "",
+        "X-Small": "xsmall",
+        "Small": "small"
+      },
+      "show": "!panel_style",
+      "enable": "show_image && image_align == 'top' && !panel_padding && !item_maxwidth && (!grid_default || grid_default == '1') && (!grid_small || grid_small == '1') && (!grid_medium || grid_medium == '1') && (!grid_large || grid_large == '1') && (!grid_xlarge || grid_xlarge == '1')"
+    },
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
+    "margin": "${builder.margin}",
+    "margin_remove_top": "${builder.margin_remove_top}",
+    "margin_remove_bottom": "${builder.margin_remove_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "_parallax_button": "${builder._parallax_button}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Enter your own custom CSS. The following selectors will be prefixed automatically for this element: <code>.el-element</code>, <code>.el-item</code>, <code>.el-content</code>",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {
+        "debounce": 500,
+        "hints": [
+          ".el-element"
+        ]
+      }
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {
+          "title": "Settings",
+          "fields": [
+            {
+              "label": "Panel",
+              "type": "group",
+              "divider": true,
+              "fields": [
+                "panel_style",
+                "panel_link",
+                "panel_padding",
+                "panel_image_no_padding",
+                "item_maxwidth",
+                "panel_content_width"
+              ]
+            },
+            {
+              "label": "General",
+              "type": "group",
+              "fields": [
+                "position",
+                "position_left",
+                "position_right",
+                "position_top",
+                "position_bottom",
+                "position_z_index",
+                "margin",
+                "margin_remove_top",
+                "margin_remove_bottom",
+                "maxwidth",
+                "maxwidth_breakpoint",
+                "block_align",
+                "block_align_breakpoint",
+                "block_align_fallback",
+                "text_align",
+                "text_align_breakpoint",
+                "text_align_fallback",
+                "animation",
+                "_parallax_button",
+                "visibility"
+              ]
+            }
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}
