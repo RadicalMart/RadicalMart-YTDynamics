@@ -42,6 +42,6 @@
     </div>
 
     <div class="uk-margin" uk-slider>
-        <?php echo $this->render("{$__dir}/template-preview-slider-horizontal", compact('props')) ?>
+        <?php echo $this->render("{$root_dir}/{$mode}/template-preview-slider", compact('props')) ?>
     </div>
 </div>

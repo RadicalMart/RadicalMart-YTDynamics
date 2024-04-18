@@ -3,7 +3,8 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
-$mode = 'horizontal';
+$mode     = 'horizontal';
+$root_dir = $__dir;
 
 $el = $this->el('div', [
 
@@ -45,24 +46,16 @@ $el = $this->el('div', [
 
 <?php echo $el($props, $attrs) ?>
 
-<?php
-$config = [
-	'mode' => 'vertical',
-	'type' => 'preview',
-];
-echo $this->render("{$__dir}/template-preview-slideshow-" . $mode, compact('props'));
-?>
+<?php echo $this->render("{$__dir}/{$mode}/template-preview-slideshow", compact('props', 'mode', 'root_dir')); ?>
 
 <?php echo $el->end() ?>
 
-<div id="modal-full" class="uk-modal-full uk-height-1-1" uk-modal>
+<div id="modal-full" class="uk-modal-full" uk-height-viewport uk-modal>
     <div class="uk-modal-dialog uk-height-1-1">
         <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
         <div class="uk-padding-small">
             <div class="uk-container uk-container-center">
-				<?php
-				echo $this->render("{$__dir}/template-full-slideshow-" . $mode, compact('props'));
-				?>
+				<?php echo $this->render("{$__dir}/{$mode}/template-full-slideshow", compact('props', 'mode','root_dir')); ?>
             </div>
         </div>
     </div>
