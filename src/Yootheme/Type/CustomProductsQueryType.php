@@ -12,7 +12,7 @@ class CustomProductsQueryType
 	{
 		return [
 			'fields' => [
-				'CustomProducts' => [
+				'CustomRadicalMartProducts' => [
 					'type' => [
 						'listOf' => 'ProductType'
 					],

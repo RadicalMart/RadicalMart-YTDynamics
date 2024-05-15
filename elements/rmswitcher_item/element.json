@@ -1,7 +1,7 @@
 {
   "@import": "./element.php",
-  "name": "rmgrid_item",
-  "title": "rmgrid_item",
+  "name": "rmswitcher_item",
+  "title": "rmswitcher_item",
   "width": 500,
   "defaults": {
     "margin": "default"
@@ -14,6 +14,10 @@
   "fields": {
     "content": {
       "type": "builder-fragment"
+    },
+    "title": {
+      "label": "Title",
+      "source": true
     },
     "panel_style": {
       "label": "Style",
@@ -129,6 +133,13 @@
         {
           "title": "Settings",
           "fields": [
+            {
+              "label": "Nav",
+              "type": "group",
+              "fields": [
+                "title"
+              ]
+            },
             {
               "label": "Sublayout",
               "type": "group",

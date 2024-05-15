@@ -43,6 +43,14 @@ class CategoryType
 						'label' => trans('Link'),
 					],
 				],
+				'child'     => [
+					'type'     => [
+						'listOf' => 'CategoryType'
+					],
+					'metadata'   => [
+						'label' => trans('Child'),
+					],
+				],
 				'media'     => [
 					'type'       => 'CategoryMediaType',
 					'metadata'   => [

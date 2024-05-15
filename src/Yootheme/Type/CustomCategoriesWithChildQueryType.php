@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class CustomCategoriesQueryType
+class CustomCategoriesWithChildQueryType extends CustomCategoriesQueryType
 {
     /**
      * @return array
@@ -39,7 +39,7 @@ class CustomCategoriesQueryType
                     ],
 
                     'metadata' => [
-                        'label' => trans('Custom Categories'),
+                        'label' => trans('Custom Categories with child categories'),
                         'group' => trans('RadicalMart'),
                         'fields' => [
 	                        'catid' => [
@@ -129,10 +129,7 @@ class CustomCategoriesQueryType
             ->getMVCFactory()
             ->createModel('Categories', 'Site', ['ignore_request' => true]);
 
-		if(!empty($args['catid']))
-		{
-			$model->setState('category.id', (int) $args['catid']);
-		}
+		$model->setState('category.id', (int) $args['catid']);
 
 	    if(!empty($args['limit']))
 	    {
@@ -140,7 +137,13 @@ class CustomCategoriesQueryType
 	    }
 
 		$items = $model->getItems();
-		var_dump($items[0]);
+
+		foreach ($items as $item)
+		{
+			$model->setState('category.id', (int) $item->id);
+			$item->child = $model->getItems();
+		}
+
         return $items;
     }
 

@@ -12,6 +12,9 @@ class LoadSourceTypes
 
 		$query = [
 			Type\CustomCategoriesQueryType::config(),
+			Type\CustomCategoriesWithChildQueryType::config(),
+			Type\CustomCategoryQueryType::config(),
+			Type\CustomProductsQueryType::config(),
 			Type\CustomProductsQueryType::config(),
 			Type\CategoriesQueryType::config(),
 			Type\ProductsQueryType::config(),

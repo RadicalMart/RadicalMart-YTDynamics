@@ -22,7 +22,8 @@ class LoadBuilderConfig
 
 		$model_categories->setState('filter.published', 1);
 		$categories = $model_categories->getItems();
-		$options    = [];
+		$options    = [
+		];
 
 		foreach ($categories as $category)
 		{
