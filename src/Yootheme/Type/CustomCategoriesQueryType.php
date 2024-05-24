@@ -140,7 +140,7 @@ class CustomCategoriesQueryType
 	    }
 
 		$items = $model->getItems();
-		var_dump($items[0]);
+
         return $items;
     }
 

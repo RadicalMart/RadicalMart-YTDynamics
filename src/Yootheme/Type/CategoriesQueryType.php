@@ -1,5 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
+use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
 class CategoriesQueryType
@@ -118,7 +119,15 @@ class CategoriesQueryType
 
 	public static function resolveSingle($root, array $args)
 	{
-		return $root['category'] ?? null;
+		$model = Factory::getApplication()->bootComponent('com_radicalmart')
+			->getMVCFactory()
+			->createModel('Categories', 'Site', ['ignore_request' => true]);
+
+		$category = $root['category'];
+		$model->setState('category.id', (int) $category->id);
+		$category->child = $model->getItems();
+
+		return $category;
 	}
 
 }

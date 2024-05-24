@@ -41,7 +41,7 @@ class CustomProductsQueryType
 					],
 
 					'metadata' => [
-						'label'  => trans('Custom Product'),
+						'label'  => trans('Custom Products'),
 						'group'  => trans('RadicalMart'),
 						'fields' => [
 							'category'       => [
@@ -138,6 +138,11 @@ class CustomProductsQueryType
 			{
 				$model->setState('filter.category', (int) $args['category']);
 			}
+		}
+
+		if(!empty($args['limit']))
+		{
+			$model->setState('list.limit', (int) $args['limit']);
 		}
 
 		return $model->getItems();
