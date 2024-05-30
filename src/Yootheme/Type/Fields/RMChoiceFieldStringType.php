@@ -30,12 +30,12 @@ class RMChoiceFieldStringType
 
         return [
             'fields' => [
-                'name' => array_merge_recursive($field, [
+                'text' => array_merge_recursive($field, [
                     'metadata' => [
-                        'label' => trans('Names'),
+                        'label' => trans('Texts'),
                     ],
                     'extensions' => [
-                        'call' => __CLASS__ . '::resolveNames',
+                        'call' => __CLASS__ . '::resolveTexts',
                     ],
                 ]),
 
@@ -51,11 +51,11 @@ class RMChoiceFieldStringType
         ];
     }
 
-    public static function resolveNames($item, $args)
+    public static function resolveTexts($item, $args)
     {
         $args += ['separator' => ', '];
 
-        $result = array_map(fn($item) => Text::_($item), array_column($item, 'name'));
+        $result = array_map(fn($item) => Text::_($item), array_column($item, 'text'));
 
         return join($args['separator'], $result);
     }
