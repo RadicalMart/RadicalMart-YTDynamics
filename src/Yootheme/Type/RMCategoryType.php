@@ -2,7 +2,7 @@
 
 use function YOOtheme\trans;
 
-class CategoryType
+class RMCategoryType
 {
 	/**
 	 * @return array
@@ -45,14 +45,14 @@ class CategoryType
 				],
 				'child'     => [
 					'type'     => [
-						'listOf' => 'CategoryType'
+						'listOf' => 'RMCategoryType'
 					],
 					'metadata'   => [
 						'label' => trans('Child'),
 					],
 				],
 				'media'     => [
-					'type'       => 'CategoryMediaType',
+					'type'       => 'RMCategoryMediaType',
 					'metadata'   => [
 						'label' => trans('Media'),
 					],
@@ -61,7 +61,7 @@ class CategoryType
 					],
 				],
 				'params'    => [
-					'type'       => 'CategoryParamsType',
+					'type'       => 'RMCategoryParamsType',
 					'metadata'   => [
 						'label' => trans('Params'),
 					],

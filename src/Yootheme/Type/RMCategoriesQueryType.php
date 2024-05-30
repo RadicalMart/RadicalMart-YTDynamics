@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class CategoriesQueryType
+class RMCategoriesQueryType
 {
 	/**
 	 * @return array
@@ -13,7 +13,7 @@ class CategoriesQueryType
 		return [
 			'fields' => [
 				'category'   => [
-					'type'       => 'CategoryType',
+					'type'       => 'RMCategoryType',
 					'args'       => [
 						'offset' => [
 							'type' => 'Int',
@@ -45,7 +45,7 @@ class CategoriesQueryType
 				],
 				'categories' => [
 					'type'       => [
-						'listOf' => 'CategoryType',
+						'listOf' => 'RMCategoryType',
 					],
 					'args'       => [
 						'offset' => [

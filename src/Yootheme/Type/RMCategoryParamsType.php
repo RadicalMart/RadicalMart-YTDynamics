@@ -4,7 +4,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use function YOOtheme\trans;
 
-class ProductParamsType
+class RMCategoryParamsType
 {
 
 	public static function config()
@@ -15,7 +15,7 @@ class ProductParamsType
 		$fields = ['fields' => []];
 		$model  = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
-			->createModel('Product', 'Administrator', ['ignore_request' => true]);
+			->createModel('Category', 'Administrator', ['ignore_request' => true]);
 		$form   = $model->getForm();
 
 		// получаем params от формы

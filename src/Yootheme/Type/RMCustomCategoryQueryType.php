@@ -4,7 +4,7 @@ use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class CustomCategoryQueryType
+class RMCustomCategoryQueryType
 {
 	/**
 	 * @return array
@@ -13,8 +13,8 @@ class CustomCategoryQueryType
 	{
 		return [
 			'fields' => [
-				'customRadicalMartCategory' => [
-					'type' => 'CategoryType',
+				'CustomRadicalMartCategory' => [
+					'type' => 'RMCategoryType',
 
 					'args' => [
 						'id' => [

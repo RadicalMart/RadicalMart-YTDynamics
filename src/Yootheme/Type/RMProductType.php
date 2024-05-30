@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class ProductType
+class RMProductType
 {
 	/**
 	 * @return array
@@ -71,7 +71,7 @@ class ProductType
 				],
 
 				'price' => [
-					'type'     => 'PriceType',
+					'type'     => 'RMPriceType',
 					'metadata' => [
 						'label' => trans('Price'),
 					],
@@ -79,7 +79,7 @@ class ProductType
 
 				'prices' => [
 					'type'     => [
-						'listOf' => 'PriceType'
+						'listOf' => 'RMPriceType'
 					],
 					'metadata' => [
 						'label' => trans('Prices'),
@@ -87,7 +87,7 @@ class ProductType
 				],
 
 				'category' => [
-					'type'       => 'CategoryType',
+					'type'       => 'RMCategoryType',
 					'metadata'   => [
 						'label' => trans('Category'),
 					],
@@ -98,7 +98,7 @@ class ProductType
 
 				'categories' => [
 					'type'     => [
-						'listOf' => 'CategoryType'
+						'listOf' => 'RMCategoryType'
 					],
 					'metadata' => [
 						'label' => trans('Categories'),
@@ -106,7 +106,7 @@ class ProductType
 				],
 
 				'mediafirst' => [
-					'type'       => 'ProductImageType',
+					'type'       => 'RMProductImageType',
 					'metadata'   => [
 						'label' => trans('Media first'),
 					],
@@ -117,7 +117,7 @@ class ProductType
 
 				'media' => [
 					'type'       => [
-						'listOf' => 'ProductImageType'
+						'listOf' => 'RMProductImageType'
 					],
 					'metadata'   => [
 						'label' => trans('Media'),
@@ -128,7 +128,7 @@ class ProductType
 				],
 
 				'params' => [
-					'type'       => 'ProductParamsType',
+					'type'       => 'RMProductParamsType',
 					'metadata'   => [
 						'label' => trans('Params'),
 					],
@@ -139,7 +139,7 @@ class ProductType
 
 				'fields' => [
 					'type'     => [
-						'listOf' => 'FieldType'
+						'listOf' => 'RMFieldType'
 					],
 					'metadata' => [
 						'label' => trans('Fields'),

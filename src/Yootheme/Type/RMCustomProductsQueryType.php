@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class CustomProductsQueryType
+class RMCustomProductsQueryType
 {
 	/**
 	 * @return array
@@ -14,7 +14,7 @@ class CustomProductsQueryType
 			'fields' => [
 				'CustomRadicalMartProducts' => [
 					'type' => [
-						'listOf' => 'ProductType'
+						'listOf' => 'RMProductType'
 					],
 
 					'args' => [
@@ -53,10 +53,6 @@ class CustomProductsQueryType
 									'multiple' => true,
 									'class'    => 'uk-height-small',
 								],
-							],
-							'favorite'       => [
-								'label' => trans('Filter by favorite'),
-								'type'  => 'checkbox',
 							],
 							'_offset'        => [
 								'description' => trans(

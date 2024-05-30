@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class PriceType
+class RMPriceType
 {
 
 	public static function config()

@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class FieldType
+class RMFieldType
 {
 
 	public static function config()

@@ -1,24 +1,25 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
+use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class CategoryMediaType
+class RMProductImageType
 {
 
 	public static function config()
 	{
 		return [
 			'fields' => [
-				'image' => [
+				'src' => [
 					'type'     => 'String',
 					'metadata' => [
-						'label'   => trans('Image'),
+						'label'   => trans('Src'),
 					],
 				],
-				'icon' => [
+				'alt' => [
 					'type'     => 'String',
 					'metadata' => [
-						'label'   => trans('Icon'),
+						'label'   => trans('Alt'),
 					],
 				],
 			]

@@ -2,7 +2,7 @@
 
 use function YOOtheme\trans;
 
-class ProductsQueryType
+class RMProductsQueryType
 {
 	/**
 	 * @return array
@@ -12,7 +12,7 @@ class ProductsQueryType
 		return [
 			'fields' => [
 				'product'  => [
-					'type'       => 'ProductType',
+					'type'       => 'RMProductType',
 					'args'       => [
 						'offset' => [
 							'type' => 'Int',
@@ -44,7 +44,7 @@ class ProductsQueryType
 				],
 				'products' => [
 					'type'       => [
-						'listOf' => 'ProductType',
+						'listOf' => 'RMProductType',
 					],
 					'args'       => [
 						'offset' => [
