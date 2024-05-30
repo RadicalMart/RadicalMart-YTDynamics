@@ -23,6 +23,9 @@ class RMCustomProductsQueryType
 								'listOf' => 'String',
 							],
 						],
+						'ids'             => [
+							'type' => 'String',
+						],
 						'offset'          => [
 							'type' => 'Int',
 						],
@@ -48,11 +51,16 @@ class RMCustomProductsQueryType
 								'label'   => trans('Filter by category'),
 								'type'    => 'select',
 								'default' => [],
-								'options' => [['evaluate' => 'yootheme.builder.categories']],
+								'options' => [['evaluate' => 'yootheme.builder.radicalmart_categories']],
 								'attrs'   => [
 									'multiple' => true,
 									'class'    => 'uk-height-small',
 								],
+							],
+							'ids'            => [
+								'label'   => trans('Filter by IDs'),
+								'type'    => 'text',
+								'default' => '',
 							],
 							'_offset'        => [
 								'description' => trans(
@@ -136,9 +144,20 @@ class RMCustomProductsQueryType
 			}
 		}
 
-		if(!empty($args['limit']))
+		if (!empty($args['limit']))
 		{
 			$model->setState('list.limit', (int) $args['limit']);
+		}
+
+		if (!empty($args['ids']))
+		{
+			$ids = explode(',', $args['ids']);
+			array_walk($ids, static function ($id) {
+				return trim((int) $id);
+			});
+
+			$model->setState('filter.item_id', $ids);
+
 		}
 
 		return $model->getItems();

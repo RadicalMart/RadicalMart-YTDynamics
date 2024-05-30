@@ -61,7 +61,7 @@ class LoadSourceTypes
 		// add field on type
 		$source->objectType(
 			$type,
-			$config = [
+			[
 				'fields' => [
 					'field' => [
 						'type'       => ($fieldType = "{$type}Fields"),
