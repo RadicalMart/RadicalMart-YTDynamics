@@ -53,18 +53,13 @@ class LoadSourceTypes
 		$model->setState('list.limit', 0);
 		$fields = $model->getItems();
 
-		$this->configFields($source, 'RMProductType', $fields);
-	}
-
-	protected function configFields($source, $type, array $fields): void
-	{
-		// add field on type
+		// Добавляем поля
 		$source->objectType(
-			$type,
+			'RMProductType',
 			[
 				'fields' => [
 					'field' => [
-						'type'       => ($fieldType = "{$type}Fields"),
+						'type'       => ($fieldType = "RMProductTypeFields"),
 						'metadata'   => [
 							'label' => trans('Fields'),
 						],
@@ -76,8 +71,7 @@ class LoadSourceTypes
 			],
 		);
 
-		// configure field type
-		$source->objectType($fieldType, Type\RMFieldsType::config($source, $type, $fields));
+		$source->objectType($fieldType, Type\RMFieldsType::config($source, 'RMProductType', $fields));
 	}
 
 }
