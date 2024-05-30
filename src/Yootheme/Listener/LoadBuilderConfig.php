@@ -19,15 +19,27 @@ class LoadBuilderConfig
 		$model_categories = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
 			->createModel('Categories', 'Administrator', ['ignore_request' => true]);
-
 		$model_categories->setState('filter.published', 1);
+		$model_categories->setState('list.limit, 0');
 		$categories = $model_categories->getItems();
-		$options    = [
-		];
+
+		$model_fieldsets = Factory::getApplication()->bootComponent('com_radicalmart')
+			->getMVCFactory()
+			->createModel('Fieldsets', 'Administrator', ['ignore_request' => true]);
+		$model_fieldsets->setState('list.limit, 0');
+		$fieldsets = $model_fieldsets->getItems();
+
+		$options_categories = [];
+		$options_fieldsets  = [];
 
 		foreach ($categories as $category)
 		{
-			$options[] = ['value' => $category->id, 'text' => $category->title];
+			$options_categories[] = ['value' => $category->id, 'text' => $category->title];
+		}
+
+		foreach ($fieldsets as $fieldset)
+		{
+			$options_fieldsets[] = ['value' => $fieldset->id, 'text' => $fieldset->title];
 		}
 
 		$languageField = [
@@ -107,7 +119,8 @@ class LoadBuilderConfig
 
 		$config->merge([
 			'templates'              => $templates,
-			'radicalmart_categories' => $options
+			'radicalmart_categories' => $options_categories,
+			'radicalmart_fieldsets'  => $options_fieldsets,
 		]);
 
 	}

@@ -72,6 +72,16 @@ class RMFieldsType
 		return array_replace_recursive($config, ['metadata' => ['filters' => ['limit']]]);
 	}
 
+	protected static function configTextarea($field, array $config)
+	{
+		return array_replace_recursive($config, ['metadata' => ['filters' => ['limit']]]);
+	}
+
+	protected static function configEditor($field, array $config)
+	{
+		return array_replace_recursive($config, ['metadata' => ['filters' => ['limit']]]);
+	}
+
 	protected static function configList($field, array $config)
 	{
 		if ((int) $field->params->get('multiple'))
@@ -135,24 +145,7 @@ class RMFieldsType
 
 	public function resolveGenericField($field, $value)
 	{
-		if ($field->fieldparams->exists('multiple'))
-		{
-			$value = (array) $value;
-
-			if ($field->fieldparams['multiple'])
-			{
-				return array_map(
-					fn($value) => is_scalar($value) ? ['value' => $value] : $value,
-					$value,
-				);
-			}
-			else
-			{
-				return array_shift($value);
-			}
-		}
-
-		return $field->rawvalue;
+		return $field->value;
 	}
 
 	public function resolveList($field)
