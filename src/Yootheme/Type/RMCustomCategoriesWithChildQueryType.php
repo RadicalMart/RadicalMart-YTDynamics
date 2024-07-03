@@ -40,7 +40,7 @@ class RMCustomCategoriesWithChildQueryType extends RMCustomCategoriesQueryType
 					],
 
 					'metadata' => [
-						'label'  => trans('Custom Categories with child categories'),
+						'label'  => trans('RM Custom Categories with child categories'),
 						'group'  => trans('RadicalMart'),
 						'fields' => [
 							'catid'          => [

@@ -45,7 +45,7 @@ class RMCustomProductsQueryType
 					],
 
 					'metadata' => [
-						'label'  => trans('Custom Products'),
+						'label'  => trans('RM Custom Products'),
 						'group'  => trans('RadicalMart'),
 						'fields' => [
 							'category'       => [

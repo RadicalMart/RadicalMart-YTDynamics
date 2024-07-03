@@ -25,7 +25,7 @@ class RMCustomCategoryQueryType
 					],
 
 					'metadata' => [
-						'label'  => trans('Custom Category'),
+						'label'  => trans('RM Custom Category'),
 						'group'  => trans('RadicalMart'),
 						'fields' => [
 							'id' => [

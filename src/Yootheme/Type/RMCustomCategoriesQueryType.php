@@ -40,7 +40,7 @@ class RMCustomCategoriesQueryType
                     ],
 
                     'metadata' => [
-                        'label' => trans('Custom Categories'),
+                        'label' => trans('RM Custom Categories'),
                         'group' => trans('RadicalMart'),
                         'fields' => [
 	                        'catid' => [
