@@ -130,7 +130,6 @@ class RMCustomCategoriesWithChildQueryType extends RMCustomCategoriesQueryType
 			->getMVCFactory()
 			->createModel('Categories', 'Site', ['ignore_request' => true]);
 		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
-		$model->setContext('context');
 		$model->setState('category.id', (int) $args['catid']);
 
 		if (!empty($args['limit']))

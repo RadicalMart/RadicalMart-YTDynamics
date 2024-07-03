@@ -130,7 +130,6 @@ class RMCustomCategoriesQueryType
             ->getMVCFactory()
             ->createModel('Categories', 'Site', ['ignore_request' => true]);
 	    $model->setState('params', ComponentHelper::getParams('com_radicalmart'));
-	    $model->setContext('context');
 
 		if(!empty($args['catid']))
 		{

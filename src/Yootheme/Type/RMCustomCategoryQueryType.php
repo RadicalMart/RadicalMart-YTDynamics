@@ -54,7 +54,6 @@ class RMCustomCategoryQueryType
 			->getMVCFactory()
 			->createModel('Category', 'Site', ['ignore_request' => true]);
 		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
-		$model->setContext('context');
 
 		return $model->getItem($args['id']);
 	}
