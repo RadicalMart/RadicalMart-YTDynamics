@@ -1,5 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
@@ -135,6 +136,8 @@ class RMCustomProductsQueryType
 		$model = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
 			->createModel('Products', 'Site', ['ignore_request' => true]);
+		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
+		$model->setContext('context');
 
 		if (!empty($args['category']))
 		{

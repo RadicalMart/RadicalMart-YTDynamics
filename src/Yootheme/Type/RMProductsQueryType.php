@@ -102,7 +102,7 @@ class RMProductsQueryType
 			'offset' => 0,
 			'limit'  => null,
 		];
-
+		
 		if (isset($root['items']))
 		{
 			$items = $root['items'];

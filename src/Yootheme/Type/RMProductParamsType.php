@@ -1,5 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use function YOOtheme\trans;
@@ -16,7 +17,10 @@ class RMProductParamsType
 		$model  = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
 			->createModel('Product', 'Administrator', ['ignore_request' => true]);
-		$form   = $model->getForm();
+		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
+		$model->setContext('context');
+
+		$form = $model->getForm();
 
 		// получаем params от формы
 		$params = $form->getGroup('params');

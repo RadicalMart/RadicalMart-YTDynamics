@@ -37,6 +37,18 @@ class RMCategoryType
 						'filters' => ['limit'],
 					],
 				],
+				'total_products' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label'   => trans('Total products'),
+					],
+				],
+				'total_metas' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label'   => trans('Total metas'),
+					],
+				],
 				'link'      => [
 					'type'     => 'String',
 					'metadata' => [

@@ -1,7 +1,9 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
 use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
 class RMCustomCategoryQueryType
@@ -27,10 +29,13 @@ class RMCustomCategoryQueryType
 						'group'  => trans('RadicalMart'),
 						'fields' => [
 							'id' => [
-								'label'        => trans('Category'),
-								'type'         => 'select',
-								'defaultIndex' => 0,
-								'options'      => [['evaluate' => 'yootheme.builder.radicalmart_categories']],
+								'label'   => trans('Category'),
+								'type'    => 'select',
+								'default' => 1,
+								'options' => [
+									['value' => 1, 'text' => trans('Root')],
+									['evaluate' => 'yootheme.builder.radicalmart_categories']
+								],
 							],
 						],
 					],
@@ -48,7 +53,10 @@ class RMCustomCategoryQueryType
 		$model = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
 			->createModel('Category', 'Site', ['ignore_request' => true]);
+		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
+		$model->setContext('context');
 
 		return $model->getItem($args['id']);
 	}
+
 }

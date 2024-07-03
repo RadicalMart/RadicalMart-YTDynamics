@@ -25,7 +25,7 @@ class RMFieldsType
 								'name'       => $field->alias,
 								'metadata'   => [
 									'label' => $field->title,
-									'group' => $field->group_title,
+									'group' => $field->group_title ?? '',
 								],
 								'extensions' => [
 									'call' => "{$type}.fields@resolve",
