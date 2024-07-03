@@ -13,7 +13,7 @@ class RMCustomCategoriesWithChildQueryType extends RMCustomCategoriesQueryType
 	{
 		return [
 			'fields' => [
-				'CustomRadicalMartCategories' => [
+				'CustomRadicalMartCategoriesWithChild' => [
 					'type' => [
 						'listOf' => 'RMCategoryType'
 					],
