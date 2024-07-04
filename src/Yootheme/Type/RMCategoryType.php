@@ -1,5 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
+use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
 class RMCategoryType
@@ -97,7 +98,12 @@ class RMCategoryType
 
 	public static function params($item, $args)
 	{
-		return $item->params->toArray();
+		if($item->params instanceof Registry)
+		{
+			return $item->params->toArray();
+		}
+
+		return [];
 	}
 
 }
