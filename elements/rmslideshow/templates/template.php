@@ -25,14 +25,14 @@ $wa->getRegistry()->addExtensionRegistryFile('plg_system_ytdynamics');
 $wa->useScript('plg_system_ytdynamics.gallery');
 
 $slide_spacing        = '25px';
-$slide_height         = '450px';
+$slide_height         = '600px';
 $thumbs_slide_spacing = '15px';
-$thumbs_slide_count  = '5';
+$thumbs_slide_count   = '7';
 
 
 $mode = 'vertical';
 
-if($mode == 'vertical')
+if ($mode == 'vertical')
 {
 
 }

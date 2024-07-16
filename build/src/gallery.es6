@@ -10,6 +10,7 @@ class YTDynamicsGallery {
 
         }
         const OPTIONS_THUMBS = {
+            align: 'center',
             axis: 'y',
             dragFree: true,
             loop: true
