@@ -20,90 +20,115 @@ $el = $this->el('div', [
 
 ]);
 
+$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+$wa->getRegistry()->addExtensionRegistryFile('plg_system_ytdynamics');
+$wa->useScript('plg_system_ytdynamics.gallery');
+
+$slide_spacing        = '25px';
+$slide_height         = '450px';
+$thumbs_slide_spacing = '15px';
+$thumbs_slide_count  = '5';
+
+
+$mode = 'vertical';
+
+if($mode == 'vertical')
+{
+
+}
 ?>
 
-<style>
-    .rmslideshow {
-        position: relative;
-    }
+    <style>
+        .rmslideshow {
+            margin: auto;
+        }
 
-    .rmslideshow-vertical .slider {
-        position: absolute;
-        left: calc(-50% + 250px);
-        top: 45%;
-        transform: rotate(90deg);
-        width: calc(100% - 350px);
-    }
+        .rmslideshow__viewport {
+            border: 1px solid #ddd;
+            overflow: hidden;
+        }
 
-    .rmslideshow-vertical .slider li > a {
-        transform: rotate(-90deg);
-    }
+        .rmslideshow__container {
+            backface-visibility: hidden;
+            display: flex;
+            touch-action: pan-y pinch-zoom;
+        }
 
-    .rmslideshow-vertical .items {
-        margin-left: 150px;
-    }
-</style>
+        .rmslideshow__slide {
+            flex: 0 0 100%;
+            min-width: 0;
+        }
+
+        .rmslideshow__slide__image {
+            height: <?php echo $slide_height; ?>;
+        }
+
+        .rmslideshow__slide__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .rmslideshow-thumbs {
+        }
+
+        .rmslideshow-thumbs__viewport {
+            overflow: hidden;
+            padding-top: <?php echo $thumbs_slide_spacing; ?>;
+        }
+
+        .rmslideshow-thumbs__container {
+            display: flex;
+            touch-action: pan-x pinch-zoom;
+            margin-top: calc(<?php echo $slide_spacing; ?> * -1);
+            height: calc(<?php echo $slide_spacing; ?> + <?php echo $slide_height; ?>);
+            flex-direction: column;
+        }
+
+        .rmslideshow-thumbs__slide {
+            border: 1px solid #ddd;
+            flex: 0 0 calc(100% / <?php echo $thumbs_slide_count ?> - <?php echo $thumbs_slide_spacing; ?>);
+            min-width: 0;
+            margin-bottom: <?php echo $thumbs_slide_spacing; ?>;
+        }
+
+        .rmslideshow-thumbs__slide__image {
+            width: 100%;
+            height: 100%;
+        }
+
+        .rmslideshow-thumbs__slide__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+    </style>
 
 <?php echo $el($props, $attrs) ?>
-
-<?php echo $this->render("{$__dir}/{$mode}/template-preview-slideshow", compact('props', 'mode', 'root_dir')); ?>
-
-<?php echo $el->end() ?>
-
-<div id="modal-full" class="uk-modal-full" uk-height-viewport uk-modal>
-    <div class="uk-modal-dialog uk-height-1-1">
-        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
-        <div class="uk-padding-small">
-            <div class="uk-container uk-container-center">
-				<?php echo $this->render("{$__dir}/{$mode}/template-full-slideshow", compact('props', 'mode','root_dir')); ?>
+    <div class="rmslideshow">
+        <div data-uk-grid>
+            <div class="uk-width-small">
+                <div class="rmslideshow-thumbs">
+                    <div class="rmslideshow-thumbs__viewport">
+                        <div class="rmslideshow-thumbs__container">
+							<?php for ($i = 0; $i < 15; $i++): ?>
+								<?php echo $this->render("{$__dir}/template-thumb", compact('props', 'root_dir')); ?>
+							<?php endfor; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-expand">
+                <div class="rmslideshow__viewport">
+                    <div class="rmslideshow__container">
+						<?php for ($i = 0; $i < 15; $i++): ?>
+							<?php echo $this->render("{$__dir}/template-slide", compact('props', 'root_dir')); ?>
+						<?php endfor; ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<script>
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-        let imgs = document.querySelectorAll('[type=preview] .uk-slideshow-items img');
-
-        for (let i = 0; i < imgs.length; i++) {
-            imgs[i].addEventListener('click', function (ev) {
-                UIkit.modal('#modal-full').show();
-            });
-        }
-
-		<?php if($mode === 'vertical') : ?>
-        let slider = document.querySelectorAll('[uk-slider]');
-        for (let i = 0; i < slider.length; i++) {
-
-            let direct = '';
-            let previous = slider[i].querySelectorAll('[uk-slidenav-previous]');
-            let next = slider[i].querySelectorAll('[uk-slidenav-next]');
-
-            for (let j = 0; j < previous.length; j++) {
-                previous[j].addEventListener('click', function () {
-                    if (direct === 'previous') {
-                        return;
-                    }
-                    direct = 'previous';
-                    this.click();
-                });
-            }
-
-            for (let j = 0; j < next.length; j++) {
-                next[j].addEventListener('click', function () {
-                    if (direct === 'next') {
-                        return;
-                    }
-                    direct = 'next';
-                    this.click();
-                });
-            }
-
-        }
-		<?php endif; ?>
-    });
-
-
-</script>
+<?php echo $el->end() ?>

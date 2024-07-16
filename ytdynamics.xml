@@ -20,4 +20,8 @@
             <fieldset name="basic"></fieldset>
         </fields>
     </config>
+    <media destination="plg_system_ytdynamics" folder="media">
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
 </extension>
