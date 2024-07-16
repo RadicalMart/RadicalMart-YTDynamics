@@ -21,7 +21,7 @@ class RMCustomProductsQueryType
 					'args' => [
 						'category'        => [
 							'type' => [
-								'listOf' => 'String',
+								'listOf' => 'Int',
 							],
 						],
 						'ids'             => [
@@ -140,9 +140,9 @@ class RMCustomProductsQueryType
 
 		if (!empty($args['category']))
 		{
-			if (is_int($args['category']))
+			if (is_array($args['category']))
 			{
-				$model->setState('filter.category', (int) $args['category']);
+				$model->setState('filter.categories', $args['category']);
 			}
 		}
 
