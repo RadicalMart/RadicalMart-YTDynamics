@@ -24,6 +24,7 @@ class LoadSourceTypes
 
 		$types = [
 			['RMCategoryType', Type\RMCategoryType::config()],
+			['RMCategoryChildType', Type\RMCategoryChildType::config()],
 			['RMCategoryParamsType', Type\RMCategoryParamsType::config()],
 			['RMCategoryMediaType', Type\RMCategoryMediaType::config()],
 			['RMProductType', Type\RMProductType::config()],

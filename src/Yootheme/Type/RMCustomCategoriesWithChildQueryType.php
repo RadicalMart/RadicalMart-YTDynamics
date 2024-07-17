@@ -15,7 +15,7 @@ class RMCustomCategoriesWithChildQueryType extends RMCustomCategoriesQueryType
 			'fields' => [
 				'CustomRadicalMartCategoriesWithChild' => [
 					'type' => [
-						'listOf' => 'RMCategoryType'
+						'listOf' => 'RMCategoryChildType'
 					],
 
 					'args' => [
@@ -137,15 +137,7 @@ class RMCustomCategoriesWithChildQueryType extends RMCustomCategoriesQueryType
 			$model->setState('list.limit', (int) $args['limit']);
 		}
 
-		$items = $model->getItems();
-
-		foreach ($items as $item)
-		{
-			$model->setState('category.id', (int) $item->id);
-			$item->child = $model->getItems();
-		}
-
-		return $items;
+		return $model->getItems();
 	}
 
 }

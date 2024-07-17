@@ -1,5 +1,7 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
@@ -12,26 +14,26 @@ class RMCategoryType
 	{
 		return [
 			'fields' => [
-				'id'        => [
+				'id'             => [
 					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('ID'),
 					],
 				],
-				'alias'     => [
+				'alias'          => [
 					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('Alias'),
 					],
 				],
-				'title'     => [
+				'title'          => [
 					'type'     => 'String',
 					'metadata' => [
 						'label'   => trans('Title'),
 						'filters' => ['limit'],
 					],
 				],
-				'introtext' => [
+				'introtext'      => [
 					'type'     => 'String',
 					'metadata' => [
 						'label'   => trans('Introtext'),
@@ -41,30 +43,22 @@ class RMCategoryType
 				'total_products' => [
 					'type'     => 'String',
 					'metadata' => [
-						'label'   => trans('Total products'),
+						'label' => trans('Total products'),
 					],
 				],
-				'total_metas' => [
+				'total_metas'    => [
 					'type'     => 'String',
 					'metadata' => [
-						'label'   => trans('Total metas'),
+						'label' => trans('Total metas'),
 					],
 				],
-				'link'      => [
+				'link'           => [
 					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('Link'),
 					],
 				],
-				'child'     => [
-					'type'     => [
-						'listOf' => 'RMCategoryType'
-					],
-					'metadata'   => [
-						'label' => trans('Child'),
-					],
-				],
-				'media'     => [
+				'media'          => [
 					'type'       => 'RMCategoryMediaType',
 					'metadata'   => [
 						'label' => trans('Media'),
@@ -73,7 +67,7 @@ class RMCategoryType
 						'call' => __CLASS__ . '::media',
 					],
 				],
-				'params'    => [
+				'params'         => [
 					'type'       => 'RMCategoryParamsType',
 					'metadata'   => [
 						'label' => trans('Params'),
@@ -93,12 +87,17 @@ class RMCategoryType
 
 	public static function media($item)
 	{
-		return $item->media->toArray();
+		if ($item->media instanceof Registry)
+		{
+			return $item->media->toArray();
+		}
+
+		return [];
 	}
 
 	public static function params($item, $args)
 	{
-		if($item->params instanceof Registry)
+		if ($item->params instanceof Registry)
 		{
 			return $item->params->toArray();
 		}
