@@ -1,6 +1,7 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Listener;
 
 use Joomla\CMS\Document\Document;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
@@ -22,6 +23,12 @@ class MatchTemplate
 		}
 
 		$context = $view->get('context');
+		$layout = Factory::getApplication()->input->get('layout');
+
+		if(!empty($layout))
+		{
+			$context .= '.' . $layout;
+		}
 
 		if ($context === 'com_radicalmart.product')
 		{
@@ -47,7 +54,10 @@ class MatchTemplate
 			];
 		}
 
-		if ($context === 'com_radicalmart.categories')
+		if (
+			$context === 'com_radicalmart.categories' ||
+			$context === 'com_radicalmart.categories.alphabetical'
+		)
 		{
 			$pagination = $view->get('pagination');
 
