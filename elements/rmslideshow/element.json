@@ -13,6 +13,11 @@
     "content": "./templates/content.php"
   },
   "fields": {
+    "content": {
+      "label": "Items",
+      "type": "content-items",
+      "item": "rmslideshow_item"
+    },
     "panel_style": {
       "label": "Style",
       "description": "Select one of the boxed card or tile styles or a blank panel.",
@@ -126,6 +131,12 @@
     "default": {
       "type": "tabs",
       "fields": [
+        {
+          "title": "Content",
+          "fields": [
+            "content"
+          ]
+        },
         {
           "title": "Settings",
           "fields": [

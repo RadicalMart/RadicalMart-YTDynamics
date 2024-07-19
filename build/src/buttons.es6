@@ -1,4 +1,4 @@
-export const addThumbBtnsClickHandlers = (emblaApiMain, emblaApiThumb) => {
+export const addThumbButtonsClickHandlers = (emblaApiMain, emblaApiThumb) => {
     const slidesThumbs = emblaApiThumb.slideNodes()
 
     const scrollToIndex = slidesThumbs.map(
@@ -16,7 +16,7 @@ export const addThumbBtnsClickHandlers = (emblaApiMain, emblaApiThumb) => {
     }
 }
 
-export const addToggleThumbBtnsActive = (emblaApiMain, emblaApiThumb) => {
+export const addToggleThumbButtonsActive = (emblaApiMain, emblaApiThumb) => {
     const slidesThumbs = emblaApiThumb.slideNodes()
 
     const toggleThumbBtnsState = () => {
@@ -33,5 +33,54 @@ export const addToggleThumbBtnsActive = (emblaApiMain, emblaApiThumb) => {
     return () => {
         const selected = emblaApiMain.selectedScrollSnap()
         slidesThumbs[selected].classList.remove('rmslideshow-thumbs__slide--selected')
+    }
+}
+
+export const addPrevNextButtonsClickHandlers = (emblaApi, prevBtn, nextBtn) => {
+    const scrollPrev = () => {
+        emblaApi.scrollPrev()
+    }
+    const scrollNext = () => {
+        emblaApi.scrollNext()
+    }
+    prevBtn.addEventListener('click', scrollPrev, false)
+    nextBtn.addEventListener('click', scrollNext, false)
+
+    const removeTogglePrevNextButtonsActive = addTogglePrevNextButtonsActive(
+        emblaApi,
+        prevBtn,
+        nextBtn
+    )
+
+    return () => {
+        removeTogglePrevNextButtonsActive()
+        prevBtn.removeEventListener('click', scrollPrev, false)
+        nextBtn.removeEventListener('click', scrollNext, false)
+    }
+}
+
+function addTogglePrevNextButtonsActive(emblaApi, prevBtn, nextBtn) {
+    let togglePrevNextBtnsState = () => {
+        if (emblaApi.canScrollPrev()) {
+            prevBtn.removeAttribute('disabled')
+        } else {
+            prevBtn.setAttribute('disabled', 'disabled')
+        }
+
+        if (emblaApi.canScrollNext()) {
+            nextBtn.removeAttribute('disabled')
+        } else {
+            nextBtn.setAttribute('disabled', 'disabled')
+        }
+    }
+
+    emblaApi
+        .on('select', togglePrevNextBtnsState)
+        .on('init', togglePrevNextBtnsState)
+        .on('reInit', togglePrevNextBtnsState)
+
+    return () => {
+        prevBtn.removeAttribute('disabled')
+        nextBtn.removeAttribute('disabled')
     }
 }

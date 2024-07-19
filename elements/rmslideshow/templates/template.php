@@ -3,9 +3,6 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
-$mode     = 'horizontal';
-$root_dir = $__dir;
-
 $el = $this->el('div', [
 
 	'class' => [
@@ -26,16 +23,13 @@ $wa->useScript('plg_system_ytdynamics.gallery');
 
 $slide_spacing        = '25px';
 $slide_height         = '600px';
+$slide_height_thumb   = $slide_height;
 $thumbs_slide_spacing = '15px';
-$thumbs_slide_count   = '7';
+$thumbs_slide_count   = '5';
+$nav_height           = '30px';
 
+$slide_height_thumb = '(' . $slide_height_thumb . ' - ' . $nav_height . ' * 2)';
 
-$mode = 'vertical';
-
-if ($mode == 'vertical')
-{
-
-}
 ?>
 
     <style>
@@ -52,6 +46,7 @@ if ($mode == 'vertical')
             backface-visibility: hidden;
             display: flex;
             touch-action: pan-y pinch-zoom;
+            max-height: <?php echo $slide_height; ?>;
         }
 
         .rmslideshow__slide {
@@ -73,23 +68,31 @@ if ($mode == 'vertical')
         .rmslideshow-thumbs {
         }
 
+        .rmslideshow-thumbs__navigate {
+            height: <?php echo $nav_height; ?>;
+            cursor: pointer;
+        }
+
         .rmslideshow-thumbs__viewport {
             overflow: hidden;
-            padding-top: <?php echo $thumbs_slide_spacing; ?>;
         }
 
         .rmslideshow-thumbs__container {
-            display: flex;
             touch-action: pan-x pinch-zoom;
-            margin-top: calc(<?php echo $slide_spacing; ?> * -1);
-            height: calc(<?php echo $slide_spacing; ?> + <?php echo $slide_height; ?>);
-            flex-direction: column;
+            max-height: calc(<?php echo $slide_height_thumb; ?>);
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(<?php echo $thumbs_slide_count; ?>, 1fr);
+            grid-column-gap: 0;
+            grid-row-gap: <?php echo $thumbs_slide_spacing; ?>;
         }
 
         .rmslideshow-thumbs__slide {
             border: 1px solid #ddd;
-            flex: 0 0 calc(100% / <?php echo $thumbs_slide_count ?> - <?php echo $thumbs_slide_spacing; ?>);
-            min-width: 0;
+            height: calc((<?php echo $slide_height_thumb; ?> + <?php echo $thumbs_slide_spacing; ?>) / <?php echo $thumbs_slide_count;?> - <?php echo $thumbs_slide_spacing; ?>);
+        }
+
+        .rmslideshow-thumbs__slide:last-child {
             margin-bottom: <?php echo $thumbs_slide_spacing; ?>;
         }
 
@@ -110,22 +113,28 @@ if ($mode == 'vertical')
     <div class="rmslideshow">
         <div data-uk-grid>
             <div class="uk-width-small">
-                <div class="rmslideshow-thumbs">
+                <div class="rmslideshow-thumbs rmslideshow-vertical">
+                    <div class="rmslideshow-thumbs__navigate rmslideshow-thumbs__prev uk-flex uk-flex-center uk-flex-middle">
+                        <i data-uk-icon="icon: chevron-up;ratio: 2;"></i>
+                    </div>
                     <div class="rmslideshow-thumbs__viewport">
                         <div class="rmslideshow-thumbs__container">
-							<?php for ($i = 0; $i < 15; $i++): ?>
-								<?php echo $this->render("{$__dir}/template-thumb", compact('props', 'root_dir')); ?>
-							<?php endfor; ?>
+							<?php foreach ($children as $child) : ?>
+								<?= $builder->render($child, ['element' => $props, 'template' => 'thumb']) ?>
+							<?php endforeach ?>
                         </div>
+                    </div>
+                    <div class="rmslideshow-thumbs__navigate rmslideshow-thumbs__next uk-flex uk-flex-center uk-flex-middle">
+                        <i data-uk-icon="icon: chevron-down;ratio: 2;"></i>
                     </div>
                 </div>
             </div>
             <div class="uk-width-expand">
                 <div class="rmslideshow__viewport">
                     <div class="rmslideshow__container">
-						<?php for ($i = 0; $i < 15; $i++): ?>
-							<?php echo $this->render("{$__dir}/template-slide", compact('props', 'root_dir')); ?>
-						<?php endfor; ?>
+						<?php foreach ($children as $child) : ?>
+							<?= $builder->render($child, ['element' => $props, 'template' => 'slide']) ?>
+						<?php endforeach ?>
                     </div>
                 </div>
             </div>

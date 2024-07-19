@@ -19,7 +19,9 @@
   },
   "homepage": "https://radicalmart.ru/",
   "dependencies": {
-    "embla-carousel": "^8.1.6"
+    "embla-carousel": "^8.1.6",
+    "embla-carousel-fade": "^8.1.7",
+    "embla-carousel-wheel-gestures": "^8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",

@@ -1,46 +1,53 @@
-import EmblaCarousel from 'embla-carousel'
+import EmblaCarousel from 'embla-carousel';
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
+import Fade from 'embla-carousel-fade';
 import {
-    addThumbBtnsClickHandlers,
-    addToggleThumbBtnsActive
-} from './buttons.es6'
+    addThumbButtonsClickHandlers,
+    addToggleThumbButtonsActive,
+    addPrevNextButtonsClickHandlers
+} from './buttons.es6';
 
 class YTDynamicsGallery {
-    init() {
+    init(container) {
         const OPTIONS = {
-
-        }
+            loop: true,
+            duration: 30
+        };
         const OPTIONS_THUMBS = {
-            align: 'center',
+            align: 'start',
             axis: 'y',
             dragFree: true,
             loop: true
-        }
+        };
 
-        const viewportNodeMainCarousel = document.querySelector('.rmslideshow__viewport')
-        const viewportNodeThumbCarousel = document.querySelector('.rmslideshow-thumbs__viewport')
-        const emblaApiMain = EmblaCarousel(viewportNodeMainCarousel, OPTIONS)
-        const emblaApiThumb = EmblaCarousel(viewportNodeThumbCarousel, OPTIONS_THUMBS)
+        let viewportNodeMainCarousel = container.querySelector('.rmslideshow__viewport'),
+            viewportNodeThumbCarousel = container.querySelector('.rmslideshow-thumbs__viewport'),
+            prevThumbBtnNode = container.querySelector('.rmslideshow-thumbs__prev'),
+            nextThumbBtnNode = container.querySelector('.rmslideshow-thumbs__next'),
+            emblaMain = EmblaCarousel(viewportNodeMainCarousel, OPTIONS, [Fade()]),
+            emblaThumb = EmblaCarousel(viewportNodeThumbCarousel, OPTIONS_THUMBS, [WheelGesturesPlugin()])
 
-        const removeThumbBtnsClickHandlers = addThumbBtnsClickHandlers(
-            emblaApiMain,
-            emblaApiThumb
-        )
-        const removeToggleThumbBtnsActive = addToggleThumbBtnsActive(
-            emblaApiMain,
-            emblaApiThumb
-        )
+        let removeThumbBtnsClickHandlers = addThumbButtonsClickHandlers(emblaMain, emblaThumb),
+            removeToggleThumbBtnsActive = addToggleThumbButtonsActive(emblaMain, emblaThumb),
+            removeThumbPrevNextBtnsClickHandlers = addPrevNextButtonsClickHandlers(emblaThumb, prevThumbBtnNode, nextThumbBtnNode);
 
-        emblaApiMain
+        emblaMain
             .on('destroy', removeThumbBtnsClickHandlers)
             .on('destroy', removeToggleThumbBtnsActive)
+            .on('destroy', removeThumbPrevNextBtnsClickHandlers);
 
-        emblaApiThumb
+        emblaThumb
             .on('destroy', removeThumbBtnsClickHandlers)
             .on('destroy', removeToggleThumbBtnsActive)
+            .on('destroy', removeThumbPrevNextBtnsClickHandlers);
     }
 }
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    (new YTDynamicsGallery).init();
+    let rmslideshows = document.querySelectorAll('.rmslideshow');
+
+    for (let i = 0; i < rmslideshows.length; i++) {
+        (new YTDynamicsGallery).init(rmslideshows[i]);
+    }
 });
