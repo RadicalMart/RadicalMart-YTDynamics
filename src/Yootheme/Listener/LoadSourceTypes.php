@@ -1,6 +1,8 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Listener;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Plugin\System\YTDynamics\Event\EventYTDynamics;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 use YOOtheme\Builder\Source;
 use function YOOtheme\trans;
@@ -37,6 +39,13 @@ class LoadSourceTypes
 			['RMValueFieldType', Type\Fields\RMValueFieldType::config()],
 		];
 
+		PluginHelper::importPlugin('ytdynamics');
+
+		Factory::getApplication()->getDispatcher()->dispatch(
+			'onYTDynamics',
+			new EventYTDynamics('onYTDynamics', ['query' => $query, 'types' => &$types])
+		);
+
 		foreach ($query as $args)
 		{
 			$source->queryType($args);
@@ -46,7 +55,6 @@ class LoadSourceTypes
 		{
 			$source->objectType(...$args);
 		}
-
 
 		$model = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
