@@ -71,8 +71,18 @@ class RMProductType
 					],
 				],
 
+				'stock' => [
+					'type'     => 'RMProductStockType',
+					'metadata' => [
+						'label' => trans('Stock'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::stock',
+					],
+				],
+
 				'price' => [
-					'type'     => 'RMPriceType',
+					'type'     => 'RMProductPriceType',
 					'metadata' => [
 						'label' => trans('Price'),
 					],
@@ -80,7 +90,7 @@ class RMProductType
 
 				'prices' => [
 					'type'     => [
-						'listOf' => 'RMPriceType'
+						'listOf' => 'RMProductPriceType'
 					],
 					'metadata' => [
 						'label' => trans('Prices'),
@@ -177,6 +187,11 @@ class RMProductType
 		$gallery = $media->get('gallery');
 
 		return (array) $gallery;
+	}
+
+	public static function stock($item)
+	{
+		return $item->stock;
 	}
 
 	public static function params($item, $args)
