@@ -44,6 +44,37 @@ class RMCategoriesQueryType
 						'call' => __CLASS__ . '::resolveSingle',
 					],
 				],
+				'categorychild'   => [
+					'type'       => 'RMCategoryChildType',
+					'args'       => [
+						'offset' => [
+							'type' => 'Int',
+						],
+					],
+					'metadata'   => [
+						'label'  => trans('Category with child'),
+						'view'   => ['com_radicalmart.category'],
+						'group'  => trans('Page'),
+						'fields' => [
+							'offset' => [
+								'label'       => trans('Start'),
+								'description' => trans(
+									'Set the starting point to specify which article is loaded.',
+								),
+								'type'        => 'number',
+								'default'     => 0,
+								'modifier'    => 1,
+								'attrs'       => [
+									'min'      => 1,
+									'required' => true,
+								],
+							],
+						],
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::resolveSingle',
+					],
+				],
 				'categories' => [
 					'type'       => [
 						'listOf' => 'RMCategoryType',

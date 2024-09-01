@@ -12,6 +12,7 @@ $content = $builder->render($children);
 $el = $this->el($props['html_element'] ?: 'div', [
 
 	'class' => [
+		'el-item',
 		'uk-panel [uk-{panel_style: tile-.*}] {@panel_style: |tile-.*}',
 		'uk-card uk-{panel_style: card-.*} [uk-card-{!panel_padding: |default}]',
 		'uk-tile-hover {@panel_style: tile-.*} {@panel_link}'              => $props['link'],

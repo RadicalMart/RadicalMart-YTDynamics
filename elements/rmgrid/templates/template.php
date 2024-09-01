@@ -2,17 +2,29 @@
 
 use Joomla\CMS\Factory;
 
-$app                  = Factory::getApplication();
-$cookieName           = 'radicalmart_products-list_layout';
-$productsListTemplate = $app->input->cookie->get($cookieName, 'grid');
+$mode                 = $props['mode'];
 
-$cookieName           = 'radicalmart_products-list_ordering';
-$productsListOrdering = $app->input->cookie->get($cookieName);
-
-if ($productsListTemplate !== 'grid')
+if(str_contains($mode, 'radicalmart_'))
 {
-	return;
+	$app                  = Factory::getApplication();
+	$cookieName           = 'radicalmart_products-list_layout';
+	$productsListTemplate = $app->input->cookie->get($cookieName, 'grid');
+
+	$cookieName           = 'radicalmart_products-list_ordering';
+	$productsListOrdering = $app->input->cookie->get($cookieName);
+
+    if($mode === 'radicalmart_grid' && $productsListTemplate !== 'grid')
+    {
+        return;
+    }
+
+	if($mode === 'radicalmart_list' && $productsListTemplate !== 'list')
+	{
+		return;
+	}
+
 }
+
 
 $el = $this->el('div', []);
 

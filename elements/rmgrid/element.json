@@ -9,6 +9,7 @@
   "container": true,
   "width": 500,
   "defaults": {
+    "mode": "default",
     "show_title": true,
     "show_meta": true,
     "show_content": true,
@@ -60,6 +61,15 @@
       "label": "Items",
       "type": "content-items",
       "item": "rmgrid_item"
+    },
+    "mode": {
+      "label": "Mode",
+      "type": "select",
+      "options": {
+        "Default": "default",
+        "RadicalMart Grid": "radicalmart_grid",
+        "RadicalMart List": "radicalmart_list"
+      }
     },
     "show_title": {
       "label": "Display",
@@ -161,6 +171,7 @@
       "type": "select",
       "options": {
         "Inherit": "",
+        "1 Column": "1",
         "2 Columns": "2",
         "3 Columns": "3",
         "4 Columns": "4",
@@ -175,6 +186,7 @@
       "type": "select",
       "options": {
         "Inherit": "",
+        "1 Column": "1",
         "2 Columns": "2",
         "3 Columns": "3",
         "4 Columns": "4",
@@ -189,6 +201,7 @@
       "type": "select",
       "options": {
         "Inherit": "",
+        "1 Column": "1",
         "2 Columns": "2",
         "3 Columns": "3",
         "4 Columns": "4",
@@ -903,13 +916,7 @@
         "debounce": 500,
         "hints": [
           ".el-element",
-          ".el-nav",
-          ".el-item",
-          ".el-title",
-          ".el-meta",
-          ".el-content",
-          ".el-image",
-          ".el-link"
+          ".el-item"
         ]
       }
     },
@@ -933,6 +940,14 @@
         {
           "title": "Settings",
           "fields": [
+            {
+              "label": "General",
+              "type": "group",
+              "divider": true,
+              "fields": [
+                "mode"
+              ]
+            },
             {
               "label": "Grid",
               "type": "group",
