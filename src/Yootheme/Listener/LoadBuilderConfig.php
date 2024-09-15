@@ -128,7 +128,29 @@ class LoadBuilderConfig
 			],
 
 			'com_users.profile' => [
-				'label'    => trans('User profile'),
+				'label'    => trans('RM user'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang'  => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart.personal' => [
+				'label'    => trans('RM personal'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang'  => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart.settings' => [
+				'label'    => trans('RM settings'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [

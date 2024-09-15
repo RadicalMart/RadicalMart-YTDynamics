@@ -52,6 +52,8 @@ class LoadSourceTypes
 			// LK
 			['RMMenuType', Type\LK\RMMenuType::config()],
 			['RMUserType', Type\LK\RMUserType::config()],
+			['RMPersonalType', Type\LK\RMPersonalType::config()],
+			['RMSettingsType', Type\LK\RMSettingsType::config()],
 		];
 
 		PluginHelper::importPlugin('ytdynamics');
@@ -88,14 +90,14 @@ class LoadSourceTypes
 							'label' => trans('Fields'),
 						],
 						'extensions' => [
-							'call' => Type\RMFieldsType::class . '::field',
+							'call' => Type\Product\RMFieldsType::class . '::field',
 						],
 					],
 				],
 			],
 		);
 
-		$source->objectType($fieldType, Type\RMFieldsType::config($source, 'RMProductType', $fields));
+		$source->objectType($fieldType, Type\Product\RMFieldsType::config($source, 'RMProductType', $fields));
 	}
 
 }

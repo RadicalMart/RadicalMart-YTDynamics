@@ -2,6 +2,7 @@
 
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
+use Joomla\Component\RadicalMart\Administrator\Helper\UserHelper;
 
 class RMLKQueryType
 {
@@ -16,26 +17,46 @@ class RMLKQueryType
 	{
 		return [
 			'fields' => [
-				'menu' => [
+				'RadicalMartMenu'     => [
 					'type'       => [
 						'listOf' => 'RMMenuType'
 					],
 					'metadata'   => [
-						'label' => trans('Menus'),
+						'label' => trans('RM Menus'),
 						'group' => trans('RadicalMart'),
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::menu',
 					],
 				],
-				'user' => [
+				'RadicalMartUser'     => [
 					'type'       => 'RMUserType',
 					'metadata'   => [
-						'label' => trans('User'),
+						'label' => trans('RM User'),
 						'group' => trans('RadicalMart'),
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::user',
+					],
+				],
+				'RadicalMartPersonal' => [
+					'type'       => 'RMPersonalType',
+					'metadata'   => [
+						'label' => trans('RM Personal'),
+						'group' => trans('RadicalMart'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
+					],
+				],
+				'RadicalMartSettings' => [
+					'type'       => 'RMSettingsType',
+					'metadata'   => [
+						'label' => trans('RM Settings'),
+						'group' => trans('RadicalMart'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
 					],
 				],
 			],
@@ -53,6 +74,11 @@ class RMLKQueryType
 		$user->avatar = UserHelper::getAvatar($user->id);
 
 		return $user;
+	}
+
+	public static function component($root, array $args)
+	{
+		return (object) ['component' => 'html'];
 	}
 
 }

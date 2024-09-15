@@ -123,12 +123,22 @@ class MatchTemplate
 
 		if ($context === 'com_radicalmart.settings')
 		{
-
+			return [
+				'type'   => $context,
+				'query'  => [
+					'lang'  => $this->language,
+				],
+			];
 		}
 
 		if ($context === 'com_radicalmart.personal')
 		{
-
+			return [
+				'type'   => $context,
+				'query'  => [
+					'lang'  => $this->language,
+				],
+			];
 		}
 
 		if ($context === 'com_radicalmart_bonuses.points')
