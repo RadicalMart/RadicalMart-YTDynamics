@@ -1,46 +1,49 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
 class RMUserType extends BaseType
 {
-
 	/**
-	 * @param $config
-	 *
 	 * @return array
-	 *
-	 * @since version
 	 */
 	public static function config()
 	{
-		parent::triggerEvent([
+
+		return parent::triggerEvent([
 			'fields' => [
-				'id'             => [
+
+				'id' => [
 					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('ID'),
 					],
 				],
-				'name'             => [
+
+				'name' => [
 					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('Name'),
 					],
 				],
-				'email'             => [
+
+				'email' => [
 					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('E-mail'),
 					],
 				],
+
 			],
 
 			'metadata' => [
 				'type'  => true,
-				'label' => trans('Category'),
+				'label' => trans('User'),
 			],
 		]);
 	}
+
 
 }

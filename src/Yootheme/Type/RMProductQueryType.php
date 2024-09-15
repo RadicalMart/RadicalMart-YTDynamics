@@ -45,6 +45,7 @@ class RMProductQueryType
 
 	public static function resolve($root)
 	{
+
 		if (isset($root['product']))
 		{
 			return $root['product'];

@@ -99,14 +99,54 @@ class MatchTemplate
 			$item = Factory::getApplication()->getIdentity();
 
 			return [
-				'type'   => $context,
-				'query'  => [
+				'type'    => $context,
+				'query'   => [
 					'lang' => $this->language,
 				],
-				'params' => [
+				'params'  => [
 					'item' => $item,
-				]
+				],
+				'editUrl' => null,
 			];
+		}
+
+		var_dump($context);
+
+		if ($context === 'com_radicalmart.orders')
+		{
+			$pagination = $view->get('pagination');
+
+			return [
+				'type'   => $context,
+				'query'  => [
+					'pages' => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
+					'lang'  => $this->language,
+				],
+				'params' => [
+					'items'      => $view->get('items'),
+					'pagination' => $pagination,
+				],
+			];
+		}
+
+		if ($context === 'com_radicalmart.settings')
+		{
+
+		}
+
+		if ($context === 'com_radicalmart.personal')
+		{
+
+		}
+
+		if ($context === 'com_radicalmart_bonuses.points')
+		{
+
+		}
+
+		if ($context === 'com_radicalmart_bonuses.codes')
+		{
+
 		}
 
 		return null;

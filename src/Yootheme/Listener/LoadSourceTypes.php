@@ -25,6 +25,7 @@ class LoadSourceTypes
 			Type\RMProductsQueryType::config(),
 			Type\RMProductQueryType::config(),
 			Type\RMUserQueryType::config(),
+			Type\RMMenuQueryType::config(),
 		];
 
 		$types = [
@@ -32,16 +33,20 @@ class LoadSourceTypes
 			['RMCategoryChildType', Type\RMCategoryChildType::config()],
 			['RMCategoryParamsType', Type\RMCategoryParamsType::config()],
 			['RMCategoryMediaType', Type\RMCategoryMediaType::config()],
+
 			['RMProductType', Type\RMProductType::config()],
 			['RMProductPriceType', Type\RMProductPriceType::config()],
 			['RMProductImageType', Type\RMProductImageType::config()],
 			['RMProductStockType', Type\RMProductStockType::config()],
 			['RMProductParamsType', Type\RMProductParamsType::config()],
+
 			['RMFieldType', Type\RMFieldType::config()],
 			['RMChoiceFieldStringType', Type\Fields\RMChoiceFieldStringType::config()],
 			['RMChoiceFieldType', Type\Fields\RMChoiceFieldType::config()],
 			['RMValueFieldType', Type\Fields\RMValueFieldType::config()],
 			['RMUserType', Type\RMUserType::config()],
+
+			['RMMenuType', Type\RMMenuType::config()],
 		];
 
 		PluginHelper::importPlugin('ytdynamics');

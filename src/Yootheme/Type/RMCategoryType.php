@@ -15,7 +15,7 @@ class RMCategoryType extends BaseType
 	 */
 	public static function config()
 	{
-		parent::triggerEvent([
+		return parent::triggerEvent([
 			'fields' => [
 				'id'             => [
 					'type'     => 'String',

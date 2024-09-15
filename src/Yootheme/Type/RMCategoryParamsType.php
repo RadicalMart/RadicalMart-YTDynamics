@@ -42,7 +42,6 @@ class RMCategoryParamsType extends BaseType
 			}
 
 			return parent::triggerEvent($fields);
-
 		}
 		catch (Exception $e)
 		{

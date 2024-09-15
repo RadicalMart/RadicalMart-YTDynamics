@@ -1,8 +1,9 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
 use function YOOtheme\trans;
+use Joomla\Component\RadicalMart\Administrator\Helper\UserHelper;
 
-class RMUserQueryType
+class RMMenuQueryType
 {
 
 	/**
@@ -16,11 +17,12 @@ class RMUserQueryType
 		return [
 			'fields' => [
 				'user' => [
-					'type'       => 'RMUserType',
+					'type'       => [
+						'listOf' => 'RMMenuType'
+					],
 					'metadata'   => [
-						'label' => trans('User'),
-						'view'  => ['com_users.profile'],
-						'group' => trans('Page'),
+						'label' => trans('Menus'),
+						'group' => trans('RadicalMart'),
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::resolve',
@@ -30,12 +32,9 @@ class RMUserQueryType
 		];
 	}
 
-	public static function resolve($root)
+	public static function resolve($root, array $args)
 	{
-		if (isset($root['item']))
-		{
-			return $root['item'];
-		}
+		return UserHelper::getMenu();
 	}
 
 }
