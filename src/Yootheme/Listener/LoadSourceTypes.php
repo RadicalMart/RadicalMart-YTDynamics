@@ -2,7 +2,7 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Plugin\System\YTDynamics\Event\EventYTDynamics;
+use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsSourceEvent;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 use YOOtheme\Builder\Source;
 use function YOOtheme\trans;
@@ -13,38 +13,54 @@ class LoadSourceTypes
 	public function handle($source): void
 	{
 
+		PluginHelper::importPlugin('radicalmart_ytdynamics');
+
 		$query = [
-			Type\RMCustomCategoriesQueryType::config(),
-			Type\RMCustomCategoriesWithChildQueryType::config(),
-			Type\RMCustomCategoryQueryType::config(),
-			Type\RMCustomProductsQueryType::config(),
-			Type\RMCustomProductsQueryType::config(),
-			Type\RMCategoriesQueryType::config(),
-			Type\RMProductsQueryType::config(),
-			Type\RMProductQueryType::config(),
+			Type\Category\RMCustomCategoriesQueryType::config(),
+			Type\Category\RMCustomCategoriesWithChildQueryType::config(),
+			Type\Category\RMCustomCategoryQueryType::config(),
+			Type\Category\RMCategoriesQueryType::config(),
+
+			Type\Product\RMCustomProductsQueryType::config(),
+			Type\Product\RMCustomProductsQueryType::config(),
+			Type\Product\RMProductsQueryType::config(),
+			Type\Product\RMProductQueryType::config(),
+
+			Type\LK\RMLKQueryType::config(),
 		];
 
 		$types = [
-			['RMCategoryType', Type\RMCategoryType::config()],
-			['RMCategoryChildType', Type\RMCategoryChildType::config()],
-			['RMCategoryParamsType', Type\RMCategoryParamsType::config()],
-			['RMCategoryMediaType', Type\RMCategoryMediaType::config()],
-			['RMProductType', Type\RMProductType::config()],
-			['RMProductPriceType', Type\RMProductPriceType::config()],
-			['RMProductImageType', Type\RMProductImageType::config()],
-			['RMProductStockType', Type\RMProductStockType::config()],
-			['RMProductParamsType', Type\RMProductParamsType::config()],
-			['RMFieldType', Type\RMFieldType::config()],
-			['RMChoiceFieldStringType', Type\Fields\RMChoiceFieldStringType::config()],
-			['RMChoiceFieldType', Type\Fields\RMChoiceFieldType::config()],
-			['RMValueFieldType', Type\Fields\RMValueFieldType::config()],
+			// Category
+			['RMCategoryType', Type\Category\RMCategoryType::config()],
+			['RMCategoryChildType', Type\Category\RMCategoryChildType::config()],
+			['RMCategoryParamsType', Type\Category\RMCategoryParamsType::config()],
+			['RMCategoryMediaType', Type\Category\RMCategoryMediaType::config()],
+
+			// Product
+			['RMProductType', Type\Product\RMProductType::config()],
+			['RMProductPriceType', Type\Product\RMProductPriceType::config()],
+			['RMProductImageType', Type\Product\RMProductImageType::config()],
+			['RMProductStockType', Type\Product\RMProductStockType::config()],
+			['RMProductParamsType', Type\Product\RMProductParamsType::config()],
+
+			// Product fields
+			['RMFieldType', Type\Product\RMFieldType::config()],
+			['RMChoiceFieldStringType', Type\Product\Fields\RMChoiceFieldStringType::config()],
+			['RMChoiceFieldType', Type\Product\Fields\RMChoiceFieldType::config()],
+			['RMValueFieldType', Type\Product\Fields\RMValueFieldType::config()],
+
+			// LK
+			['RMMenuType', Type\LK\RMMenuType::config()],
+			['RMUserType', Type\LK\RMUserType::config()],
+			['RMPersonalType', Type\LK\RMPersonalType::config()],
+			['RMSettingsType', Type\LK\RMSettingsType::config()],
 		];
 
 		PluginHelper::importPlugin('ytdynamics');
 
 		Factory::getApplication()->getDispatcher()->dispatch(
-			'onYTDynamics',
-			new EventYTDynamics('onYTDynamics', ['query' => $query, 'types' => &$types])
+			'onRadicalMartYTDynamicsSource',
+			new YTDynamicsSourceEvent('onRadicalMartYTDynamicsSource', ['query' => &$query, 'types' => &$types])
 		);
 
 		foreach ($query as $args)
@@ -74,14 +90,14 @@ class LoadSourceTypes
 							'label' => trans('Fields'),
 						],
 						'extensions' => [
-							'call' => Type\RMFieldsType::class . '::field',
+							'call' => Type\Product\RMFieldsType::class . '::field',
 						],
 					],
 				],
 			],
 		);
 
-		$source->objectType($fieldType, Type\RMFieldsType::config($source, 'RMProductType', $fields));
+		$source->objectType($fieldType, Type\Product\RMFieldsType::config($source, 'RMProductType', $fields));
 	}
 
 }

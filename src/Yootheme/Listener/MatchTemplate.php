@@ -23,9 +23,9 @@ class MatchTemplate
 		}
 
 		$context = $view->get('context');
-		$layout = Factory::getApplication()->input->get('layout');
+		$layout  = Factory::getApplication()->input->get('layout');
 
-		if(!empty($layout))
+		if (!empty($layout))
 		{
 			$context .= '.' . $layout;
 		}
@@ -92,6 +92,63 @@ class MatchTemplate
 					'pagination' => $pagination,
 				],
 			];
+		}
+
+		if ($context === 'com_users.profile')
+		{
+			return [
+				'type'    => $context,
+				'query'   => [
+					'lang' => $this->language,
+				]
+			];
+		}
+
+		if ($context === 'com_radicalmart.orders')
+		{
+			$pagination = $view->get('pagination');
+
+			return [
+				'type'   => $context,
+				'query'  => [
+					'pages' => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
+					'lang'  => $this->language,
+				],
+				'params' => [
+					'items'      => $view->get('items'),
+					'pagination' => $pagination,
+				],
+			];
+		}
+
+		if ($context === 'com_radicalmart.settings')
+		{
+			return [
+				'type'   => $context,
+				'query'  => [
+					'lang'  => $this->language,
+				],
+			];
+		}
+
+		if ($context === 'com_radicalmart.personal')
+		{
+			return [
+				'type'   => $context,
+				'query'  => [
+					'lang'  => $this->language,
+				],
+			];
+		}
+
+		if ($context === 'com_radicalmart_bonuses.points')
+		{
+
+		}
+
+		if ($context === 'com_radicalmart_bonuses.codes')
+		{
+
 		}
 
 		return null;
