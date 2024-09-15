@@ -1,28 +1,28 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
-use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class RMProductImageType
+class RMProductImageType extends BaseType
 {
 
 	public static function config()
 	{
-		return [
+		return parent::triggerEvent([
 			'fields' => [
 				'src' => [
 					'type'     => 'String',
 					'metadata' => [
-						'label'   => trans('Src'),
+						'label' => trans('Src'),
 					],
 				],
 				'alt' => [
 					'type'     => 'String',
 					'metadata' => [
-						'label'   => trans('Alt'),
+						'label' => trans('Alt'),
 					],
 				],
 			]
-		];
+		]);
 	}
+
 }

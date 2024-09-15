@@ -1,18 +1,21 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
-class RMCategoryType
+class RMCategoryType extends BaseType
 {
+
 	/**
+	 * @param $config
+	 *
 	 * @return array
+	 *
+	 * @since version
 	 */
 	public static function config()
 	{
-		return [
+		parent::triggerEvent([
 			'fields' => [
 				'id'             => [
 					'type'     => 'String',
@@ -82,7 +85,7 @@ class RMCategoryType
 				'type'  => true,
 				'label' => trans('Category'),
 			],
-		];
+		]);
 	}
 
 	public static function media($item)

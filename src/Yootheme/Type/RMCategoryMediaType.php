@@ -2,12 +2,18 @@
 
 use function YOOtheme\trans;
 
-class RMCategoryMediaType
+class RMCategoryMediaType extends BaseType
 {
 
+	/**
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	public static function config()
 	{
-		return [
+		return parent::triggerEvent([
 			'fields' => [
 				'image' => [
 					'type'     => 'String',
@@ -22,6 +28,7 @@ class RMCategoryMediaType
 					],
 				],
 			]
-		];
+		]);
 	}
+
 }

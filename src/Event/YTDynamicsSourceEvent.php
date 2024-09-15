@@ -5,7 +5,7 @@ use YOOtheme\Builder\Source;
 
 \defined('_JEXEC') or die;
 
-class EventYTDynamics extends Event
+class YTDynamicsSourceEvent extends Event
 {
 
 	public function getSource(): Source

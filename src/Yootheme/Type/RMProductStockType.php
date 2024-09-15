@@ -3,21 +3,21 @@
 use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class RMProductStockType
+class RMProductStockType extends BaseType
 {
 
 	public static function config()
 	{
-		return [
+		return parent::triggerEvent([
 			'fields' => [
 				'all' => [
-					'type' => 'String',
+					'type'     => 'String',
 					'metadata' => [
 						'label' => trans('All'),
 					],
 				],
 			]
-		];
+		]);
 	}
 
 }

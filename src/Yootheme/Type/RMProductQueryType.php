@@ -4,8 +4,12 @@ use function YOOtheme\trans;
 
 class RMProductQueryType
 {
+
 	/**
+	 *
 	 * @return array
+	 *
+	 * @since version
 	 */
 	public static function config()
 	{

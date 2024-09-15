@@ -4,8 +4,12 @@ use function YOOtheme\trans;
 
 class RMProductsQueryType
 {
+
 	/**
+	 *
 	 * @return array
+	 *
+	 * @since version
 	 */
 	public static function config()
 	{
@@ -102,7 +106,7 @@ class RMProductsQueryType
 			'offset' => 0,
 			'limit'  => null,
 		];
-		
+
 		if (isset($root['items']))
 		{
 			$items = $root['items'];
@@ -120,4 +124,5 @@ class RMProductsQueryType
 	{
 		return $root['items'][$args['offset'] ?? 0] ?? null;
 	}
+
 }

@@ -6,8 +6,13 @@ use function YOOtheme\trans;
 
 class RMCategoryChildType extends RMCategoryType
 {
+
 	/**
+	 * @param $config
+	 *
 	 * @return array
+	 *
+	 * @since version
 	 */
 	public static function config()
 	{

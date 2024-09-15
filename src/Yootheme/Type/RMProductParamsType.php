@@ -5,7 +5,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use function YOOtheme\trans;
 
-class RMProductParamsType
+class RMProductParamsType extends BaseType
 {
 
 	public static function config()
@@ -35,7 +35,7 @@ class RMProductParamsType
 			];
 		}
 
-		return $fields;
+		return parent::triggerEvent($fields);
 	}
 
 }

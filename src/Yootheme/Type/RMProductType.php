@@ -4,7 +4,7 @@ use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
-class RMProductType
+class RMProductType extends BaseType
 {
 	/**
 	 * @return array
@@ -12,7 +12,7 @@ class RMProductType
 	public static function config()
 	{
 
-		return [
+		return parent::triggerEvent([
 			'fields' => [
 
 				'id' => [
@@ -72,8 +72,8 @@ class RMProductType
 				],
 
 				'stock' => [
-					'type'     => 'RMProductStockType',
-					'metadata' => [
+					'type'       => 'RMProductStockType',
+					'metadata'   => [
 						'label' => trans('Stock'),
 					],
 					'extensions' => [
@@ -162,8 +162,7 @@ class RMProductType
 				'type'  => true,
 				'label' => trans('Product'),
 			],
-		];
-
+		]);
 	}
 
 	public static function category($item)
@@ -196,7 +195,7 @@ class RMProductType
 
 	public static function params($item, $args)
 	{
-		if($item->params instanceof Registry)
+		if ($item->params instanceof Registry)
 		{
 			return $item->params->toArray();
 		}

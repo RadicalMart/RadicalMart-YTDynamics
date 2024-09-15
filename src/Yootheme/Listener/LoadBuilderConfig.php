@@ -126,6 +126,17 @@ class LoadBuilderConfig
 					],
 				],
 			],
+
+			'com_users.profile' => [
+				'label'    => trans('User profile'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang'  => $languageField,
+						],
+					],
+				],
+			],
 		];
 
 		$config->merge([

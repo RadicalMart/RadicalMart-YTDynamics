@@ -23,9 +23,9 @@ class MatchTemplate
 		}
 
 		$context = $view->get('context');
-		$layout = Factory::getApplication()->input->get('layout');
+		$layout  = Factory::getApplication()->input->get('layout');
 
-		if(!empty($layout))
+		if (!empty($layout))
 		{
 			$context .= '.' . $layout;
 		}
@@ -91,6 +91,21 @@ class MatchTemplate
 					'items'      => $view->get('items'),
 					'pagination' => $pagination,
 				],
+			];
+		}
+
+		if ($context === 'com_users.profile')
+		{
+			$item = Factory::getApplication()->getIdentity();
+
+			return [
+				'type'   => $context,
+				'query'  => [
+					'lang' => $this->language,
+				],
+				'params' => [
+					'item' => $item,
+				]
 			];
 		}
 

@@ -8,12 +8,12 @@ use YOOtheme\Path;
 use YOOtheme\Str;
 use function YOOtheme\app;
 
-class RMFieldsType
+class RMFieldsType extends BaseType
 {
 
 	public static function config(Source $source, $type, array $fields)
 	{
-		return [
+		return parent::triggerEvent([
 			'fields' => array_filter(
 				array_reduce(
 					$fields,
@@ -46,7 +46,7 @@ class RMFieldsType
 					],
 				],
 			],
-		];
+		]);
 	}
 
 	protected static function configFields($field, array $config, Source $source, $type)

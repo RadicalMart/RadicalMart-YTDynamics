@@ -2,7 +2,7 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Plugin\System\YTDynamics\Event\EventYTDynamics;
+use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsSourceEvent;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 use YOOtheme\Builder\Source;
 use function YOOtheme\trans;
@@ -13,6 +13,8 @@ class LoadSourceTypes
 	public function handle($source): void
 	{
 
+		PluginHelper::importPlugin('radicalmart_ytdynamics');
+
 		$query = [
 			Type\RMCustomCategoriesQueryType::config(),
 			Type\RMCustomCategoriesWithChildQueryType::config(),
@@ -22,6 +24,7 @@ class LoadSourceTypes
 			Type\RMCategoriesQueryType::config(),
 			Type\RMProductsQueryType::config(),
 			Type\RMProductQueryType::config(),
+			Type\RMUserQueryType::config(),
 		];
 
 		$types = [
@@ -38,13 +41,14 @@ class LoadSourceTypes
 			['RMChoiceFieldStringType', Type\Fields\RMChoiceFieldStringType::config()],
 			['RMChoiceFieldType', Type\Fields\RMChoiceFieldType::config()],
 			['RMValueFieldType', Type\Fields\RMValueFieldType::config()],
+			['RMUserType', Type\RMUserType::config()],
 		];
 
 		PluginHelper::importPlugin('ytdynamics');
 
 		Factory::getApplication()->getDispatcher()->dispatch(
-			'onYTDynamics',
-			new EventYTDynamics('onYTDynamics', ['query' => $query, 'types' => &$types])
+			'onRadicalMartYTDynamicsSource',
+			new YTDynamicsSourceEvent('onRadicalMartYTDynamicsSource', ['query' => &$query, 'types' => &$types])
 		);
 
 		foreach ($query as $args)

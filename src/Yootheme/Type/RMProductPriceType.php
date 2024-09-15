@@ -1,14 +1,13 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type;
 
-use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
-class RMProductPriceType
+class RMProductPriceType extends BaseType
 {
 
 	public static function config()
 	{
-		return [
+		return parent::triggerEvent([
 			'fields' => [
 				'currency'        => [
 					'type'     => 'String',
@@ -149,7 +148,7 @@ class RMProductPriceType
 					],
 				],
 			]
-		];
+		]);
 	}
 
 }
