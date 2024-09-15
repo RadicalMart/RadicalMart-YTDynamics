@@ -96,21 +96,13 @@ class MatchTemplate
 
 		if ($context === 'com_users.profile')
 		{
-			$item = Factory::getApplication()->getIdentity();
-
 			return [
 				'type'    => $context,
 				'query'   => [
 					'lang' => $this->language,
-				],
-				'params'  => [
-					'item' => $item,
-				],
-				'editUrl' => null,
+				]
 			];
 		}
-
-		var_dump($context);
 
 		if ($context === 'com_radicalmart.orders')
 		{
