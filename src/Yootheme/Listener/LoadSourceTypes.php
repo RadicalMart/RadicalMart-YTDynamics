@@ -13,8 +13,6 @@ class LoadSourceTypes
 	public function handle($source): void
 	{
 
-		PluginHelper::importPlugin('radicalmart_ytdynamics');
-
 		$query = [
 			Type\Category\RMCustomCategoriesQueryType::config(),
 			Type\Category\RMCustomCategoriesWithChildQueryType::config(),
@@ -55,8 +53,6 @@ class LoadSourceTypes
 			['RMPersonalType', Type\LK\RMPersonalType::config()],
 			['RMSettingsType', Type\LK\RMSettingsType::config()],
 		];
-
-		PluginHelper::importPlugin('ytdynamics');
 
 		Factory::getApplication()->getDispatcher()->dispatch(
 			'onRadicalMartYTDynamicsSource',

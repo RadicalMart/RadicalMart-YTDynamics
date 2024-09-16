@@ -3,6 +3,7 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Event\SubscriberInterface;
 use YOOtheme\Application;
 
@@ -28,6 +29,8 @@ class YTDynamics extends CMSPlugin implements SubscriberInterface
 		{
 			return;
 		}
+
+		PluginHelper::importPlugin('radicalmart_ytdynamics');
 
 		Application::getInstance()->load(implode('/', [JPATH_PLUGINS, 'system', 'ytdynamics', 'src', 'Yootheme']) . '/bootstrap.php');
 	}
