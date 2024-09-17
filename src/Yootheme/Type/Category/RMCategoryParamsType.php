@@ -2,7 +2,8 @@
 
 use Exception;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Form\Form;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Plugin\System\YTDynamics\Model\CategoryModel;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
 
@@ -21,12 +22,9 @@ class RMCategoryParamsType extends BaseType
 
 		try
 		{
-			Form::addFormPath(JPATH_ROOT . '/administrator/components/com_radicalmart/forms');
-
-			$model = Factory::getApplication()->bootComponent('com_radicalmart')
-				->getMVCFactory()
-				->createModel('Category', 'Administrator', ['ignore_request' => true]);
-			$form  = $model->getForm();
+			$model = new CategoryModel(['ignore_request' => true],);
+			$model->setDatabase(Factory::getContainer()->get(DatabaseInterface::class));
+			$form = $model->getForm();
 
 			// получаем params от формы
 			$params = $form->getGroup('params');

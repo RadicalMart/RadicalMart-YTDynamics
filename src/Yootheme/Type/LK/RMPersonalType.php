@@ -1,13 +1,14 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\LK;
 
-use Joomla\CMS\Document\DocumentAwareInterface;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Form\Form;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Trait\ComponentTrait;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
 
 class RMPersonalType extends BaseType
 {
+
+	use ComponentTrait;
+
 	/**
 	 * @return array
 	 */
@@ -31,47 +32,14 @@ class RMPersonalType extends BaseType
 
 			'metadata' => [
 				'type'  => true,
-				'label' => trans('Settings'),
+				'label' => trans('Personal'),
 			],
 		]);
 	}
 
 	public static function component($item)
 	{
-
-		$view = Factory::getApplication()
-			->bootComponent('com_radicalmart')
-			->getMVCFactory()
-			->createView('Settings', '', 'Html');
-
-		$model = Factory::getApplication()
-			->bootComponent('com_radicalmart')
-			->getMVCFactory()
-			->createModel('Personal', 'Site', ['ignore_request' => false]);
-
-
-		$assets = Factory::getApplication()->getDocument()->getWebAssetManager();
-		$assets->getRegistry()->addExtensionRegistryFile('com_radicalmart');
-
-		Form::addFormPath(implode(DIRECTORY_SEPARATOR, [JPATH_BASE, 'components', 'com_radicalmart', 'forms']));
-
-		$document = Factory::getApplication()->getDocument();
-
-		if ($view instanceof DocumentAwareInterface && $document)
-		{
-			$view->setDocument($document);
-		}
-
-		$view->setModel($model, true);
-		$view->addTemplatePath(implode(DIRECTORY_SEPARATOR, [JPATH_PLUGINS, 'system', 'ytdynamics', 'template']));
-
-		ob_start();
-
-		$view->display('ytdpersonal');
-
-		return ob_get_clean();
-
-
+		return static::getRenderComponent('Personal', 'ytdpersonal');
 	}
 
 }

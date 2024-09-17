@@ -2,7 +2,8 @@
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Form\Form;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Plugin\System\YTDynamics\Model\ProductModel;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
 
@@ -11,15 +12,11 @@ class RMProductParamsType extends BaseType
 
 	public static function config()
 	{
-
-		Form::addFormPath(JPATH_ROOT . '/administrator/components/com_radicalmart/forms');
-
 		$fields = ['fields' => []];
-		$model  = Factory::getApplication()->bootComponent('com_radicalmart')
-			->getMVCFactory()
-			->createModel('Product', 'Administrator', ['ignore_request' => true]);
-		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
 
+		$model = new ProductModel(['ignore_request' => true]);
+		$model->setDatabase(Factory::getContainer()->get(DatabaseInterface::class));
+		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
 		$form = $model->getForm();
 
 		// получаем params от формы

@@ -52,7 +52,7 @@ class LoadBuilderConfig
 
 		$templates = [
 			'com_radicalmart.product' => [
-				'label'    => trans('Single Product'),
+				'label'    => trans('RM single product'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [
@@ -76,7 +76,7 @@ class LoadBuilderConfig
 			],
 
 			'com_radicalmart.categories' => [
-				'label'    => trans('List All Categories'),
+				'label'    => trans('RM list all categories'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [
@@ -87,7 +87,7 @@ class LoadBuilderConfig
 			],
 
 			'com_radicalmart.categories.alphabetical' => [
-				'label'    => trans('List All Categories alphabetical'),
+				'label'    => trans('RM list all categories alphabetical'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [
@@ -98,7 +98,7 @@ class LoadBuilderConfig
 			],
 
 			'com_radicalmart.category' => [
-				'label'    => trans('Category RadicalMart'),
+				'label'    => trans('RM Category'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [
