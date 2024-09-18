@@ -107,7 +107,7 @@ class RMProductsQueryType
 			'limit'  => null,
 		];
 
-		if (isset($root['items']))
+		if (!empty($root['items']))
 		{
 			$items = $root['items'];
 
@@ -117,6 +117,10 @@ class RMProductsQueryType
 			}
 
 			return $items;
+		}
+		else
+		{
+			return [-1 => true];
 		}
 	}
 

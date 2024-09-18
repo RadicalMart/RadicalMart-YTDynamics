@@ -6,7 +6,6 @@ if (!empty($props['css']))
 	$css = preg_replace('/[\r\n\t\h]+/u', ' ', $props['css']);
 	echo "<style class=\"uk-margin-remove-adjacent\">{$css}</style>";
 }
-
 $content = $builder->render($children);
 
 $el = $this->el($props['html_element'] ?: 'div', [
