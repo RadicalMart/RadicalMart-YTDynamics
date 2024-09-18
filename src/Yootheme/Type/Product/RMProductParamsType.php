@@ -33,6 +33,19 @@ class RMProductParamsType extends BaseType
 			];
 		}
 
+		$plugin = $form->getGroup('plugin');
+
+		// проходим plugin и создаем поля
+		foreach ($plugin as $key => $value)
+		{
+			$fields['fields'][$value->fieldname] = [
+				'type'     => 'String',
+				'metadata' => [
+					'label' => trans($value->fieldname),
+				]
+			];
+		}
+
 		return parent::triggerEvent($fields);
 	}
 

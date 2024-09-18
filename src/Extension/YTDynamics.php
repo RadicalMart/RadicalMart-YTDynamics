@@ -30,6 +30,7 @@ class YTDynamics extends CMSPlugin implements SubscriberInterface
 			return;
 		}
 
+		PluginHelper::importPlugin('radicalmart');
 		PluginHelper::importPlugin('radicalmart_ytdynamics');
 
 		Application::getInstance()->load(implode('/', [JPATH_PLUGINS, 'system', 'ytdynamics', 'src', 'Yootheme']) . '/bootstrap.php');
