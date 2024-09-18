@@ -159,6 +159,28 @@ class LoadBuilderConfig
 					],
 				],
 			],
+
+			'com_radicalmart.orders' => [
+				'label'    => trans('RM Orders'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang'  => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart.order' => [
+				'label'    => trans('RM Order'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang'  => $languageField,
+						],
+					],
+				],
+			],
 		];
 
 		$config->merge([

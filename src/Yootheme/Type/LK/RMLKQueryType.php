@@ -59,6 +59,16 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
+				'RadicalMartOrders' => [
+					'type'       => 'RMOrderType',
+					'metadata'   => [
+						'label' => trans('RM Orders'),
+						'group' => trans('RadicalMart'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
+					],
+				],
 			],
 		];
 	}

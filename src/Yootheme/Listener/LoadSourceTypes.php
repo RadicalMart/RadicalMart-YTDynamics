@@ -52,6 +52,7 @@ class LoadSourceTypes
 			['RMUserType', Type\LK\RMUserType::config()],
 			['RMPersonalType', Type\LK\RMPersonalType::config()],
 			['RMSettingsType', Type\LK\RMSettingsType::config()],
+			['RMOrderType', Type\LK\RMOrderType::config()],
 		];
 
 		Factory::getApplication()->getDispatcher()->dispatch(
