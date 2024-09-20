@@ -1,8 +1,8 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\LK;
 
+use Joomla\CMS\Router\Route;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
-use Joomla\CMS\HTML\HTMLHelper;
 
 class RMUserType extends BaseType
 {
@@ -29,6 +29,13 @@ class RMUserType extends BaseType
 					],
 				],
 
+				'username' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Username'),
+					],
+				],
+
 				'email' => [
 					'type'     => 'String',
 					'metadata' => [
@@ -42,6 +49,26 @@ class RMUserType extends BaseType
 						'label' => trans('Avatar'),
 					],
 				],
+
+				'edit' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Link edit'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::edit',
+					],
+				],
+
+				'logout' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Link logout'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::logout',
+					],
+				],
 			],
 
 			'metadata' => [
@@ -51,9 +78,14 @@ class RMUserType extends BaseType
 		]);
 	}
 
-	public static function text($item)
+	public static function edit($item)
 	{
-		return HTMLHelper::image(($item->avantar) ?: 'com_radicalmart/no-avatar.svg', htmlspecialchars($item->name));
+		return Route::link('site', 'index.php?option=com_radicalmart&view=settings');
+	}
+
+	public static function logout($item)
+	{
+		return Route::link('site', 'index.php?option=com_users&view=login&layout=logout&task=user.menulogout');
 	}
 
 }
