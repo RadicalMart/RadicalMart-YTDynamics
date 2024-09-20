@@ -1,12 +1,16 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\LK;
 
-use Joomla\CMS\Language\Text;
+use Joomla\CMS\Document\DocumentAwareInterface;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Trait\ComponentTrait;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
+use Joomla\CMS\HTML\HTMLHelper;
 
-class RMOrderType extends BaseType
+class RMSettingsComponentType extends BaseType
 {
+
 	use ComponentTrait;
 
 	/**
@@ -27,18 +31,19 @@ class RMOrderType extends BaseType
 						'call' => __CLASS__ . '::component',
 					],
 				],
+
 			],
 
 			'metadata' => [
 				'type'  => true,
-				'label' => trans('Order'),
+				'label' => trans('Settings'),
 			],
 		]);
 	}
 
 	public static function component($item)
 	{
-		return static::getRenderComponent('Orders', 'ytdorders');
+		return static::getRenderComponent('Settings', 'ytdsettings');
 	}
 
 }

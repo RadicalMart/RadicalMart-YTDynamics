@@ -1,14 +1,10 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\LK;
 
-use Joomla\CMS\Document\DocumentAwareInterface;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Form\Form;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Trait\ComponentTrait;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
-use Joomla\CMS\HTML\HTMLHelper;
 
-class RMSettingsType extends BaseType
+class RMPersonalComponentType extends BaseType
 {
 
 	use ComponentTrait;
@@ -36,14 +32,14 @@ class RMSettingsType extends BaseType
 
 			'metadata' => [
 				'type'  => true,
-				'label' => trans('Settings'),
+				'label' => trans('Personal'),
 			],
 		]);
 	}
 
 	public static function component($item)
 	{
-		return static::getRenderComponent('Settings', 'ytdsettings');
+		return static::getRenderComponent('Personal', 'ytdpersonal');
 	}
 
 }

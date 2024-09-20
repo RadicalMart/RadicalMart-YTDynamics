@@ -4,9 +4,8 @@ use Joomla\Plugin\System\YTDynamics\Yootheme\Trait\ComponentTrait;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
 
-class RMPersonalType extends BaseType
+class RMOrdersComponentType extends BaseType
 {
-
 	use ComponentTrait;
 
 	/**
@@ -27,19 +26,18 @@ class RMPersonalType extends BaseType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-
 			],
 
 			'metadata' => [
 				'type'  => true,
-				'label' => trans('Personal'),
+				'label' => trans('Orders'),
 			],
 		]);
 	}
 
 	public static function component($item)
 	{
-		return static::getRenderComponent('Personal', 'ytdpersonal');
+		return static::getRenderComponent('Orders', 'ytdorders');
 	}
 
 }

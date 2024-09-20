@@ -39,8 +39,10 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::user',
 					],
 				],
-				'RadicalMartPersonal' => [
-					'type'       => 'RMPersonalType',
+
+
+				'RadicalMartPersonalComponent' => [
+					'type'       => 'RMPersonalComponentType',
 					'metadata'   => [
 						'label' => trans('RM Personal'),
 						'group' => trans('RadicalMart'),
@@ -49,8 +51,8 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartSettings' => [
-					'type'       => 'RMSettingsType',
+				'RadicalMartSettingsComponent' => [
+					'type'       => 'RMSettingsComponentType',
 					'metadata'   => [
 						'label' => trans('RM Settings'),
 						'group' => trans('RadicalMart'),
@@ -59,10 +61,20 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartOrders' => [
-					'type'       => 'RMOrderType',
+				'RadicalMartOrdersComponent' => [
+					'type'       => 'RMOrdersComponentType',
 					'metadata'   => [
 						'label' => trans('RM Orders'),
+						'group' => trans('RadicalMart'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
+					],
+				],
+				'RadicalMartOrderComponent' => [
+					'type'       => 'RMOrderComponentType',
+					'metadata'   => [
+						'label' => trans('RM Order'),
 						'group' => trans('RadicalMart'),
 					],
 					'extensions' => [
