@@ -74,7 +74,7 @@ class RMFieldsType extends BaseType
 
 		$object = new $class_name;
 
-		return call_user_func([$object, 'resolve'], $field, $args, $ctx, $info);
+		return $object->resolve($field, $args, $ctx, $info);
 	}
 
 	public static function field($item, $args, $ctx, $info)

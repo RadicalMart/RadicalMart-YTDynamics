@@ -8,7 +8,7 @@ use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
 use Joomla\CMS\HTML\HTMLHelper;
 
-class RMSettingsComponentType extends BaseType
+class RMComponentSettingsType extends BaseType
 {
 
 	use ComponentTrait;
@@ -43,7 +43,7 @@ class RMSettingsComponentType extends BaseType
 
 	public static function component($item)
 	{
-		return static::getRenderComponent('Settings', 'ytdsettings');
+		return static::getRenderComponent('com_radicalmart', 'Settings', 'ytdsettings');
 	}
 
 }

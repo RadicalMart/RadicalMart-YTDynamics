@@ -17,7 +17,7 @@ class RMLKQueryType
 	{
 		return [
 			'fields' => [
-				'RadicalMartMenu'     => [
+				'RadicalMartMenu'              => [
 					'type'       => [
 						'listOf' => 'RMMenuType'
 					],
@@ -29,7 +29,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::menu',
 					],
 				],
-				'RadicalMartUser'     => [
+				'RadicalMartUser'              => [
 					'type'       => 'RMUserType',
 					'metadata'   => [
 						'label' => trans('RM User'),
@@ -39,43 +39,67 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::user',
 					],
 				],
-
-
-				'RadicalMartPersonalComponent' => [
-					'type'       => 'RMPersonalComponentType',
+				'RadicalMartComponentPersonal' => [
+					'type'       => 'RMComponentPersonalType',
 					'metadata'   => [
 						'label' => trans('RM Personal'),
-						'group' => trans('RadicalMart'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart.personal'],
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartSettingsComponent' => [
-					'type'       => 'RMSettingsComponentType',
+				'RadicalMartComponentSettings' => [
+					'type'       => 'RMComponentSettingsType',
 					'metadata'   => [
 						'label' => trans('RM Settings'),
-						'group' => trans('RadicalMart'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart.settings'],
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartOrdersComponent' => [
-					'type'       => 'RMOrdersComponentType',
+				'RadicalMartComponentOrders'   => [
+					'type'       => 'RMComponentOrdersType',
 					'metadata'   => [
 						'label' => trans('RM Orders'),
-						'group' => trans('RadicalMart'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart.orders'],
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartOrderComponent' => [
-					'type'       => 'RMOrderComponentType',
+				'RadicalMartComponentOrder'    => [
+					'type'       => 'RMComponentOrderType',
 					'metadata'   => [
 						'label' => trans('RM Order'),
-						'group' => trans('RadicalMart'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart.order'],
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
+					],
+				],
+				'RadicalMartComponentCodes'    => [
+					'type'       => 'RMComponentCodesType',
+					'metadata'   => [
+						'label' => trans('RM Codes'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart_bonuses.codes'],
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
+					],
+				],
+				'RadicalMartComponentPoints'   => [
+					'type'       => 'RMComponentPointsType',
+					'metadata'   => [
+						'label' => trans('RM Points'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart_bonuses.points'],
 					],
 					'extensions' => [
 						'call' => __CLASS__ . '::component',

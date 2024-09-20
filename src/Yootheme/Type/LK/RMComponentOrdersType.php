@@ -4,7 +4,7 @@ use Joomla\Plugin\System\YTDynamics\Yootheme\Trait\ComponentTrait;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
 
-class RMOrdersComponentType extends BaseType
+class RMComponentOrdersType extends BaseType
 {
 	use ComponentTrait;
 
@@ -37,7 +37,7 @@ class RMOrdersComponentType extends BaseType
 
 	public static function component($item)
 	{
-		return static::getRenderComponent('Orders', 'ytdorders');
+		return static::getRenderComponent('com_radicalmart', 'Orders', 'ytdorders');
 	}
 
 }

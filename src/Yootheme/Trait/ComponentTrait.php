@@ -8,6 +8,7 @@ trait ComponentTrait
 {
 
 	/**
+	 * @param $component
 	 * @param $name
 	 * @param $template
 	 *
@@ -15,22 +16,22 @@ trait ComponentTrait
 	 *
 	 * @since version
 	 */
-	public static function getRenderComponent($name, $template)
+	public static function getRenderComponent($component, $name, $template)
 	{
 		try
 		{
 			$view = Factory::getApplication()
-				->bootComponent('com_radicalmart')
+				->bootComponent($component)
 				->getMVCFactory()
 				->createView($name, '', 'Html');
 
 			$model = Factory::getApplication()
-				->bootComponent('com_radicalmart')
+				->bootComponent($component)
 				->getMVCFactory()
 				->createModel($name, 'Site', ['ignore_request' => false]);
 
 			$assets = Factory::getApplication()->getDocument()->getWebAssetManager();
-			$assets->getRegistry()->addExtensionRegistryFile('com_radicalmart');
+			$assets->getRegistry()->addExtensionRegistryFile($component);
 
 			Form::addFormPath(implode(DIRECTORY_SEPARATOR, [JPATH_BASE, 'components', 'com_radicalmart', 'forms']));
 

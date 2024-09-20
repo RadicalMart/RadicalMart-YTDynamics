@@ -50,10 +50,12 @@ class LoadSourceTypes
 			// LK
 			['RMMenuType', Type\LK\RMMenuType::config()],
 			['RMUserType', Type\LK\RMUserType::config()],
-			['RMPersonalComponentType', Type\LK\RMPersonalComponentType::config()],
-			['RMSettingsComponentType', Type\LK\RMSettingsComponentType::config()],
-			['RMOrdersComponentType', Type\LK\RMOrdersComponentType::config()],
-			['RMOrderComponentType', Type\LK\RMOrderComponentType::config()],
+			['RMComponentPersonalType', Type\LK\RMComponentPersonalType::config()],
+			['RMComponentSettingsType', Type\LK\RMComponentSettingsType::config()],
+			['RMComponentOrdersType', Type\LK\RMComponentOrdersType::config()],
+			['RMComponentOrderType', Type\LK\RMComponentOrderType::config()],
+			['RMComponentPointsType', Type\LK\RMComponentPointsType::config()],
+			['RMComponentCodesType', Type\LK\RMComponentCodesType::config()],
 		];
 
 		Factory::getApplication()->getDispatcher()->dispatch(
