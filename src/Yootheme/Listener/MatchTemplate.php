@@ -142,6 +142,17 @@ class MatchTemplate
 			];
 		}
 
+		if ($context === 'com_radicalmart_favorites.favorites')
+		{
+			return [
+				'type'  => $context,
+				'query' => [
+					'lang' => $this->language,
+				],
+			];
+		}
+
+
 		if ($context === 'com_radicalmart_bonuses.points')
 		{
 			return [
@@ -174,7 +185,7 @@ class MatchTemplate
 
 		$template = $event->getResult();
 
-		if (count($template) > 0)
+		if (is_array($template) && count($template) > 0)
 		{
 			return $template;
 		}

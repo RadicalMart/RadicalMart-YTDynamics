@@ -55,6 +55,7 @@ class LoadSourceTypes
 			['RMComponentOrderType', Type\LK\RMComponentOrderType::config()],
 			['RMComponentPointsType', Type\LK\RMComponentPointsType::config()],
 			['RMComponentCodesType', Type\LK\RMComponentCodesType::config()],
+			['RMComponentFavoritesType', Type\LK\RMComponentFavoritesType::config()],
 		];
 
 		foreach ($query as $args)

@@ -83,6 +83,17 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
+				'RadicalMartComponentFavorites'   => [
+					'type'       => 'RMComponentFavoritesType',
+					'metadata'   => [
+						'label' => trans('RM Favorites'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart_favorites.favorites'],
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
+					],
+				],
 				'RadicalMartComponentCodes'    => [
 					'type'       => 'RMComponentCodesType',
 					'metadata'   => [

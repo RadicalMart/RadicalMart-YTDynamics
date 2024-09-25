@@ -163,7 +163,7 @@ class LoadBuilderConfig
 			],
 
 			'com_radicalmart.orders' => [
-				'label'    => trans('RM Orders'),
+				'label'    => trans('RM orders'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [
@@ -174,7 +174,40 @@ class LoadBuilderConfig
 			],
 
 			'com_radicalmart.order' => [
-				'label'    => trans('RM Order'),
+				'label'    => trans('RM order'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart_favorites.favorites' => [
+				'label'    => trans('RM favorites'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart_bonuses.points' => [
+				'label'    => trans('RM points'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart_bonuses.codes' => [
+				'label'    => trans('RM codes'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [

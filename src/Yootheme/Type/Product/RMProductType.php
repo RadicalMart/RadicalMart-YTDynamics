@@ -1,5 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product;
 
+use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use Joomla\Registry\Registry;
 use function YOOtheme\trans;
@@ -155,7 +156,17 @@ class RMProductType extends BaseType
 					'metadata' => [
 						'label' => trans('Fields'),
 					],
-				]
+				],
+
+				'favorite' => [
+					'type'       => 'String',
+					'metadata'   => [
+						'label' => trans('Favorite'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::favorite',
+					],
+				],
 			],
 
 			'metadata' => [
@@ -201,6 +212,26 @@ class RMProductType extends BaseType
 		}
 
 		return [];
+	}
+
+	public static function favorite($item, $args)
+	{
+		try
+		{
+			$result = [];
+			$context = 'com_radicalmart.product';
+
+			// Display stats
+			$active   = \Joomla\Component\RadicalMartFavorites\Site\Helper\FavoritesHelper::checkActive($item->id);
+			$result[] = LayoutHelper::render('components.radicalmart_favorites.buttons.toggle', ['product_id' => $item->id, 'active' => $active, 'context' => $context]);
+			return implode("\n", $result);
+
+		}
+		catch (\Throwable $e)
+		{
+			dd($e);
+		}
+
 	}
 
 }
