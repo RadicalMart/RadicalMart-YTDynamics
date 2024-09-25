@@ -1,6 +1,8 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Listener;
 
 use Joomla\CMS\Factory;
+use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsConfigEvent;
+use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsSourceEvent;
 use YOOtheme\Builder\BuilderConfig;
 use YOOtheme\Config;
 use function YOOtheme\trans;
@@ -132,7 +134,7 @@ class LoadBuilderConfig
 				'fieldset' => [
 					'default' => [
 						'fields' => [
-							'lang'  => $languageField,
+							'lang' => $languageField,
 						],
 					],
 				],
@@ -143,7 +145,7 @@ class LoadBuilderConfig
 				'fieldset' => [
 					'default' => [
 						'fields' => [
-							'lang'  => $languageField,
+							'lang' => $languageField,
 						],
 					],
 				],
@@ -154,7 +156,7 @@ class LoadBuilderConfig
 				'fieldset' => [
 					'default' => [
 						'fields' => [
-							'lang'  => $languageField,
+							'lang' => $languageField,
 						],
 					],
 				],
@@ -165,7 +167,7 @@ class LoadBuilderConfig
 				'fieldset' => [
 					'default' => [
 						'fields' => [
-							'lang'  => $languageField,
+							'lang' => $languageField,
 						],
 					],
 				],
@@ -176,7 +178,7 @@ class LoadBuilderConfig
 				'fieldset' => [
 					'default' => [
 						'fields' => [
-							'lang'  => $languageField,
+							'lang' => $languageField,
 						],
 					],
 				],
@@ -188,6 +190,11 @@ class LoadBuilderConfig
 			'radicalmart_categories' => $options_categories,
 			'radicalmart_fieldsets'  => $options_fieldsets,
 		]);
+
+		Factory::getApplication()->getDispatcher()->dispatch(
+			'onRadicalMartYTDynamicsConfig',
+			new YTDynamicsConfigEvent('onRadicalMartYTDynamicsConfig', ['config' => &$config])
+		);
 
 	}
 

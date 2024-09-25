@@ -5,6 +5,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsMatchTemplateEvent;
 
 class MatchTemplate
 {
@@ -97,8 +98,8 @@ class MatchTemplate
 		if ($context === 'com_users.profile')
 		{
 			return [
-				'type'    => $context,
-				'query'   => [
+				'type'  => $context,
+				'query' => [
 					'lang' => $this->language,
 				]
 			];
@@ -124,9 +125,9 @@ class MatchTemplate
 		if ($context === 'com_radicalmart.settings')
 		{
 			return [
-				'type'   => $context,
-				'query'  => [
-					'lang'  => $this->language,
+				'type'  => $context,
+				'query' => [
+					'lang' => $this->language,
 				],
 			];
 		}
@@ -134,23 +135,51 @@ class MatchTemplate
 		if ($context === 'com_radicalmart.personal')
 		{
 			return [
-				'type'   => $context,
-				'query'  => [
-					'lang'  => $this->language,
+				'type'  => $context,
+				'query' => [
+					'lang' => $this->language,
 				],
 			];
 		}
 
 		if ($context === 'com_radicalmart_bonuses.points')
 		{
-
+			return [
+				'type'  => $context,
+				'query' => [
+					'lang' => $this->language,
+				],
+			];
 		}
 
 		if ($context === 'com_radicalmart_bonuses.codes')
 		{
+			return [
+				'type'  => $context,
+				'query' => [
+					'lang' => $this->language,
+				],
+			];
+		}
 
+		$event = new YTDynamicsMatchTemplateEvent(
+			'onRadicalMartYTDynamicsMatchTemplate',
+			['match' => &$this, 'context' => $context, 'view' => &$view, 'tpl' => $tpl]
+		);
+
+		Factory::getApplication()->getDispatcher()->dispatch(
+			'onRadicalMartYTDynamicsMatchTemplate',
+			$event
+		);
+
+		$template = $event->getResult();
+
+		if (count($template) > 0)
+		{
+			return $template;
 		}
 
 		return null;
 	}
+
 }
