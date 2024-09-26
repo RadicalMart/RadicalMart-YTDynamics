@@ -80,6 +80,16 @@ class RMOrderType extends BaseType
 						'label' => trans('Link'),
 					],
 				],
+
+				'products' => [
+					'type' => [
+						'listOf' => 'RMProductType'
+					],
+					'metadata' => [
+						'label' => trans('Products'),
+					],
+				],
+
 			],
 
 			'metadata' => [

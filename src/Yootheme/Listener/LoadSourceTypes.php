@@ -24,6 +24,7 @@ class LoadSourceTypes
 			Type\Product\RMProductQueryType::config(),
 
 			Type\LK\RMLKQueryType::config(),
+			Type\LK\RMOrdersQueryType::config(),
 			Type\LK\RMCustomOrdersQueryType::config(),
 		];
 
