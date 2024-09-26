@@ -32,7 +32,7 @@ class RMLKQueryType
 				'RadicalMartUser'              => [
 					'type'       => 'RMUserType',
 					'metadata'   => [
-						'label' => trans('RM User'),
+						'label' => trans('RM user'),
 						'group' => trans('RadicalMart'),
 					],
 					'extensions' => [
@@ -42,7 +42,7 @@ class RMLKQueryType
 				'RadicalMartComponentPersonal' => [
 					'type'       => 'RMComponentPersonalType',
 					'metadata'   => [
-						'label' => trans('RM Personal'),
+						'label' => trans('RM component personal'),
 						'group' => trans('Page'),
 						'view'  => ['com_radicalmart.personal'],
 					],
@@ -53,7 +53,7 @@ class RMLKQueryType
 				'RadicalMartComponentSettings' => [
 					'type'       => 'RMComponentSettingsType',
 					'metadata'   => [
-						'label' => trans('RM Settings'),
+						'label' => trans('RM component settings'),
 						'group' => trans('Page'),
 						'view'  => ['com_radicalmart.settings'],
 					],
@@ -64,7 +64,7 @@ class RMLKQueryType
 				'RadicalMartComponentOrders'   => [
 					'type'       => 'RMComponentOrdersType',
 					'metadata'   => [
-						'label' => trans('RM Orders'),
+						'label' => trans('RM component orders'),
 						'group' => trans('Page'),
 						'view'  => ['com_radicalmart.orders'],
 					],
@@ -75,7 +75,7 @@ class RMLKQueryType
 				'RadicalMartComponentOrder'    => [
 					'type'       => 'RMComponentOrderType',
 					'metadata'   => [
-						'label' => trans('RM Order'),
+						'label' => trans('RM component order'),
 						'group' => trans('Page'),
 						'view'  => ['com_radicalmart.order'],
 					],
@@ -86,7 +86,7 @@ class RMLKQueryType
 				'RadicalMartComponentFavorites'   => [
 					'type'       => 'RMComponentFavoritesType',
 					'metadata'   => [
-						'label' => trans('RM Favorites'),
+						'label' => trans('RM component favorites'),
 						'group' => trans('Page'),
 						'view'  => ['com_radicalmart_favorites.favorites'],
 					],
@@ -97,7 +97,7 @@ class RMLKQueryType
 				'RadicalMartComponentCodes'    => [
 					'type'       => 'RMComponentCodesType',
 					'metadata'   => [
-						'label' => trans('RM Codes'),
+						'label' => trans('RM component codes'),
 						'group' => trans('Page'),
 						'view'  => ['com_radicalmart_bonuses.codes'],
 					],
@@ -108,7 +108,7 @@ class RMLKQueryType
 				'RadicalMartComponentPoints'   => [
 					'type'       => 'RMComponentPointsType',
 					'metadata'   => [
-						'label' => trans('RM Points'),
+						'label' => trans('RM component points'),
 						'group' => trans('Page'),
 						'view'  => ['com_radicalmart_bonuses.points'],
 					],

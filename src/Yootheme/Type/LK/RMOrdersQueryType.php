@@ -23,7 +23,7 @@ class RMOrdersQueryType
 						],
 					],
 					'metadata'   => [
-						'label'  => trans('Order'),
+						'label'  => trans('RM order'),
 						'view'   => ['com_radicalmart.order'],
 						'group'  => trans('Page'),
 						'fields' => [
@@ -59,7 +59,7 @@ class RMOrdersQueryType
 						],
 					],
 					'metadata'   => [
-						'label'  => trans('Orders'),
+						'label'  => trans('RM orders'),
 						'view'   => ['com_radicalmart.orders'],
 						'group'  => trans('Page'),
 						'fields' => [
@@ -126,7 +126,7 @@ class RMOrdersQueryType
 
 	public static function resolveSingle($root, array $args)
 	{
-		return $root['items'][$args['offset'] ?? 0] ?? null;
+		return $root['item'] ?? null;
 	}
 
 }
