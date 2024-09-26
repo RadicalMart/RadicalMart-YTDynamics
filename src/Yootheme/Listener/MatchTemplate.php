@@ -122,6 +122,20 @@ class MatchTemplate
 			];
 		}
 
+		if ($context === 'com_radicalmart.order')
+		{
+
+			return [
+				'type'   => $context,
+				'query'  => [
+					'lang'  => $this->language,
+				],
+				'params' => [
+					'item'      => $view->get('order'),
+				],
+			];
+		}
+
 		if ($context === 'com_radicalmart.settings')
 		{
 			return [

@@ -1,5 +1,7 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\LK;
 
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Language\Text;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;
 
@@ -35,16 +37,25 @@ class RMOrderType extends BaseType
 					],
 				],
 
-				'total' => [
-					'type'       => 'RMOrderTotalType',
+				'created' => [
+					'type'       => 'String',
 					'metadata'   => [
+						'label' => trans('Created'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::created',
+					],
+				],
+				'total'   => [
+					'type'     => 'RMOrderTotalType',
+					'metadata' => [
 						'label' => trans('Total'),
 					]
 				],
 
 				'status' => [
-					'type'       => 'RMOrderStatusType',
-					'metadata'   => [
+					'type'     => 'RMOrderStatusType',
+					'metadata' => [
 						'label' => trans('Status'),
 					]
 				],
@@ -76,6 +87,11 @@ class RMOrderType extends BaseType
 				'label' => trans('Order'),
 			],
 		]);
+	}
+
+	public static function created($item)
+	{
+		return (new Date($item->date))->format(Text::_('DATE_FORMAT_LC5'));
 	}
 
 }

@@ -126,8 +126,6 @@ class RMCustomOrdersQueryType
 			$model->setState('list.limit', (int) $args['limit']);
 		}
 
-		//dd($model->getItems());
-
 		return $model->getItems();
 	}
 
