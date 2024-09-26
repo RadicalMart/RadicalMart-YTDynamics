@@ -14,6 +14,7 @@ class RMCustomOrdersQueryType
 		return [
 			'fields' => [
 				'CustomRadicalMartOrders' => [
+
 					'type' => [
 						'listOf' => 'RMOrderType'
 					],
@@ -110,15 +111,22 @@ class RMCustomOrdersQueryType
 
 	public static function resolve($root, array $args)
 	{
+
 		$model = Factory::getApplication()->bootComponent('com_radicalmart')
 			->getMVCFactory()
 			->createModel('Orders', 'Site', ['ignore_request' => true]);
 		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
 
+		$user = Factory::getApplication()->getIdentity();
+
+		$model->setState('user.id', (int) $user->id);
+
 		if (!empty($args['limit']))
 		{
 			$model->setState('list.limit', (int) $args['limit']);
 		}
+
+		//dd($model->getItems());
 
 		return $model->getItems();
 	}

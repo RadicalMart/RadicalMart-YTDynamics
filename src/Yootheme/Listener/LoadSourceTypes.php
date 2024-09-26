@@ -24,6 +24,7 @@ class LoadSourceTypes
 			Type\Product\RMProductQueryType::config(),
 
 			Type\LK\RMLKQueryType::config(),
+			Type\LK\RMCustomOrdersQueryType::config(),
 		];
 
 		$types = [
@@ -49,6 +50,10 @@ class LoadSourceTypes
 			// LK
 			['RMMenuType', Type\LK\RMMenuType::config()],
 			['RMUserType', Type\LK\RMUserType::config()],
+			['RMOrderType', Type\LK\RMOrderType::config()],
+			['RMOrderStatusType', Type\LK\RMOrderStatusType::config()],
+			['RMOrderTotalType', Type\LK\RMOrderTotalType::config()],
+			['RMOrderStatusParamsType', Type\LK\RMOrderStatusParamsType::config()],
 			['RMComponentPersonalType', Type\LK\RMComponentPersonalType::config()],
 			['RMComponentSettingsType', Type\LK\RMComponentSettingsType::config()],
 			['RMComponentOrdersType', Type\LK\RMComponentOrdersType::config()],
