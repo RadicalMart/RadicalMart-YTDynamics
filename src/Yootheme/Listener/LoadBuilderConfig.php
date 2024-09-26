@@ -100,7 +100,7 @@ class LoadBuilderConfig
 			],
 
 			'com_radicalmart.category' => [
-				'label'    => trans('RM Category'),
+				'label'    => trans('RM category'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [
