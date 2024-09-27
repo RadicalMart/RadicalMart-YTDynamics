@@ -23,4 +23,19 @@ class YTDynamicsSourceEvent extends Event
 		return $this->arguments['types'];
 	}
 
+	public function setSource(Source $source): void
+	{
+		$this->setArgument('source', $source);
+	}
+
+	public function setQuery(array $query): void
+	{
+		$this->setArgument('query', $query);
+	}
+
+	public function setTypes(array $types): void
+	{
+		$this->setArgument('query', $types);
+	}
+
 }

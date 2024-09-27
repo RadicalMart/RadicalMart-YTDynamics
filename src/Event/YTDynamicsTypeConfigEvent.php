@@ -18,4 +18,9 @@ class YTDynamicsTypeConfigEvent extends Event
 		return $this->arguments['config'];
 	}
 
+	public function setConfig(array $config): void
+	{
+		$this->setArgument('config', $config);
+	}
+
 }
