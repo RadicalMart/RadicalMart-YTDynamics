@@ -64,6 +64,11 @@ class LoadSourceTypes
 			['RMComponentFavoritesType', Type\LK\RMComponentFavoritesType::config()],
 		];
 
+		Factory::getApplication()->getDispatcher()->dispatch(
+			'onRadicalMartYTDynamicsSource',
+			new YTDynamicsSourceEvent('onRadicalMartYTDynamicsSource', ['source' => &$source, 'query' => &$query, 'types' => &$types])
+		);
+
 		foreach ($query as $args)
 		{
 			$source->queryType($args);
@@ -99,11 +104,6 @@ class LoadSourceTypes
 		);
 
 		$source->objectType($fieldType, Type\Product\RMFieldsType::config($source, 'RMProductType', $fields));
-
-		Factory::getApplication()->getDispatcher()->dispatch(
-			'onRadicalMartYTDynamicsSource',
-			new YTDynamicsSourceEvent('onRadicalMartYTDynamicsSource', ['source' => &$source, 'query' => &$query, 'types' => &$types])
-		);
 
 	}
 
