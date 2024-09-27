@@ -216,22 +216,14 @@ class RMProductType extends BaseType
 
 	public static function favorite($item, $args)
 	{
-		try
-		{
-			$result = [];
-			$context = 'com_radicalmart.product';
+		$result  = [];
+		$context = 'com_radicalmart.product';
 
-			// Display stats
-			$active   = \Joomla\Component\RadicalMartFavorites\Site\Helper\FavoritesHelper::checkActive($item->id);
-			$result[] = LayoutHelper::render('components.radicalmart_favorites.buttons.toggle', ['product_id' => $item->id, 'active' => $active, 'context' => $context]);
-			return implode("\n", $result);
+		// Display stats
+		$active   = \Joomla\Component\RadicalMartFavorites\Site\Helper\FavoritesHelper::checkActive($item->id);
+		$result[] = LayoutHelper::render('components.radicalmart_favorites.buttons.toggle', ['product_id' => $item->id, 'active' => $active, 'context' => $context]);
 
-		}
-		catch (\Throwable $e)
-		{
-			dd($e);
-		}
-
+		return implode("\n", $result);
 	}
 
 }
