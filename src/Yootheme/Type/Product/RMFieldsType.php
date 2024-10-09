@@ -1,6 +1,12 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product;
 
+use Joomla\CMS\Factory;
+use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsMatchTemplateEvent;
+use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsResultEvent;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\General;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Standard;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Subform;
 use YOOtheme\Arr;
 use YOOtheme\Builder\Source;
 use YOOtheme\Config;
@@ -12,8 +18,34 @@ use function YOOtheme\app;
 class RMFieldsType extends BaseType
 {
 
+	protected static $plugins_map = [
+		'general'  => General::class,
+		'standard' => Standard::class,
+		'subform'  => Subform::class,
+	];
+
 	public static function config(Source $source, $type, array $fields)
 	{
+		$event = new YTDynamicsResultEvent(
+			'onRadicalMartYTDynamicsProductFieldsTypeConfig',
+			[]
+		);
+
+		Factory::getApplication()->getDispatcher()->dispatch(
+			'onRadicalMartYTDynamicsProductFieldsTypeConfig',
+			$event
+		);
+
+		$class_name_event = $event->getResult();
+
+		if (is_array($class_name_event) && count($class_name_event) > 0)
+		{
+			foreach ($class_name_event as $event)
+			{
+				static::$plugins_map = array_merge(static::$plugins_map, $event);
+			}
+		}
+
 		return parent::triggerEvent([
 			'fields' => array_filter(
 				array_reduce(
@@ -53,8 +85,9 @@ class RMFieldsType extends BaseType
 	protected static function configFields($field, array $config, Source $source, $type)
 	{
 
-		$field_plugin = ucfirst(strtolower($field->plugin));
-		$class_name   = 'Joomla\\Plugin\\System\\YTDynamics\\Yootheme\\Type\\Product\\Fields\\Plugins\\' . $field_plugin;
+		$field_plugin = strtolower($field->plugin);
+
+		$class_name = static::$plugins_map[$field_plugin] ?? '';
 
 		if (!class_exists($class_name))
 		{
@@ -69,8 +102,8 @@ class RMFieldsType extends BaseType
 		$name  = $info->fieldName;
 		$field = $item->fields[$name];
 
-		$field_plugin = ucfirst(strtolower($field->plugin));
-		$class_name   = 'Joomla\\Plugin\\System\\YTDynamics\\Yootheme\\Type\\Product\\Fields\\Plugins\\' . $field_plugin;
+		$field_plugin = strtolower($field->plugin);
+		$class_name   = static::$plugins_map[$field_plugin] ?? '';
 
 		$object = new $class_name;
 
