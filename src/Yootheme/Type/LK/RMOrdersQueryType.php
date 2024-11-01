@@ -15,7 +15,7 @@ class RMOrdersQueryType
 	{
 		return [
 			'fields' => [
-				'order' => [
+				'RadicalMartOrders' => [
 					'type'       => 'RMOrderType',
 					'args'       => [
 						'offset' => [

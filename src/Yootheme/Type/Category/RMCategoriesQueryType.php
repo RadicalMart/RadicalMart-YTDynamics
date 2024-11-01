@@ -13,7 +13,7 @@ class RMCategoriesQueryType
 	{
 		return [
 			'fields' => [
-				'category'   => [
+				'RadicalMartCategory'   => [
 					'type'       => 'RMCategoryType',
 					'args'       => [
 						'offset' => [
@@ -44,7 +44,7 @@ class RMCategoriesQueryType
 						'call' => __CLASS__ . '::resolveSingle',
 					],
 				],
-				'categorychild'   => [
+				'RadicalMartCategoryChild'   => [
 					'type'       => 'RMCategoryChildType',
 					'args'       => [
 						'offset' => [
@@ -75,7 +75,7 @@ class RMCategoriesQueryType
 						'call' => __CLASS__ . '::resolveSingle',
 					],
 				],
-				'categories' => [
+				'RadicalMartCategories' => [
 					'type'       => [
 						'listOf' => 'RMCategoryType',
 					],

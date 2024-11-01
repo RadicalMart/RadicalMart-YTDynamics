@@ -15,7 +15,7 @@ class RMProductQueryType
 	{
 		return [
 			'fields' => [
-				'product'     => [
+				'RadicalMartProduct'     => [
 					'type'       => 'RMProductType',
 					'metadata'   => [
 						'label' => trans('Product'),
@@ -26,7 +26,7 @@ class RMProductQueryType
 						'call' => __CLASS__ . '::resolve',
 					],
 				],
-				'productMeta' => [
+				'RadicalMartProductMeta' => [
 					'type'       => [
 						'listOf' => 'RMProductType'
 					],

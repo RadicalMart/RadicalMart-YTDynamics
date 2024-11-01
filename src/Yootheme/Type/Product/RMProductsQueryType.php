@@ -15,38 +15,7 @@ class RMProductsQueryType
 	{
 		return [
 			'fields' => [
-				'product'  => [
-					'type'       => 'RMProductType',
-					'args'       => [
-						'offset' => [
-							'type' => 'Int',
-						],
-					],
-					'metadata'   => [
-						'label'  => trans('Product'),
-						'view'   => ['com_radicalmart.category'],
-						'group'  => trans('Page'),
-						'fields' => [
-							'offset' => [
-								'label'       => trans('Start'),
-								'description' => trans(
-									'Set the starting point to specify which article is loaded.',
-								),
-								'type'        => 'number',
-								'default'     => 0,
-								'modifier'    => 1,
-								'attrs'       => [
-									'min'      => 1,
-									'required' => true,
-								],
-							],
-						],
-					],
-					'extensions' => [
-						'call' => __CLASS__ . '::resolveSingle',
-					],
-				],
-				'products' => [
+				'RadicalMartProducts' => [
 					'type'       => [
 						'listOf' => 'RMProductType',
 					],
@@ -122,11 +91,6 @@ class RMProductsQueryType
 		{
 			return [-1 => true];
 		}
-	}
-
-	public static function resolveSingle($root, array $args)
-	{
-		return $root['items'][$args['offset'] ?? 0] ?? null;
 	}
 
 }
