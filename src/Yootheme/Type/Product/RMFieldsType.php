@@ -100,6 +100,12 @@ class RMFieldsType extends BaseType
 	public function resolve($item, $args, $ctx, $info)
 	{
 		$name  = $info->fieldName;
+
+		if(empty($item->fields[$name]))
+		{
+			return;
+		}
+
 		$field = $item->fields[$name];
 
 		$field_plugin = strtolower($field->plugin);

@@ -6,7 +6,7 @@ use YOOtheme\Str;
 class Subform extends General
 {
 
-	public static function configFields($field, array $config, Source &$source, $type)
+	public static function configFields($field, array $config, Source $source, $type)
 	{
 		$field_type = 'Subform';
 

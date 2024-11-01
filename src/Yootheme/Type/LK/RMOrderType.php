@@ -101,7 +101,7 @@ class RMOrderType extends BaseType
 
 	public static function created($item)
 	{
-		return (new Date($item->date))->format(Text::_('DATE_FORMAT_LC5'));
+		return (new Date($item->created))->format(Text::_('DATE_FORMAT_LC5'));
 	}
 
 }

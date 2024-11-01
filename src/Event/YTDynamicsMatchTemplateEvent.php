@@ -28,7 +28,7 @@ class YTDynamicsMatchTemplateEvent extends Event implements ResultAwareInterface
 
 	public function getResult()
 	{
-		return $this->arguments['result'];
+		return $this->arguments['result'] ?? null;
 	}
 
 	public function typeCheckResult($data): void
