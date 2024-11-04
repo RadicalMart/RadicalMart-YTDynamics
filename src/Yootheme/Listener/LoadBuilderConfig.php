@@ -129,6 +129,17 @@ class LoadBuilderConfig
 				],
 			],
 
+			'com_radicalmart_search.search' => [
+				'label'    => trans('RM search'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
 			'com_users.profile' => [
 				'label'    => trans('RM user'),
 				'fieldset' => [

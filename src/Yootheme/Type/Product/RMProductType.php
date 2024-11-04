@@ -183,6 +183,12 @@ class RMProductType extends BaseType
 
 	public static function mediaFirst($item, $args)
 	{
+
+		if (empty($item->media))
+		{
+			return [];
+		}
+
 		$media   = $item->media;
 		$gallery = $media->get('gallery');
 		$first   = array_shift($gallery);
@@ -192,6 +198,11 @@ class RMProductType extends BaseType
 
 	public static function media($item, $args)
 	{
+
+		if (empty($item->media))
+		{
+			return [];
+		}
 
 		$media   = $item->media;
 		$gallery = $media->get('gallery');

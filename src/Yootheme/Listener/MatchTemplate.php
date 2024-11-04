@@ -2,6 +2,7 @@
 
 use Joomla\CMS\Document\Document;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
@@ -95,6 +96,23 @@ class MatchTemplate
 			];
 		}
 
+		if ($context === 'com_radicalmart_search.search')
+		{
+			$pagination = $view->get('pagination');
+
+			return [
+				'type'   => $context,
+				'query'  => [
+					'pages' => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
+					'lang'  => $this->language,
+				],
+				'params' => [
+					'items'      => $view->get('items'),
+					'pagination' => $pagination,
+				],
+			];
+		}
+
 		if ($context === 'com_users.profile')
 		{
 			return [
@@ -128,10 +146,10 @@ class MatchTemplate
 			return [
 				'type'   => $context,
 				'query'  => [
-					'lang'  => $this->language,
+					'lang' => $this->language,
 				],
 				'params' => [
-					'item'      => $view->get('order'),
+					'item' => $view->get('order'),
 				],
 			];
 		}

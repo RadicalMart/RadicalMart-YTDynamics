@@ -26,6 +26,8 @@ class LoadSourceTypes
 			Type\LK\RMLKQueryType::config(),
 			Type\LK\RMOrdersQueryType::config(),
 			Type\LK\RMCustomOrdersQueryType::config(),
+
+			Type\Search\RMSearchQueryType::config(),
 		];
 
 		$types = [
@@ -62,6 +64,10 @@ class LoadSourceTypes
 			['RMComponentPointsType', Type\LK\RMComponentPointsType::config()],
 			['RMComponentCodesType', Type\LK\RMComponentCodesType::config()],
 			['RMComponentFavoritesType', Type\LK\RMComponentFavoritesType::config()],
+
+			// Search
+			['RMSearchType', Type\Search\RMSearchType::config()],
+
 		];
 
 		Factory::getApplication()->getDispatcher()->dispatch(
