@@ -50,6 +50,10 @@ class LoadSourceTypes
 			['RMChoiceFieldType', Type\Product\Fields\RMChoiceFieldType::config()],
 			['RMValueFieldType', Type\Product\Fields\RMValueFieldType::config()],
 
+			// Product plugins
+			['RMProductPluginsType', Type\Product\RMProductPluginsType::config()],
+			['RMProductPluginsBlockType', Type\Product\RMProductPluginsBlockType::config()],
+
 			// LK
 			['RMMenuType', Type\LK\RMMenuType::config()],
 			['RMUserType', Type\LK\RMUserType::config()],

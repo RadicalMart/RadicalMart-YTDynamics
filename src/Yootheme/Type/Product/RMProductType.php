@@ -149,6 +149,16 @@ class RMProductType extends BaseType
 					],
 				],
 
+				'plugins' => [
+					'type'       => 'RMProductPluginsType',
+					'metadata'   => [
+						'label' => trans('Plugins'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::plugins',
+					],
+				],
+
 				'fields' => [
 					'type'     => [
 						'listOf' => 'RMFieldType'
@@ -220,6 +230,17 @@ class RMProductType extends BaseType
 		if ($item->params instanceof Registry)
 		{
 			return $item->params->toArray();
+		}
+
+		return [];
+	}
+
+	public static function plugins($item, $args)
+	{
+
+		if ($item->plugins instanceof Registry)
+		{
+			return $item->plugins->toArray();
 		}
 
 		return [];
