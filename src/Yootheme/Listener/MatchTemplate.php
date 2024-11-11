@@ -205,6 +205,29 @@ class MatchTemplate
 			];
 		}
 
+		if ($context === 'com_radicalmart_landings.page')
+		{
+			$category   = $view->get('category');
+			$page       = $view->get('page');
+			$items      = $view->get('items');
+			$pagination = $view->get('pagination');
+
+			return [
+				'type'   => $context,
+				'query'  => [
+					'catid' => $category->id,
+					'pages' => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
+					'lang'  => $this->language,
+				],
+				'params' => [
+					'category'   => $category,
+					'page'       => $page,
+					'items'      => $items,
+					'pagination' => $pagination,
+				],
+			];
+		}
+
 		$event = new YTDynamicsMatchTemplateEvent(
 			'onRadicalMartYTDynamicsMatchTemplate',
 			['match' => &$this, 'context' => $context, 'view' => &$view, 'tpl' => $tpl]

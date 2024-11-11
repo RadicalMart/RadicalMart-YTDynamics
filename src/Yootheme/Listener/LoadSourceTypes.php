@@ -13,20 +13,27 @@ class LoadSourceTypes
 	{
 
 		$query = [
+			// Category
 			Type\Category\RMCustomCategoriesQueryType::config(),
 			Type\Category\RMCustomCategoriesWithChildQueryType::config(),
 			Type\Category\RMCustomCategoryQueryType::config(),
 			Type\Category\RMCategoriesQueryType::config(),
 
+			// Product
 			Type\Product\RMCustomProductsQueryType::config(),
 			Type\Product\RMCustomProductsQueryType::config(),
 			Type\Product\RMProductsQueryType::config(),
 			Type\Product\RMProductQueryType::config(),
 
+			// LK
 			Type\LK\RMLKQueryType::config(),
 			Type\LK\RMOrdersQueryType::config(),
 			Type\LK\RMCustomOrdersQueryType::config(),
 
+			// Page
+			Type\Pages\RMPageLandingsQueryType::config(),
+
+			// Search
 			Type\Search\RMSearchQueryType::config(),
 		];
 
@@ -68,6 +75,10 @@ class LoadSourceTypes
 			['RMComponentPointsType', Type\LK\RMComponentPointsType::config()],
 			['RMComponentCodesType', Type\LK\RMComponentCodesType::config()],
 			['RMComponentFavoritesType', Type\LK\RMComponentFavoritesType::config()],
+
+			// Pages
+			['RMPageLandingType', Type\Pages\RMPageLandingType::config()],
+			['RMPageLandingParamsType', Type\Pages\RMPageLandingParamsType::config()],
 
 			// Search
 			['RMSearchType', Type\Search\RMSearchType::config()],

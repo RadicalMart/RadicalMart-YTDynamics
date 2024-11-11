@@ -129,28 +129,6 @@ class LoadBuilderConfig
 				],
 			],
 
-			'com_radicalmart_search.search' => [
-				'label'    => trans('RM search'),
-				'fieldset' => [
-					'default' => [
-						'fields' => [
-							'lang' => $languageField,
-						],
-					],
-				],
-			],
-
-			'com_users.profile' => [
-				'label'    => trans('RM user'),
-				'fieldset' => [
-					'default' => [
-						'fields' => [
-							'lang' => $languageField,
-						],
-					],
-				],
-			],
-
 			'com_radicalmart.personal' => [
 				'label'    => trans('RM personal'),
 				'fieldset' => [
@@ -195,6 +173,17 @@ class LoadBuilderConfig
 				],
 			],
 
+			'com_users.profile' => [
+				'label'    => trans('RM user'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
 			'com_radicalmart_favorites.favorites' => [
 				'label'    => trans('RM favorites'),
 				'fieldset' => [
@@ -219,6 +208,28 @@ class LoadBuilderConfig
 
 			'com_radicalmart_bonuses.codes' => [
 				'label'    => trans('RM codes'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart_search.search' => [
+				'label'    => trans('RM search'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
+			'com_radicalmart_landings.page' => [
+				'label'    => trans('RM landings page'),
 				'fieldset' => [
 					'default' => [
 						'fields' => [
