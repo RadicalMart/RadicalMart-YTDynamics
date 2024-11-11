@@ -54,7 +54,7 @@ class Subform extends General
 			$fields[$subField->name] = $subField->type;
 		}
 
-		return array_map(function ($vals) use ($fields) {
+		return array_map(static function ($vals) use ($fields) {
 			$values = [];
 
 			foreach ($vals as $name => $value)
@@ -65,7 +65,6 @@ class Subform extends General
 			return $values;
 
 		}, array_values((is_string($field->rawvalue) ? json_decode($field->rawvalue, true) : $field->rawvalue) ?: []));
-
 
 	}
 

@@ -1,9 +1,9 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product;
 
 use Joomla\CMS\Factory;
-use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsMatchTemplateEvent;
 use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsResultEvent;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Gallery;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\General;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Standard;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Subform;
@@ -22,6 +22,7 @@ class RMFieldsType extends BaseType
 		'general'  => General::class,
 		'standard' => Standard::class,
 		'subform'  => Subform::class,
+		'gallery'  => Gallery::class,
 	];
 
 	public static function config(Source $source, $type, array $fields)
@@ -99,9 +100,9 @@ class RMFieldsType extends BaseType
 
 	public function resolve($item, $args, $ctx, $info)
 	{
-		$name  = $info->fieldName;
+		$name = $info->fieldName;
 
-		if(empty($item->fields[$name]))
+		if (empty($item->fields[$name]))
 		{
 			return;
 		}
