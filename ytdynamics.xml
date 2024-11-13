@@ -13,6 +13,7 @@
     <files>
         <folder>elements</folder>
         <folder>services</folder>
+        <folder>template</folder>
         <folder plugin="ytdynamics">src</folder>
     </files>
     <config>
