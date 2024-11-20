@@ -40,6 +40,7 @@ class RMCategoryChildType extends RMCategoryType
 			->createModel('Categories', 'Site', ['ignore_request' => true]);
 		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
 		$model->setState('category.id', (int) $item->id);
+		$model->setState('filter.published', 1);
 
 		return $model->getItems();
 	}

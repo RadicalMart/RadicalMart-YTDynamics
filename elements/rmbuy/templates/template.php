@@ -3,8 +3,9 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
-$el = $this->el('div', [
+$el = $this->el('div', []);
 
+$el_cart = $this->el('div', [
 	'class' => [
 		'uk-child-width-auto',
 		'uk-flex-nowrap',
@@ -14,8 +15,9 @@ $el = $this->el('div', [
 
 	'uk-grid'          => true,
 	'radicalmart-cart' => 'product',
-	'data-id'          => $props['product_id']
+	'data-id'               => $props['product_id']
 ]);
+
 
 $assets = Factory::getApplication()->getDocument()->getWebAssetManager();
 $assets->useScript('com_radicalmart.site.cart');
@@ -25,6 +27,7 @@ $assets->useScript('com_radicalmart.site.trigger');
 ?>
 
 <?php echo $el($props, $attrs) ?>
+<?php echo $el_cart($props) ?>
 <?php if ($props['show_count']) : ?>
     <div class="uk-flex uk-flex-middle uk-button-group">
                             <span class="uk-link uk-margin-small-right"
@@ -53,4 +56,5 @@ $assets->useScript('com_radicalmart.site.trigger');
 			<?php echo Text::_('COM_RADICALMART_CART_ADD'); ?>
         </button>
     </div>
+<?php echo $el_cart->end() ?>
 <?php echo $el->end() ?>
