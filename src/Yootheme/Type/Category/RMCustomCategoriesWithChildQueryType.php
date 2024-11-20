@@ -131,6 +131,7 @@ class RMCustomCategoriesWithChildQueryType extends RMCustomCategoriesQueryType
 			->createModel('Categories', 'Site', ['ignore_request' => true]);
 		$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
 		$model->setState('category.id', (int) $args['catid']);
+		$model->setState('filter.published', 1);
 
 		if (!empty($args['limit']))
 		{
