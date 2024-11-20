@@ -61,7 +61,7 @@ class LoadBuilderConfig
 							'catid' => ($category = [
 								'label'       => trans('Limit by Categories'),
 								'description' => trans(
-									'The template is only assigned to articles from the selected categories. Articles from child categories are not included. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple categories.',
+									'The template is only assigned to articles from the selected categories. Products from child categories are not included. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple categories.',
 								),
 								'type'        => 'select',
 								'default'     => [],

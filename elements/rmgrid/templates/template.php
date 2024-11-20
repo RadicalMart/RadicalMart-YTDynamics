@@ -4,7 +4,6 @@ use Joomla\CMS\Factory;
 
 $mode = $props['mode'];
 
-
 if (str_contains($mode, 'radicalmart_'))
 {
 	$app                  = Factory::getApplication();

@@ -4,6 +4,7 @@
 
 return [
     'transforms' => [
-        'render' => function ($node) {},
+        'render' => function ($node) {
+        },
     ],
 ];

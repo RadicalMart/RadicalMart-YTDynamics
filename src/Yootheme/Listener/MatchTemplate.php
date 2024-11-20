@@ -40,6 +40,7 @@ class MatchTemplate
 			return [
 				'type'    => $context,
 				'query'   => [
+					'catid' => $item->category,
 					'lang' => $this->language,
 				],
 				'params'  => [
