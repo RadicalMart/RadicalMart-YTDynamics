@@ -63,7 +63,7 @@ $grid = $this->el('div', $config);
 
 ?>
 
-<div radicalmart-ajax="products">
+<div>
 	<?= $el($props, $attrs) ?>
 
 	<?= $grid($props) ?>
