@@ -5,10 +5,10 @@ use Joomla\CMS\Language\Text;
 
 $app                  = Factory::getApplication();
 $cookieName           = 'radicalmart_products-list_layout';
-$productsListTemplate = $app->input->cookie->get($cookieName, 'grid');
+$productsListTemplate = $app->input->cookie->getString($cookieName, 'grid');
 
 $cookieName           = 'radicalmart_products-list_ordering';
-$productsListOrdering = $app->input->cookie->get($cookieName, '');
+$productsListOrdering = $app->input->cookie->getString($cookieName, '');
 
 $options = [
 	'p.ordering ASC' => 'COM_RADICALMART_PRODUCTS_LIST_ORDERING_ORDERING',
@@ -30,6 +30,8 @@ $el = $this->el('div', [
 		'uk-flex {@panel_style} {@has_panel_image_no_padding} {@image_align: left|right}', // Let images cover the card/tile height if they have different heights
 	],
 ]);
+
+
 
 ?>
 
