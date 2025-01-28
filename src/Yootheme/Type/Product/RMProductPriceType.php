@@ -16,6 +16,54 @@ class RMProductPriceType extends BaseType
 						'label' => trans('currency'),
 					],
 				],
+				'min'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('min'),
+					],
+				],
+				'min_string'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('min_string'),
+					],
+				],
+				'min_seo'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('min_seo'),
+					],
+				],
+				'min_number'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('min_number'),
+					],
+				],
+				'max'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('max'),
+					],
+				],
+				'max_string'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('max_string'),
+					],
+				],
+				'max_seo'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('max_seo'),
+					],
+				],
+				'max_number'        => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('max_number'),
+					],
+				],
 				'purchase'        => [
 					'type'     => 'String',
 					'metadata' => [
