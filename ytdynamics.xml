@@ -26,12 +26,14 @@
     <config>
         <fields name="params">
             <fieldset name="basic">
-                <field
-                    name="medianotfound"
-                    type="media"
-                    label="PLG_YTDYNAMICS_CONFIG_MEDIANOTFOUND_LABEL"
-                    default=""
-                />
+                <fields name="product">
+                    <field
+                            name="medianotfound"
+                            type="media"
+                            label="PLG_YTDYNAMICS_CONFIG_PRODUCT_MEDIANOTFOUND_LABEL"
+                            default=""
+                    />
+                </fields>
             </fieldset>
         </fields>
     </config>

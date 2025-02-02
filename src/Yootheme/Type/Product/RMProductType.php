@@ -193,31 +193,50 @@ class RMProductType extends BaseType
 
 	public static function mediaFirst($item, $args)
 	{
+		$result = [];
 
-		if (empty($item->media))
+		if (!empty($item->media))
 		{
-			return [];
+			$media   = $item->media;
+			$gallery = (array) $media->get('gallery');
+			$result   = array_shift($gallery);
+
+			if (empty($result))
+			{
+				$not_found = static::getParam('product.medianotfound');
+
+				if (!empty($not_found))
+				{
+					$result = ['src' => $not_found, 'alt' => $item->title];
+				}
+			}
 		}
 
-		$media   = $item->media;
-		$gallery = $media->get('gallery');
-		$first   = array_shift($gallery);
-
-		return (array) $first;
+		return $result;
 	}
 
 	public static function media($item, $args)
 	{
 
-		if (empty($item->media))
+		$result = [];
+
+		if (!empty($item->media))
 		{
-			return [];
+			$media  = $item->media;
+			$result = (array) $media->get('gallery');
+
+			if (empty($result))
+			{
+				$not_found = static::getParam('product.medianotfound');
+
+				if (!empty($not_found))
+				{
+					$result[] = ['src' => $not_found, 'alt' => $item->title];
+				}
+			}
 		}
 
-		$media   = $item->media;
-		$gallery = $media->get('gallery');
-
-		return (array) $gallery;
+		return $result;
 	}
 
 	public static function stock($item)
