@@ -14,7 +14,7 @@ class YTDynamicsResultEvent extends Event implements ResultAwareInterface
 
 	public function getResult()
 	{
-		return $this->arguments['result'];
+		return $this->arguments['result'] ?? [];
 	}
 
 	public function typeCheckResult($data): void

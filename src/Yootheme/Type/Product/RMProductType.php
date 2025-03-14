@@ -277,4 +277,9 @@ class RMProductType extends BaseType
 		return implode("\n", $result);
 	}
 
+	public static function event($article)
+	{
+		return $article;
+	}
+
 }
