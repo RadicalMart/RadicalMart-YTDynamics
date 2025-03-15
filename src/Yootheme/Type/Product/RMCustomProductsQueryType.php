@@ -171,11 +171,6 @@ class RMCustomProductsQueryType
 			$model->setState('filter.item_id', $ids);
 		}
 
-		if (!empty($args['ids']))
-		{
-			$model->setState('list.ordering', $args['order']);
-		}
-
 		// Order direction
 		if ($args['order'])
 		{
