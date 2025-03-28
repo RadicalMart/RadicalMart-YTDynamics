@@ -20,7 +20,7 @@ class LoadSourceTypes
 			Type\Category\RMCategoriesQueryType::config(),
 
 			// Product
-			Type\Product\RMCustomProductsQueryType::config(),
+			Type\Product\RMCustomProductQueryType::config(),
 			Type\Product\RMCustomProductsQueryType::config(),
 			Type\Product\RMProductsQueryType::config(),
 			Type\Product\RMProductQueryType::config(),

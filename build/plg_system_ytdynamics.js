@@ -3,6 +3,10 @@ const entry = {
         import: './src/gallery.es6',
         filename: 'gallery.js',
     },
+    "src/picker-product": {
+        import: './src/picker-product.es6',
+        filename: 'picker-product.js',
+    },
 };
 
 const webpackConfig = require('./webpack.config.js');

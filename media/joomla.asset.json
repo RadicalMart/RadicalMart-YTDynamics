@@ -14,6 +14,16 @@
         "type": "module"
       },
       "version": "auto"
+    },
+    {
+      "name": "plg_system_ytdynamics.picker-product",
+      "type": "script",
+      "uri": "plg_system_ytdynamics/picker-product.min.js",
+      "attributes": {
+        "defer": true,
+        "type": "module"
+      },
+      "version": "auto"
     }
   ]
 }

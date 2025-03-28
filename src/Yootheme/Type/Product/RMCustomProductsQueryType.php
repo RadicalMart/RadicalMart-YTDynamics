@@ -2,6 +2,7 @@
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
 use function YOOtheme\trans;
 
 class RMCustomProductsQueryType
@@ -97,12 +98,12 @@ class RMCustomProductsQueryType
 									'order'           => [
 										'label'   => trans('Order'),
 										'type'    => 'select',
-										'default' => 'publish_up',
+										'default' => 'p.ordering',
 										'options' => [
-											[
-												'evaluate' =>
-													'yootheme.builder.sources.articleOrderOptions',
-											],
+											trans('Ordering')  => 'p.ordering',
+											trans('Price')  => 'p.ordering_price',
+											trans('Created')  => 'p.created',
+											trans('Title')  => 'p.title',
 										],
 									],
 									'order_direction' => [
@@ -140,10 +141,19 @@ class RMCustomProductsQueryType
 
 		if (!empty($args['category']))
 		{
-			if (is_array($args['category']))
+			if (!is_array($args['category']))
 			{
-				$model->setState('filter.categories', $args['category']);
+				$args['category'] = [$args['category']];
 			}
+
+			$model->setState('filter.categories', $args['category']);
+		}
+
+		$model->setState('filter.published', 1);
+
+		if (!empty($args['offset']))
+		{
+			$model->setState('list.start', (int) $args['offset']);
 		}
 
 		if (!empty($args['limit']))
@@ -159,8 +169,22 @@ class RMCustomProductsQueryType
 			});
 
 			$model->setState('filter.item_id', $ids);
-
 		}
+
+		// Order direction
+		if ($args['order'])
+		{
+			$model->setState('list.ordering', $args['order']);
+		}
+
+		// Order direction
+		if ($args['order_direction'])
+		{
+			$model->setState('list.direction', $args['order_direction']);
+		}
+
+		// Set language filter state
+		$model->setState('filter.language', Multilanguage::isEnabled());
 
 		return $model->getItems();
 	}
