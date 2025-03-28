@@ -44,6 +44,13 @@ class RMCategoryType extends BaseType
 						'filters' => ['limit'],
 					],
 				],
+				'fulltext'      => [
+					'type'     => 'String',
+					'metadata' => [
+						'label'   => trans('Fulltext'),
+						'filters' => ['limit'],
+					],
+				],
 				'total_products' => [
 					'type'     => 'String',
 					'metadata' => [
