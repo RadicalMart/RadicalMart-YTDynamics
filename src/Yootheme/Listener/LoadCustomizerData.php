@@ -21,6 +21,6 @@ class LoadCustomizerData
 	public function handle(): void
 	{
 		// Include tour picker script
-		$this->metadata->set('script:customizer.rm.product', ['src' => Url::to(implode('/', ['media', 'plg_system_ytdynamics', 'js', 'picker-product.min.js'])), '', 'defer' => true]);
+		$this->metadata->set('script:customizer.rm.product', ['src' => '/' . implode('/', ['media', 'plg_system_ytdynamics', 'js', 'picker-product.min.js']), '', 'defer' => true]);
 	}
 }
