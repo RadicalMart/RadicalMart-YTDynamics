@@ -5,6 +5,7 @@ use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsResultEvent;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Gallery;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\General;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Range;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Standard;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Subform;
 use YOOtheme\Arr;
@@ -23,6 +24,7 @@ class RMFieldsType extends BaseType
 		'standard' => Standard::class,
 		'subform'  => Subform::class,
 		'gallery'  => Gallery::class,
+		'range'    => Range::class,
 	];
 
 	public static function config(Source $source, $type, array $fields)
