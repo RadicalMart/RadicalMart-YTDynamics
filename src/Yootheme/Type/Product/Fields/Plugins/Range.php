@@ -55,10 +55,10 @@ class Range extends General
 
 	public function resolve($field, $args, $ctx, $info)
 	{
-		return $this->resolveField($field, $field->rawvalue);
+		return $this->resolveField($field);
 	}
 
-	public function resolveField($field, $value)
+	public function resolveField($field)
 	{
 		$field_type = ucfirst(strtolower($field->params->get('type')));
 
@@ -67,10 +67,10 @@ class Range extends General
 			return $callback($field);
 		}
 
-		return $this->resolveSingleField($field, $value);
+		return $this->resolveSingle($field);
 	}
 
-	public function resolveSingleField($field, $value)
+	public function resolveSingle($field)
 	{
 		return $field->value;
 	}
