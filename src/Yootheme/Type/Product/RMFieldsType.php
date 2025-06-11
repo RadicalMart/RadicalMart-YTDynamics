@@ -56,7 +56,7 @@ class RMFieldsType extends BaseType
 							$field,
 							[
 								'type'       => 'String',
-								'name'       => $field->alias,
+								'name'       => strtr($field->alias, '-', '_'),
 								'metadata'   => [
 									'label' => $field->title,
 									'group' => $field->group_title ?? '',
@@ -100,7 +100,7 @@ class RMFieldsType extends BaseType
 
 	public function resolve($item, $args, $ctx, $info)
 	{
-		$name = $info->fieldName;
+		$name = strtr($info->fieldName, '_', '-');
 
 		if (empty($item->fields[$name]))
 		{
