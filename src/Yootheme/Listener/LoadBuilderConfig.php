@@ -195,6 +195,17 @@ class LoadBuilderConfig
 				],
 			],
 
+			'com_radicalmart_compare.compare' => [
+				'label'    => trans('RM compare'),
+				'fieldset' => [
+					'default' => [
+						'fields' => [
+							'lang' => $languageField,
+						],
+					],
+				],
+			],
+
 			'com_radicalmart_bonuses.points' => [
 				'label'    => trans('RM points'),
 				'fieldset' => [

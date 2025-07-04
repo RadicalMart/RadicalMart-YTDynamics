@@ -185,6 +185,15 @@ class MatchTemplate
 			];
 		}
 
+		if ($context === 'com_radicalmart_compare.compare')
+		{
+			return [
+				'type'  => $context,
+				'query' => [
+					'lang' => $this->language,
+				],
+			];
+		}
 
 		if ($context === 'com_radicalmart_bonuses.points')
 		{

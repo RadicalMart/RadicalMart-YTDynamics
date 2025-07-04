@@ -177,6 +177,16 @@ class RMProductType extends BaseType
 						'call' => __CLASS__ . '::favorite',
 					],
 				],
+
+				'compare' => [
+					'type'       => 'String',
+					'metadata'   => [
+						'label' => trans('Compare'),
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::compare',
+					],
+				],
 			],
 
 			'metadata' => [
@@ -199,7 +209,7 @@ class RMProductType extends BaseType
 		{
 			$media   = $item->media;
 			$gallery = (array) $media->get('gallery');
-			$result   = array_shift($gallery);
+			$result  = array_shift($gallery);
 
 			if (empty($result))
 			{
@@ -273,6 +283,23 @@ class RMProductType extends BaseType
 		// Display stats
 		$active   = \Joomla\Component\RadicalMartFavorites\Site\Helper\FavoritesHelper::checkActive($item->id);
 		$result[] = LayoutHelper::render('components.radicalmart_favorites.buttons.toggle', ['product_id' => $item->id, 'active' => $active, 'context' => $context]);
+
+		return implode("\n", $result);
+	}
+
+	public static function compare($item, $args)
+	{
+		$result  = [];
+		$context = 'com_radicalmart.product';
+
+		// Display stats
+		$active   = \Joomla\Component\RadicalMartCompare\Site\Helper\CompareHelper::checkActive($item->id);
+		$result[] = LayoutHelper::render('components.radicalmart_compare.buttons.toggle', [
+			'product_id' => $item->id,
+			'category_id' => $item->category->id,
+			'active' => $active,
+			'context' => $context
+		]);
 
 		return implode("\n", $result);
 	}

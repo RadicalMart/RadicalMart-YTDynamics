@@ -35,6 +35,7 @@ class LoadSourceTypes
 
 			// Search
 			Type\Search\RMSearchQueryType::config(),
+			Type\Search\RMSmartSearchQueryType::config(),
 		];
 
 		$types = [
