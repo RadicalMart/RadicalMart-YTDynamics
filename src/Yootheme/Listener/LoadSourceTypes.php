@@ -76,6 +76,7 @@ class LoadSourceTypes
 			['RMComponentPointsType', Type\LK\RMComponentPointsType::config()],
 			['RMComponentCodesType', Type\LK\RMComponentCodesType::config()],
 			['RMComponentFavoritesType', Type\LK\RMComponentFavoritesType::config()],
+			['RMComponentCompareType', Type\LK\RMComponentCompareType::config()],
 
 			// Pages
 			['RMPageLandingType', Type\Pages\RMPageLandingType::config()],

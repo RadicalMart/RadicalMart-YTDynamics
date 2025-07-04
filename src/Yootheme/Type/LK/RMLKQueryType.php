@@ -17,7 +17,7 @@ class RMLKQueryType
 	{
 		return [
 			'fields' => [
-				'RadicalMartMenu'              => [
+				'RadicalMartMenu'               => [
 					'type'       => [
 						'listOf' => 'RMMenuType'
 					],
@@ -29,7 +29,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::menu',
 					],
 				],
-				'RadicalMartUser'              => [
+				'RadicalMartUser'               => [
 					'type'       => 'RMUserType',
 					'metadata'   => [
 						'label' => trans('RM user'),
@@ -39,7 +39,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::user',
 					],
 				],
-				'RadicalMartComponentPersonal' => [
+				'RadicalMartComponentPersonal'  => [
 					'type'       => 'RMComponentPersonalType',
 					'metadata'   => [
 						'label' => trans('RM component personal'),
@@ -50,7 +50,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartComponentSettings' => [
+				'RadicalMartComponentSettings'  => [
 					'type'       => 'RMComponentSettingsType',
 					'metadata'   => [
 						'label' => trans('RM component settings'),
@@ -61,7 +61,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartComponentOrders'   => [
+				'RadicalMartComponentOrders'    => [
 					'type'       => 'RMComponentOrdersType',
 					'metadata'   => [
 						'label' => trans('RM component orders'),
@@ -72,7 +72,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartComponentOrder'    => [
+				'RadicalMartComponentOrder'     => [
 					'type'       => 'RMComponentOrderType',
 					'metadata'   => [
 						'label' => trans('RM component order'),
@@ -83,7 +83,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartComponentFavorites'   => [
+				'RadicalMartComponentFavorites' => [
 					'type'       => 'RMComponentFavoritesType',
 					'metadata'   => [
 						'label' => trans('RM component favorites'),
@@ -94,7 +94,18 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartComponentCodes'    => [
+				'RadicalMartComponentCompare'   => [
+					'type'       => 'RMComponentCompareType',
+					'metadata'   => [
+						'label' => trans('RM component compare'),
+						'group' => trans('Page'),
+						'view'  => ['com_radicalmart_compare.compare'],
+					],
+					'extensions' => [
+						'call' => __CLASS__ . '::component',
+					],
+				],
+				'RadicalMartComponentCodes'     => [
 					'type'       => 'RMComponentCodesType',
 					'metadata'   => [
 						'label' => trans('RM component codes'),
@@ -105,7 +116,7 @@ class RMLKQueryType
 						'call' => __CLASS__ . '::component',
 					],
 				],
-				'RadicalMartComponentPoints'   => [
+				'RadicalMartComponentPoints'    => [
 					'type'       => 'RMComponentPointsType',
 					'metadata'   => [
 						'label' => trans('RM component points'),
