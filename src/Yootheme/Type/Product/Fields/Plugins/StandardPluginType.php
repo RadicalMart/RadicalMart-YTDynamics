@@ -2,7 +2,7 @@
 
 use YOOtheme\Builder\Source;
 
-class Standard extends General
+class StandardPluginType extends GeneralPluginType
 {
 
 	public static function configFields($field, array $config, Source $source, $type)
@@ -39,16 +39,16 @@ class Standard extends General
 		{
 			return [
 				[
-					'type' => ['listOf' => 'RMChoiceFieldType'],
+					'type' => ['listOf' => 'RMListFieldValueType'],
 				] + $config,
 				[
 					'name' => "{$config['name']}String",
-					'type' => 'RMChoiceFieldStringType',
+					'type' => 'RMChoiceFieldStringValueType',
 				] + $config,
 			];
 		}
 
-		return ['type' => 'RMChoiceFieldType'] + $config;
+		return ['type' => 'RMListFieldValueType'] + $config;
 	}
 
 	protected static function configCheckboxes($field, array $config)
@@ -57,16 +57,16 @@ class Standard extends General
 		{
 			return [
 				[
-					'type' => ['listOf' => 'RMChoiceFieldType'],
+					'type' => ['listOf' => 'RMChoiceFieldValueType'],
 				] + $config,
 				[
 					'name' => "{$config['name']}String",
-					'type' => 'RMChoiceFieldStringType',
+					'type' => 'RMChoiceFieldStringValueType',
 				] + $config,
 			];
 		}
 
-		return ['type' => 'RMChoiceFieldType'] + $config;
+		return ['type' => 'RMChoiceFieldValueType'] + $config;
 	}
 
 	public function resolve($field, $args, $ctx, $info)

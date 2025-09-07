@@ -1,5 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product;
 
+use Joomla\CMS\Factory;
 use function YOOtheme\trans;
 
 class RMProductQueryType
@@ -28,7 +29,7 @@ class RMProductQueryType
 				],
 				'RadicalMartProductMeta' => [
 					'type'       => [
-						'listOf' => 'RMProductType'
+						'listOf' => 'RMProductMetaType'
 					],
 					'metadata'   => [
 						'label' => trans('ProductMeta'),
@@ -59,7 +60,22 @@ class RMProductQueryType
 
 	public static function meta($root)
 	{
-		return $root['variability']->products;
+		$id       = (int) Factory::getApplication()->getInput()->get('id');
+		$products = $root['variability']->products;
+
+		foreach ($products as &$product)
+		{
+			if ($product->id === $id)
+			{
+				$product->isActive = true;
+			}
+			else
+			{
+				$product->isActive = false;
+			}
+		}
+
+		return $products;
 	}
 
 }

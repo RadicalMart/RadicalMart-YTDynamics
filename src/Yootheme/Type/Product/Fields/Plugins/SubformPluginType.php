@@ -3,7 +3,7 @@
 use YOOtheme\Builder\Source;
 use YOOtheme\Str;
 
-class Subform extends General
+class SubformPluginType extends GeneralPluginType
 {
 
 	public static function configFields($field, array $config, Source $source, $type)

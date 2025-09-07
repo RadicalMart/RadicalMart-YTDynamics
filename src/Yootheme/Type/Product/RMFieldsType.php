@@ -3,11 +3,11 @@
 use Joomla\CMS\Factory;
 use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsResultEvent;
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
-use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Gallery;
-use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\General;
-use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Range;
-use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Standard;
-use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\Subform;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\GalleryPluginTypeType;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\GeneralPluginType;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\RangePluginType;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\StandardPluginType;
+use Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins\SubformPluginType;
 use YOOtheme\Arr;
 use YOOtheme\Builder\Source;
 use YOOtheme\Config;
@@ -20,11 +20,11 @@ class RMFieldsType extends BaseType
 {
 
 	protected static $plugins_map = [
-		'general'  => General::class,
-		'standard' => Standard::class,
-		'subform'  => Subform::class,
-		'gallery'  => Gallery::class,
-		'range'    => Range::class,
+		'general'  => GeneralPluginType::class,
+		'standard' => StandardPluginType::class,
+		'subform'  => SubformPluginType::class,
+		'gallery'  => GalleryPluginTypeType::class,
+		'range'    => RangePluginType::class,
 	];
 
 	public static function config(Source $source, $type, array $fields)

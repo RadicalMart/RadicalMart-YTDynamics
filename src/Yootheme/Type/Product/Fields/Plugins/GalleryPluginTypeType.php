@@ -3,7 +3,7 @@
 use YOOtheme\Builder\Source;
 use YOOtheme\Str;
 
-class Gallery extends General
+class GalleryPluginTypeType extends GeneralPluginType
 {
 
 	public static function configFields($field, array $config, Source $source, $type)

@@ -1,6 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Plugins;
 
-class General
+class GeneralPluginType
 {
 
 	protected static function configGenericField($field, array $config)

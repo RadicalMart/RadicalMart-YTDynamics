@@ -3,7 +3,7 @@
 use YOOtheme\Builder\Source;
 use YOOtheme\Str;
 
-class Range extends General
+class RangePluginType extends GeneralPluginType
 {
 
 	public static function configFields($field, array $config, Source $source, $type)
