@@ -1,9 +1,9 @@
-<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields;
+<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Values;
 
 use Joomla\CMS\Language\Text;
 use function YOOtheme\trans;
 
-class RMChoiceFieldType
+class RMChoiceFieldValueType
 {
 	/**
 	 * @return array

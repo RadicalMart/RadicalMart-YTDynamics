@@ -1,8 +1,8 @@
-<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields;
+<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields\Values;
 
 use function YOOtheme\trans;
 
-class RMValueFieldType
+class RMGeneralFieldValueType
 {
     /**
      * @return array

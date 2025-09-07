@@ -1,4 +1,4 @@
-<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product;
+<?php namespace Joomla\Plugin\System\YTDynamics\Yootheme\Type\Product\Fields;
 
 use Joomla\Plugin\System\YTDynamics\Yootheme\Type\BaseType;
 use function YOOtheme\trans;

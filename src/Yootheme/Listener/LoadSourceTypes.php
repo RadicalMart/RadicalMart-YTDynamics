@@ -47,16 +47,18 @@ class LoadSourceTypes
 
 			// Product
 			['RMProductType', Type\Product\RMProductType::config()],
+			['RMProductMetaType', Type\Product\RMProductMetaType::config()],
 			['RMProductPriceType', Type\Product\RMProductPriceType::config()],
 			['RMProductImageType', Type\Product\RMProductImageType::config()],
 			['RMProductStockType', Type\Product\RMProductStockType::config()],
 			['RMProductParamsType', Type\Product\RMProductParamsType::config()],
 
 			// Product fields
-			['RMFieldType', Type\Product\RMFieldType::config()],
-			['RMChoiceFieldStringType', Type\Product\Fields\RMChoiceFieldStringType::config()],
-			['RMChoiceFieldType', Type\Product\Fields\RMChoiceFieldType::config()],
-			['RMValueFieldType', Type\Product\Fields\RMValueFieldType::config()],
+			['RMFieldType', Type\Product\Fields\RMFieldType::config()],
+			['RMChoiceFieldStringValueType', Type\Product\Fields\Values\RMChoiceFieldStringValueType::config()],
+			['RMChoiceFieldValueType', Type\Product\Fields\Values\RMChoiceFieldValueType::config()],
+			['RMGeneralFieldValueType', Type\Product\Fields\Values\RMGeneralFieldValueType::config()],
+			['RMListFieldValueType', Type\Product\Fields\Values\RMListFieldValueType::config()],
 
 			// Product plugins
 			['RMProductPluginsType', Type\Product\RMProductPluginsType::config()],
@@ -114,7 +116,7 @@ class LoadSourceTypes
 			[
 				'fields' => [
 					'field' => [
-						'type'       => ($fieldType = "RMProductTypeFields"),
+						'type'       => ($fieldProductType = "RMProductTypeFields"),
 						'metadata'   => [
 							'label' => trans('Fields'),
 						],
@@ -126,7 +128,25 @@ class LoadSourceTypes
 			],
 		);
 
-		$source->objectType($fieldType, Type\Product\RMFieldsType::config($source, 'RMProductType', $fields));
+		$source->objectType(
+			'RMProductMetaType',
+			[
+				'fields' => [
+					'field' => [
+						'type'       => ($fieldProductMetaType = "RMProductMetaTypeFields"),
+						'metadata'   => [
+							'label' => trans('Fields'),
+						],
+						'extensions' => [
+							'call' => Type\Product\RMFieldsType::class . '::field',
+						],
+					],
+				],
+			],
+		);
+
+		$source->objectType($fieldProductType, Type\Product\RMFieldsType::config($source, 'RMProductType', $fields));
+		$source->objectType($fieldProductMetaType, Type\Product\RMFieldsType::config($source, 'RMProductMetaType', $fields));
 
 	}
 
