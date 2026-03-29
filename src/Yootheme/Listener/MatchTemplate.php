@@ -27,7 +27,10 @@ class MatchTemplate
 		$context = $view->get('context');
 		$layout  = Factory::getApplication()->input->get('layout');
 
-		if (!empty($layout))
+		if (
+			!empty($layout)
+			&& in_array($context, ['com_radicalmart.categories'])
+		)
 		{
 			$context .= '.' . $layout;
 		}
