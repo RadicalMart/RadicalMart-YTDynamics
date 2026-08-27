@@ -53,7 +53,7 @@ $content = $this->el('ul', [
 
                             'class' => [
                                 'el-item',
-                                'uk-margin-remove-first-child' => !$child->props['image'] || !in_array($props['image_align'], ['left', 'right']),
+                                'uk-margin-remove-first-child' => empty($child->props['image']) || !in_array($props['image_align'], ['left', 'right']),
                             ],
 
                         ]);
@@ -81,7 +81,7 @@ $content = $this->el('ul', [
 
                     'class' => [
                         'el-item',
-                        'uk-margin-remove-first-child' => !$child->props['image'] || !in_array($props['image_align'], ['left', 'right']),
+                        'uk-margin-remove-first-child' => empty($child->props['image']) || !in_array($props['image_align'], ['left', 'right']),
                     ],
 
                 ]);

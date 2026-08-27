@@ -1,39 +1,35 @@
-<?php namespace Joomla\Plugin\System\YTDynamics\Extension;
+<?php
+namespace Joomla\Plugin\System\YTDynamics\Extension;
 
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Event\SubscriberInterface;
+use Joomla\Filesystem\Path;
 use YOOtheme\Application;
 
 class YTDynamics extends CMSPlugin implements SubscriberInterface
 {
-	protected $app;
+    protected $autoloadLanguage = true;
 
-	protected $db;
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            'onAfterInitialise' => 'onAfterInitialise',
+        ];
+    }
 
-	protected $autoloadLanguage = true;
+    public function onAfterInitialise(): void
+    {
+        if (!class_exists(Application::class, false)) {
+            return;
+        }
 
-	public static function getSubscribedEvents(): array
-	{
-		return [
-			'onAfterInitialise' => 'onAfterInitialise',
-		];
-	}
+        PluginHelper::importPlugin('radicalmart');
+        PluginHelper::importPlugin('radicalmart_ytdynamics');
 
-	public function onAfterInitialise()
-	{
-
-		if (!class_exists(Application::class, false))
-		{
-			return;
-		}
-
-		PluginHelper::importPlugin('radicalmart');
-		PluginHelper::importPlugin('radicalmart_ytdynamics');
-
-		Application::getInstance()->load(implode('/', [JPATH_PLUGINS, 'system', 'ytdynamics', 'src', 'Yootheme']) . '/bootstrap.php');
-	}
-
+        Application::getInstance()
+            ->load(Path::clean(JPATH_PLUGINS . '/system/ytdynamics/src/YOOtheme/bootstrap.php'));
+    }
 }

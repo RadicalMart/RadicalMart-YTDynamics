@@ -1,17 +1,19 @@
 <?php \defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 $mode = $props['mode'];
 
 if (str_contains($mode, 'radicalmart_'))
 {
 	$app                  = Factory::getApplication();
-	$cookieName           = 'radicalmart_products-list_layout';
-	$productsListTemplate = $app->input->cookie->get($cookieName, 'grid');
-
-	$cookieName           = 'radicalmart_products-list_ordering';
-	$productsListOrdering = $app->input->cookie->get($cookieName);
+	$cookieName           = 'com_radicalmart_category_list_item_template';
+	$productsListTemplate = $app->input->get->getCmd($cookieName)
+		?: $app->input->cookie->getCmd($cookieName, 'grid');
+	$productsListTemplate = in_array($productsListTemplate, ['grid', 'list', 'table'], true)
+		? $productsListTemplate
+		: 'grid';
 
 	if ($mode === 'radicalmart_grid' && $productsListTemplate !== 'grid')
 	{
@@ -25,7 +27,8 @@ if (str_contains($mode, 'radicalmart_'))
 
 }
 
-$empty = empty($children[0]->children);
+$children = array_values(array_filter($children, fn($child) => !empty($child->children)));
+$empty = empty($children);
 
 $el     = $this->el('div', []);
 $config = [
@@ -63,20 +66,18 @@ $grid = $this->el('div', $config);
 
 ?>
 
-<div>
-	<?= $el($props, $attrs) ?>
+<?= $el($props, $attrs) ?>
 
-	<?= $grid($props) ?>
-	<?php if (!$empty) : ?>
-		<?php foreach ($children as $child) : ?>
-            <div><?= $builder->render($child, ['element' => $props]) ?></div>
-		<?php endforeach ?>
-	<?php else: ?>
-        <div>
-            <div class="uk-alert uk-alert-warning">Товарных позиций нет.</div>
-        </div>
-	<?php endif; ?>
-	<?= $grid->end() ?>
+<?= $grid($props) ?>
+<?php if (!$empty) : ?>
+	<?php foreach ($children as $child) : ?>
+		<div><?= $builder->render($child, ['element' => $props]) ?></div>
+	<?php endforeach ?>
+<?php else: ?>
+	<div>
+		<div class="uk-alert uk-alert-warning"><?= Text::_('JGLOBAL_NO_MATCHING_RESULTS') ?></div>
+	</div>
+<?php endif; ?>
+<?= $grid->end() ?>
 
-	<?= $el->end() ?>
-</div>
+<?= $el->end() ?>

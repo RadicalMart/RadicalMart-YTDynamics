@@ -12,6 +12,8 @@ class YTDynamicsResultEvent extends Event implements ResultAwareInterface
 
 	use ResultAware;
 
+    public const EVENT_NAME = 'onRadicalMartYTDynamicsProductFieldsTypeConfig';
+
 	public function getResult()
 	{
 		return $this->arguments['result'] ?? [];

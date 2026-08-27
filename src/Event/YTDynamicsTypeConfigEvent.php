@@ -8,6 +8,8 @@ use YOOtheme\Builder\Source;
 class YTDynamicsTypeConfigEvent extends Event
 {
 
+    public const EVENT_NAME = 'onRadicalMartYTDynamicsTypeConfig';
+
 	public function getType(): string
 	{
 		return $this->arguments['type'];

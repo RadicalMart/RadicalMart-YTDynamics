@@ -1,2 +1,8 @@
 .idea
 build/node_modules
+www
+log
+tmp
+var
+.env
+pkg_radicalmart.zip

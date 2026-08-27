@@ -7,21 +7,22 @@
     <authorUrl>https://delo-design.ru</authorUrl>
     <copyright>Copyright © 2020 Delo Design. All rights reserved.</copyright>
     <license>commerce</license>
-    <version>1.2.0</version>
+    <version>1.3.0-dev</version>
     <description>PLG_YTDYNAMICS_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Plugin\System\YTDynamics</namespace>
     <scriptfile>script.php</scriptfile>
     <files>
         <folder>elements</folder>
+        <folder>languages</folder>
         <folder>services</folder>
         <folder>template</folder>
         <folder plugin="ytdynamics">src</folder>
     </files>
     <languages folder="language">
-        <language tag="en-GB">en-GB/en-GB.plg_system_ytdynamics.ini</language>
-        <language tag="en-GB">en-GB/en-GB.plg_system_ytdynamics.sys.ini</language>
-        <language tag="ru-RU">ru-RU/ru-RU.plg_system_ytdynamics.ini</language>
-        <language tag="ru-RU">ru-RU/ru-RU.plg_system_ytdynamics.sys.ini</language>
+        <language tag="en-GB">en-GB/plg_system_ytdynamics.ini</language>
+        <language tag="en-GB">en-GB/plg_system_ytdynamics.sys.ini</language>
+        <language tag="ru-RU">ru-RU/plg_system_ytdynamics.ini</language>
+        <language tag="ru-RU">ru-RU/plg_system_ytdynamics.sys.ini</language>
     </languages>
     <config>
         <fields name="params">

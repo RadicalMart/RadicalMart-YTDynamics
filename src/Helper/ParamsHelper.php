@@ -2,22 +2,25 @@
 
 
 use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
 
 class ParamsHelper
 {
-
-	public static function all()
+    /**
+     * @throws \Exception
+     */
+    public static function all(): ?Registry
 	{
 		$plugin = Factory::getApplication()->bootPlugin('ytdynamics', 'system');
 
 		return $plugin->params;
 	}
 
-	public static function get($name, $default = null)
+    /**
+     * @throws \Exception
+     */
+    public static function get(string $name, mixed $default = null)
 	{
-		$plugin = Factory::getApplication()->bootPlugin('ytdynamics', 'system');
-
-		return $plugin->params->get($name, $default);
+		return static::all()?->get($name, $default);
 	}
-
 }

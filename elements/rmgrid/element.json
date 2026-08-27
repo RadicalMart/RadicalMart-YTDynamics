@@ -33,7 +33,8 @@
     "image_svg_color": "emphasis",
     "link_text": "Read more",
     "link_style": "default",
-    "margin": "default",
+    "margin_top": "default",
+    "margin_bottom": "default",
     "item_animation": true
   },
   "placeholder": {
@@ -123,6 +124,16 @@
       "type": "checkbox",
       "text": "Show dividers",
       "enable": "grid_column_gap != 'collapse' && grid_row_gap != 'collapse'"
+    },
+    "grid_masonry": {
+      "label": "Masonry",
+      "description": "Create a masonry layout for items with different heights.",
+      "type": "select",
+      "options": {
+        "None": "",
+        "Pack": "pack",
+        "Next": "next"
+      }
     },
     "grid_column_align": {
       "label": "Alignment",
@@ -262,9 +273,8 @@
     "position_top": "${builder.position_top}",
     "position_bottom": "${builder.position_bottom}",
     "position_z_index": "${builder.position_z_index}",
-    "margin": "${builder.margin}",
-    "margin_remove_top": "${builder.margin_remove_top}",
-    "margin_remove_bottom": "${builder.margin_remove_bottom}",
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
     "maxwidth": "${builder.maxwidth}",
     "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
     "block_align": "${builder.block_align}",
@@ -334,6 +344,7 @@
                 "grid_column_gap",
                 "grid_row_gap",
                 "grid_divider",
+                "grid_masonry",
                 "grid_column_align",
                 "grid_row_align"
               ]
@@ -381,9 +392,8 @@
                 "position_top",
                 "position_bottom",
                 "position_z_index",
-                "margin",
-                "margin_remove_top",
-                "margin_remove_bottom",
+                "margin_top",
+                "margin_bottom",
                 "maxwidth",
                 "maxwidth_breakpoint",
                 "block_align",

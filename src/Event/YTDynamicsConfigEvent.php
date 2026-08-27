@@ -7,6 +7,8 @@ use Joomla\Event\Event;
 class YTDynamicsConfigEvent extends Event
 {
 
+    public const EVENT_NAME = 'onRadicalMartYTDynamicsConfig';
+
 	public function getConfig(): array
 	{
 		return $this->arguments['config'];

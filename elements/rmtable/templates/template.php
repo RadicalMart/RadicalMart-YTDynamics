@@ -1,6 +1,19 @@
 <?php
 
 use YOOtheme\Arr;
+use Joomla\CMS\Factory;
+
+$mode = $props['mode'] ?? 'default';
+
+if ($mode === 'radicalmart_table') {
+    $input = Factory::getApplication()->input;
+    $template = $input->get->getCmd('com_radicalmart_category_list_item_template')
+        ?: $input->cookie->getCmd('com_radicalmart_category_list_item_template', 'grid');
+
+    if ($template !== 'table') {
+        return;
+    }
+}
 
 $text_fields = ['title', 'meta', 'content'];
 

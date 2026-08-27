@@ -46,20 +46,25 @@ $nav_switcher = in_array($props['nav_position'], ['top', 'bottom'])
 
 ?>
 
-<?= $nav($props, $nav_switcher) ?>
+    <?= $nav($props, $nav_switcher) ?>
     <?php foreach ($children as $child) :
+
+        $title = $child->props['title'] ?? '';
+        $label = !empty($props['show_label']) ? ($child->props['label'] ?? '') : '';
+        $image_src = !empty($props['show_image']) ? ($child->props['image'] ?? '') : '';
+        $thumbnail_src = !empty($props['show_thumbnail']) ? ($child->props['thumbnail'] ?? '') : '';
+        $nav_image = $thumbnail_src ?: $image_src;
 
         // Image
         $image = $this->el('image', [
             'class' => [
-                'uk-text-{thumbnav_svg_color}' => $props['thumbnav_svg_inline'] && $props['thumbnav_svg_color'] && $this->isImage($child->props['thumbnail'] ?: $child->props['image']) == 'svg',
+                'uk-text-{thumbnav_svg_color}' => $props['thumbnav_svg_inline'] && $props['thumbnav_svg_color'] && $this->isImage($nav_image) == 'svg',
             ],
-            'src' => $child->props['thumbnail'] ?: $child->props['image'],
-            'alt' => $child->props['label'] ?: $child->props['title'],
+            'src' => $nav_image,
+            'alt' => $label ?: $title,
             'loading' => $props['image_loading'] ? false : null,
             'width' => $props['thumbnav_width'],
             'height' => $props['thumbnav_height'],
-            'focal_point' => $child->props['thumbnail'] ? $child->props['thumbnail_focal_point'] : $child->props['image_focal_point'],
             'uk-svg' => (bool) $props['thumbnav_svg_inline'],
             'thumbnail' => true,
         ]);
@@ -67,7 +72,7 @@ $nav_switcher = in_array($props['nav_position'], ['top', 'bottom'])
         $thumbnail = $image->attrs['src'] && $props['nav'] == 'thumbnav' ? $image($props) : '';
     ?>
     <li>
-        <a href><?= $thumbnail ?: $child->props['label'] ?: $child->props['title'] ?></a>
+        <a href><?= $thumbnail ?: $label ?: $title ?></a>
     </li>
     <?php endforeach ?>
 <?= $nav->end() ?>

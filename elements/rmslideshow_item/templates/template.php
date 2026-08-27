@@ -1,6 +1,6 @@
 <?php
 
-$root_dir = $__dir;
+$template = $template ?? 'slide';
 
 if($template === 'thumb')
 {

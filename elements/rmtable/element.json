@@ -9,6 +9,7 @@
     "container": true,
     "width": 500,
     "defaults": {
+        "mode": "default",
         "show_title": true,
         "show_meta": true,
         "show_content": true,
@@ -25,9 +26,9 @@
     },
     "placeholder": {
         "children": [
-            { "type": "table_item", "props": {} },
-            { "type": "table_item", "props": {} },
-            { "type": "table_item", "props": {} }
+            { "type": "rmtable_item", "props": {} },
+            { "type": "rmtable_item", "props": {} },
+            { "type": "rmtable_item", "props": {} }
         ]
     },
     "templates": {
@@ -39,6 +40,14 @@
             "label": "Items",
             "type": "content-items",
             "item": "rmtable_item"
+        },
+        "mode": {
+            "label": "Mode",
+            "type": "select",
+            "options": {
+                "Default": "default",
+                "RadicalMart Table": "radicalmart_table"
+            }
         },
         "show_title": {
             "label": "Display",
@@ -435,9 +444,8 @@
         "position_bottom": "${builder.position_bottom}",
         "position_z_index": "${builder.position_z_index}",
         "blend": "${builder.blend}",
-        "margin": "${builder.margin}",
-        "margin_remove_top": "${builder.margin_remove_top}",
-        "margin_remove_bottom": "${builder.margin_remove_bottom}",
+        "margin_top": "${builder.margin_top}",
+        "margin_bottom": "${builder.margin_bottom}",
         "maxwidth": "${builder.maxwidth}",
         "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
         "block_align": "${builder.block_align}",
@@ -484,6 +492,7 @@
                     "title": "Content",
                     "fields": [
                         "content",
+                        "mode",
                         "show_title",
                         "show_meta",
                         "show_content",
@@ -585,9 +594,8 @@
                                 "position_bottom",
                                 "position_z_index",
                                 "blend",
-                                "margin",
-                                "margin_remove_top",
-                                "margin_remove_bottom",
+                                "margin_top",
+                                "margin_bottom",
                                 "maxwidth",
                                 "maxwidth_breakpoint",
                                 "block_align",

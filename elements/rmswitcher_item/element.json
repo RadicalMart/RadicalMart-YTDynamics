@@ -4,7 +4,8 @@
   "title": "rmswitcher_item",
   "width": 500,
   "defaults": {
-    "margin": "default"
+    "margin_top": "default",
+    "margin_bottom": "default"
   },
   "placeholder": {},
   "templates": {
@@ -17,6 +18,18 @@
     },
     "title": {
       "label": "Title",
+      "source": true
+    },
+    "label": {
+      "label": "Navigation Label",
+      "source": true
+    },
+    "image": "${builder.image}",
+    "image_alt": "${builder.image_alt}",
+    "thumbnail": {
+      "label": "Navigation Thumbnail",
+      "description": "Used when thumbnail navigation is selected.",
+      "type": "image",
       "source": true
     },
     "panel_style": {
@@ -41,7 +54,7 @@
       "description": "Link the whole panel if a link exists.",
       "type": "checkbox",
       "text": "Link panel",
-      "enable": "show_link"
+      "enable": "false"
     },
     "panel_padding": {
       "label": "Padding",
@@ -53,14 +66,14 @@
         "Default": "default",
         "Large": "large"
       },
-      "enable": "panel_style || (!panel_style && show_image && image_align != 'between')"
+      "enable": "panel_style"
     },
     "panel_image_no_padding": {
       "description": "Top, left or right aligned images can be attached to the panel edge. If the image is aligned to the left or right, it will also extend to cover the whole space.",
       "type": "checkbox",
       "text": "Align image without padding",
       "show": "panel_style",
-      "enable": "show_image && image_align != 'between'"
+      "enable": "false"
     },
     "item_maxwidth": {
       "type": "select",
@@ -85,7 +98,7 @@
         "Small": "small"
       },
       "show": "!panel_style",
-      "enable": "show_image && image_align == 'top' && !panel_padding && !item_maxwidth && (!grid_default || grid_default == '1') && (!grid_small || grid_small == '1') && (!grid_medium || grid_medium == '1') && (!grid_large || grid_large == '1') && (!grid_xlarge || grid_xlarge == '1')"
+      "enable": "false"
     },
     "html_element": "${builder.html_element}",
     "position": "${builder.position}",
@@ -94,9 +107,8 @@
     "position_top": "${builder.position_top}",
     "position_bottom": "${builder.position_bottom}",
     "position_z_index": "${builder.position_z_index}",
-    "margin": "${builder.margin}",
-    "margin_remove_top": "${builder.margin_remove_top}",
-    "margin_remove_bottom": "${builder.margin_remove_bottom}",
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
     "animation": "${builder.animation}",
     "_parallax_button": "${builder._parallax_button}",
     "visibility": "${builder.visibility}",
@@ -137,7 +149,11 @@
               "label": "Nav",
               "type": "group",
               "fields": [
-                "title"
+                "title",
+                "label",
+                "image",
+                "image_alt",
+                "thumbnail"
               ]
             },
             {
@@ -153,11 +169,8 @@
               "divider": true,
               "fields": [
                 "panel_style",
-                "panel_link",
                 "panel_padding",
-                "panel_image_no_padding",
-                "item_maxwidth",
-                "panel_content_width"
+                "item_maxwidth"
               ]
             },
             {
@@ -170,9 +183,8 @@
                 "position_top",
                 "position_bottom",
                 "position_z_index",
-                "margin",
-                "margin_remove_top",
-                "margin_remove_bottom",
+                "margin_top",
+                "margin_bottom",
                 "animation",
                 "_parallax_button",
                 "visibility"
