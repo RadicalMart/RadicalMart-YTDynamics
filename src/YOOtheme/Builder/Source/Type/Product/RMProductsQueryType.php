@@ -85,6 +85,7 @@ class RMProductsQueryType
 		if (!empty($root['items']) && is_array($root['items']))
 		{
 			$items = $root['items'];
+			RMProductType::hydrateImages($items);
 
 			if ($args['offset'] || $args['limit'])
 			{

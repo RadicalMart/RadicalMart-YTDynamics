@@ -1,5 +1,6 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Type\Pages;
 
+use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Type\Product\RMProductType;
 use function YOOtheme\trans;
 
 class RMPageLandingsQueryType
@@ -86,6 +87,7 @@ class RMPageLandingsQueryType
 		if (!empty($root['items']))
 		{
 			$items = $root['items'];
+			RMProductType::hydrateImages($items);
 
 			if ($args['offset'] || $args['limit'])
 			{

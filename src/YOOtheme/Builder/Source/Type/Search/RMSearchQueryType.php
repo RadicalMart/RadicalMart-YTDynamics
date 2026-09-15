@@ -2,6 +2,7 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Type\Product\RMProductType;
 use function YOOtheme\trans;
 
 class RMSearchQueryType
@@ -102,6 +103,7 @@ class RMSearchQueryType
 		if (!empty($root['items']))
 		{
 			$items = $root['items'];
+			RMProductType::hydrateImages($items);
 
 			if ($args['offset'] || $args['limit'])
 			{

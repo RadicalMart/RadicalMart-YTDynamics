@@ -8,7 +8,7 @@ use Joomla\Registry\Registry;
 
 class BaseType
 {
-    protected static ?Registry $params;
+    protected static ?Registry $params = null;
 
     /**
      * @throws \Exception

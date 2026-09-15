@@ -64,7 +64,7 @@ class MatchTemplate
                     'catid' => fn($ids, $query): bool => $this->matchCategory(
                         (int) $item->category->id,
                         $ids,
-                        $query['include_child_categories'] ?? '',
+                        $query['include_child_categories'] ?? 'include',
                     ),
                     'lang'  => $this->language,
                 ],
@@ -139,7 +139,7 @@ class MatchTemplate
                     'catid' => fn($ids, $query): bool => $this->matchCategory(
                         (int) $category->id,
                         $ids,
-                        $query['include_child_categories'] ?? '',
+                        $query['include_child_categories'] ?? 'include',
                     ),
                     'pages'             => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
                     'product_list_view' => $this->getProductListView(),

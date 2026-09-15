@@ -7,6 +7,11 @@
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "width": 500,
+  "defaults": {
+    "show_grid_button": true,
+    "show_list_button": true,
+    "show_table_button": true
+  },
   "templates": {
     "render": "./templates/template.php",
     "content": "./templates/content.php"
@@ -80,6 +85,19 @@
       "show": "!panel_style",
       "enable": "false"
     },
+    "show_grid_button": {
+      "label": "Layout Switcher",
+      "type": "checkbox",
+      "text": "Show Grid button"
+    },
+    "show_list_button": {
+      "type": "checkbox",
+      "text": "Show List button"
+    },
+    "show_table_button": {
+      "type": "checkbox",
+      "text": "Show Table button"
+    },
     "position": "${builder.position}",
     "position_left": "${builder.position_left}",
     "position_right": "${builder.position_right}",
@@ -127,6 +145,16 @@
         {
           "title": "Settings",
           "fields": [
+            {
+              "label": "Layout Switcher",
+              "type": "group",
+              "divider": true,
+              "fields": [
+                "show_grid_button",
+                "show_list_button",
+                "show_table_button"
+              ]
+            },
             {
               "label": "Panel",
               "type": "group",

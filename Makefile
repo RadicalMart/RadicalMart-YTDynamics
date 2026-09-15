@@ -1,13 +1,29 @@
-.PHONY: $(MAKECMDGOALS)
+.PHONY: build rebuild frontend package up up-rebuild up-alone down restart down-all down-v help
 
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
+
+PLUGIN_VERSION := $(shell sed -n 's|.*<version>\(.*\)</version>.*|\1|p' ytdynamics.xml | head -n 1)
+PACKAGE_DIR := build
+PACKAGE_FILE := $(PACKAGE_DIR)/plg_system_ytdynamics-$(PLUGIN_VERSION).zip
+PACKAGE_PATHS := elements language languages media services src template script.php ytdynamics.xml
 
 build: ## Собрать контейнеры
 	docker compose build
 
 rebuild: ## Пересобрать контейнеры
 	docker compose build --no-cache
+
+frontend: ## Собрать frontend-файлы плагина
+	@test -d frontend/node_modules || npm --prefix frontend ci
+	npm --prefix frontend run plg_system_ytdynamics
+
+package: frontend ## Собрать готовый установочный ZIP плагина
+	mkdir -p $(PACKAGE_DIR)
+	$(RM) $(PACKAGE_FILE)
+	zip -q -r $(PACKAGE_FILE) $(PACKAGE_PATHS) -x '*.DS_Store'
+	unzip -tq $(PACKAGE_FILE)
+	@echo "Package: $(PACKAGE_FILE)"
 
 up: ## Развернуть контейнеры
 	docker compose up -d

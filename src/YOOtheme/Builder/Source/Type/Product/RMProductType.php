@@ -262,6 +262,111 @@ class RMProductType extends BaseType
 		return $values[$id];
 	}
 
+	public static function hydrateImages(array $items): void
+	{
+		$itemsByVariantId = [];
+
+		foreach ($items as $item)
+		{
+			if (!is_object($item) || !empty($item->image))
+			{
+				continue;
+			}
+
+			if (($item->media ?? null) instanceof Registry)
+			{
+				$image = $item->media->get('image');
+
+				if (!empty($image))
+				{
+					$item->image = $image;
+					continue;
+				}
+			}
+
+			$products = $item->products ?? [];
+
+			if ($products instanceof Registry)
+			{
+				$products = $products->toArray();
+			}
+			elseif ($products instanceof \Traversable)
+			{
+				$products = iterator_to_array($products, false);
+			}
+			elseif (!is_array($products))
+			{
+				$products = (array) $products;
+			}
+
+			$variant = reset($products);
+			$variantId = is_array($variant)
+				? (int) ($variant['id'] ?? 0)
+				: (int) (is_object($variant) ? ($variant->id ?? 0) : 0);
+
+			if ($variantId > 0)
+			{
+				$itemsByVariantId[$variantId][] = $item;
+			}
+		}
+
+		if (!$itemsByVariantId)
+		{
+			return;
+		}
+
+		try
+		{
+			$variantIds = array_keys($itemsByVariantId);
+			$model = Factory::getApplication()
+				->bootComponent('com_radicalmart')
+				->getMVCFactory()
+				->createModel('Products', 'Site', ['ignore_request' => true]);
+			$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
+			$model->setState('filter.published', 1);
+			$model->setState('filter.language', Multilanguage::isEnabled());
+			$model->setState('filter.item_id', $variantIds);
+			$model->setState('list.limit', 0);
+
+			foreach ((array) $model->getItems() as $variant)
+			{
+				if (!is_object($variant) && !is_array($variant))
+				{
+					continue;
+				}
+
+				$variantId = is_array($variant)
+					? (int) ($variant['id'] ?? 0)
+					: (int) ($variant->id ?? 0);
+				$image = is_array($variant)
+					? ($variant['image'] ?? null)
+					: ($variant->image ?? null);
+				$media = is_array($variant)
+					? ($variant['media'] ?? null)
+					: ($variant->media ?? null);
+
+				if (empty($image) && $media instanceof Registry)
+				{
+					$image = $media->get('image');
+				}
+
+				if ($variantId < 1 || empty($image) || empty($itemsByVariantId[$variantId]))
+				{
+					continue;
+				}
+
+				foreach ($itemsByVariantId[$variantId] as $item)
+				{
+					$item->image = $image;
+				}
+			}
+		}
+		catch (\Throwable)
+		{
+			// Keep source resolution working when RadicalMart cannot load a variant.
+		}
+	}
+
 	public static function image($item): string
 	{
 		$image = $item->image ?? null;
@@ -271,31 +376,63 @@ class RMProductType extends BaseType
 			$image = $item->media->get('image');
 		}
 
-		return (string) ($image ?: static::getParam('product.medianotfound', ''));
+		return static::normalizeImagePath($image ?: static::getParam('product.medianotfound', ''));
 	}
 
-	public static function mediaFirst($item, $args)
+	public static function mediaFirst($item, $args): array
 	{
-		$result = null;
+		$image = '';
 
-		if (!empty($item->media))
+		if (($item->media ?? null) instanceof Registry)
 		{
-			$media   = $item->media;
-			$gallery = (array) $media->get('gallery');
-			$result  = array_shift($gallery);
+			$gallery = (array) $item->media->get('gallery');
+			$first = reset($gallery);
 
-			if (empty($result))
+			if ($first instanceof Registry)
 			{
-				$not_found = static::getParam('product.medianotfound');
-
-				if (!empty($not_found))
-				{
-					$result = ['src' => $not_found, 'alt' => $item->title];
-				}
+				$image = $first->get('src', '');
+			}
+			elseif (is_array($first))
+			{
+				$image = $first['src'] ?? '';
+			}
+			elseif (is_object($first))
+			{
+				$image = $first->src ?? '';
+			}
+			elseif (is_string($first))
+			{
+				$image = $first;
 			}
 		}
 
-		return $result;
+		$image = static::normalizeImagePath($image);
+
+		return [
+			'src' => $image ?: static::image($item),
+			'alt' => (string) ($item->title ?? ''),
+		];
+	}
+
+	private static function normalizeImagePath(mixed $image): string
+	{
+		if (!is_scalar($image) && !($image instanceof \Stringable))
+		{
+			return '';
+		}
+
+		$image = trim((string) $image);
+
+		if (
+			$image === ''
+			|| str_starts_with($image, '/')
+			|| preg_match('#^[a-z][a-z0-9+.-]*:#i', $image)
+		)
+		{
+			return $image;
+		}
+
+		return '/' . $image;
 	}
 
 	public static function media($item, $args)

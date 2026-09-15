@@ -11,20 +11,19 @@ $productsListTemplate = $app->input->get->getCmd($cookieName)
 $productsListTemplate = in_array($productsListTemplate, ['grid', 'list', 'table'], true)
 	? $productsListTemplate
 	: 'grid';
+$showGridButton  = $props['show_grid_button'] ?? true;
+$showListButton  = $props['show_list_button'] ?? true;
+$showTableButton = $props['show_table_button'] ?? true;
 
 $cookieName           = 'com_radicalmart_category_list_ordering';
 $productsListOrdering = $app->input->cookie->getString($cookieName, '');
 
 $options = [
-	'ordering ASC'         => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_ORDERING',
-	'ordering_title ASC'   => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_TITLE_ASC',
-	'ordering_title DESC'  => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_TITLE_DESC',
-	'ordering_price ASC'   => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_PRICE_ASC',
-	'ordering_price DESC'  => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_PRICE_DESC',
-	'ordering_rating ASC'  => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_RATING_ASC',
-	'ordering_rating DESC' => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_RATING_DESC',
-	'ordering_date ASC'    => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_DATE_ASC',
-	'ordering_date DESC'   => 'COM_RADICALMART_CATEGORY_ITEMS_ORDERING_DATE_DESC',
+	'ordering ASC'        => 'PLG_YTDYNAMICS_ORDERING_DEFAULT',
+	'ordering_price ASC'  => 'PLG_YTDYNAMICS_ORDERING_PRICE_ASC',
+	'ordering_price DESC' => 'PLG_YTDYNAMICS_ORDERING_PRICE_DESC',
+	'ordering_date DESC'  => 'PLG_YTDYNAMICS_ORDERING_DATE_DESC',
+	'ordering_title ASC'  => 'PLG_YTDYNAMICS_ORDERING_TITLE_ASC',
 ];
 
 if (!isset($options[$productsListOrdering]))
@@ -85,24 +84,30 @@ $el = $this->el('div', [
 	</div>
 	<div class="uk-width-auto@s uk-flex uk-flex-center uk-flex-middle">
 		<ul class="uk-subnav uk-iconnav uk-margin-small-left uk-visible@s">
+			<?php if ($showGridButton): ?>
 			<li class="<?php echo ($productsListTemplate === 'grid') ? 'uk-active' : ''; ?>">
 				<button type="button" class="uk-icon-button"
 				        uk-icon="grid" uk-tooltip onclick="setProductsListTemplate('grid')"
 				        aria-label="<?php echo Text::_('COM_RADICALMART_PRODUCTS_LIST_LAYOUT_GRID'); ?>"
 				        title="<?php echo Text::_('COM_RADICALMART_PRODUCTS_LIST_LAYOUT_GRID'); ?>"></button>
 			</li>
+			<?php endif; ?>
+			<?php if ($showListButton): ?>
 			<li class="<?php echo ($productsListTemplate === 'list') ? 'uk-active' : ''; ?>">
 				<button type="button" class="uk-icon-button"
 				        uk-icon="list" uk-tooltip onclick="setProductsListTemplate('list')"
 				        aria-label="<?php echo Text::_('COM_RADICALMART_PRODUCTS_LIST_LAYOUT_LIST'); ?>"
 				        title="<?php echo Text::_('COM_RADICALMART_PRODUCTS_LIST_LAYOUT_LIST'); ?>"></button>
 			</li>
+			<?php endif; ?>
+			<?php if ($showTableButton): ?>
 			<li class="<?php echo ($productsListTemplate === 'table') ? 'uk-active' : ''; ?>">
 				<button type="button" class="uk-icon-button"
 				        uk-icon="table" uk-tooltip onclick="setProductsListTemplate('table')"
 				        aria-label="<?php echo Text::_('COM_RADICALMART_PRODUCTS_LIST_LAYOUT_TABLE'); ?>"
 				        title="<?php echo Text::_('COM_RADICALMART_PRODUCTS_LIST_LAYOUT_TABLE'); ?>"></button>
 			</li>
+			<?php endif; ?>
 		</ul>
 	</div>
 </div>
