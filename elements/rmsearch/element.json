@@ -6,6 +6,14 @@
     "iconSmall": "${url:images/iconSmall.svg}",
     "element": true,
     "width": 500,
+    "defaults": {
+        "search_style": "",
+        "search_size": "",
+        "search_icon": "left",
+        "placeholder": "",
+        "aria_label": "",
+        "autocomplete": true
+    },
     "templates": {
         "render": "./templates/template.php"
     },
@@ -40,6 +48,22 @@
                 "Right (Clickable)": "right"
             }
         },
+        "placeholder": {
+            "label": "Placeholder",
+            "description": "Leave empty to use the YOOtheme search translation.",
+            "type": "text",
+            "source": true
+        },
+        "aria_label": {
+            "label": "Accessible label",
+            "description": "Leave empty to reuse the placeholder text.",
+            "type": "text",
+            "source": true
+        },
+        "autocomplete": {
+            "type": "checkbox",
+            "text": "Allow browser autocomplete"
+        },
         "position": "${builder.position}",
         "position_left": "${builder.position_left}",
         "position_right": "${builder.position_right}",
@@ -62,18 +86,19 @@
         "visibility": "${builder.visibility}",
         "name": "${builder.name}",
         "status": "${builder.status}",
+        "source": "${builder.source}",
         "id": "${builder.id}",
         "class": "${builder.cls}",
         "attributes": "${builder.attrs}",
         "css": {
             "label": "CSS",
-            "description": "Enter your own custom CSS. The following selectors will be prefixed automatically for this element: <code>.el-element</code>",
+            "description": "Custom CSS is scoped to this element. Use the root and search-part selectors listed below.",
             "type": "editor",
             "editor": "code",
             "mode": "css",
             "attrs": {
                 "debounce": 500,
-                "hints": [".el-element"]
+                "hints": [".el-element", ".rm-search__form", ".rm-search__input", ".rm-search__icon"]
             }
         },
         "transform": "${builder.transform}"
@@ -89,7 +114,7 @@
                             "label": "Input",
                             "type": "group",
                             "divider": true,
-                            "fields": ["search_style", "search_size", "search_icon"]
+                            "fields": ["search_style", "search_size", "search_icon", "placeholder", "aria_label", "autocomplete"]
                         },
 
                         {

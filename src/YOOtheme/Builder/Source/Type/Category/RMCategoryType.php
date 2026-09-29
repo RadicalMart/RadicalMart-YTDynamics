@@ -1,9 +1,10 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Type\Category;
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Type\BaseType;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
@@ -145,14 +146,24 @@ class RMCategoryType extends BaseType
 		{
 			try
 			{
-				$model = Factory::getApplication()->bootComponent('com_radicalmart')
-					->getMVCFactory()
-					->createModel('Category', 'Site', ['ignore_request' => true]);
-				$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
-				$model->setState('filter.published', 1);
-				$model->setState('filter.language', Multilanguage::isEnabled());
-				$category = $model->getItem($id);
-				$values[$id] = $category ? (string) ($category->fulltext ?? '') : '';
+				$db = Factory::getContainer()->get(DatabaseInterface::class);
+				$query = $db->createQuery()
+					->select($db->quoteName('fulltext'))
+					->from($db->quoteName('#__radicalmart_categories'))
+					->where($db->quoteName('id') . ' = :id')
+					->where($db->quoteName('state') . ' = 1')
+					->bind(':id', $id, ParameterType::INTEGER);
+
+				if (Multilanguage::isEnabled())
+				{
+					$query->whereIn(
+						$db->quoteName('language'),
+						[Factory::getApplication()->getLanguage()->getTag(), '*'],
+						ParameterType::STRING,
+					);
+				}
+
+				$values[$id] = (string) ($db->setQuery($query)->loadResult() ?? '');
 			}
 			catch (\Throwable)
 			{

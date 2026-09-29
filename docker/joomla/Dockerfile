@@ -4,7 +4,7 @@ RUN pecl install xdebug && \
     docker-php-ext-enable xdebug
 
 RUN echo "xdebug.mode=develop,debug" > /usr/local/etc/php/conf.d/99-xdebug.ini && \
-    echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/99-xdebug.ini && \
+    echo "xdebug.start_with_request=trigger" >> /usr/local/etc/php/conf.d/99-xdebug.ini && \
     echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/99-xdebug.ini && \
     echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/99-xdebug.ini && \
     echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/99-xdebug.ini && \
@@ -15,7 +15,7 @@ RUN echo "xdebug.mode=develop,debug" > /usr/local/etc/php/conf.d/99-xdebug.ini &
     echo "xdebug.extended_info=0" >> /usr/local/etc/php/conf.d/99-xdebug.ini && \
     echo "xdebug.discover_client_host=0" >> /usr/local/etc/php/conf.d/99-xdebug.ini
 
-COPY docker-entrypoint.sh /entrypoint.sh
+COPY --chmod=755 docker-entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 

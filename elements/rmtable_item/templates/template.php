@@ -1,22 +1,30 @@
 <?php
 
-foreach ($filtered as $j => $field) {
+$rowType = in_array(($props['row_type'] ?? 'body'), ['head', 'body', 'foot'], true)
+	? ($props['row_type'] ?? 'body') : 'body';
+$labels = is_array($column_labels ?? null) ? $column_labels : [];
+$responsive = in_array(($table_responsive ?? 'scroll'), ['scroll', 'stack', 'cards', 'none'], true)
+	? $table_responsive : 'scroll';
 
-    echo $this->el('td', [
-
-        'class' => [
-
-            'uk-text-nowrap' => $field === 'link',
-            "uk-text-nowrap {@table_width_{$field}: shrink}" => in_array($field, $text_fields),
-
-            // Last column alignment
-            'uk-text-{table_last_align}[@m {@table_responsive: responsive}]' => array_search($field, $fields) > 1 && !isset($filtered[$j + 1]),
-
-            // Widths
-            "uk-[table {@table_width_{$field}: shrink}][width {@!table_width_{$field}: shrink}]-{table_width_{$field}}" => $i == 0 && in_array($field, $text_fields),
-            'uk-table-shrink' => $i == 0 && in_array($field, ['image', 'link']),
-        ],
-
-    ], $this->render("{$__dir}/template-{$field}"))->render($element);
-
-}
+$row = $this->el('tr', [
+	'class' => [
+		'el-item',
+		'rm-table__row',
+		'uk-active' => !empty($props['row_active']),
+		'uk-background-muted' => ($props['row_background'] ?? '') === 'muted',
+		'uk-background-primary uk-light' => ($props['row_background'] ?? '') === 'primary',
+		'uk-background-secondary uk-light' => ($props['row_background'] ?? '') === 'secondary',
+	],
+	'data-section' => $rowType,
+]);
+?>
+<?= $row($props, $attrs) ?>
+<?php foreach ($children as $index => $cell) : ?>
+	<?= $builder->render($cell, [
+		'cell_index' => $index,
+		'column_label' => $labels[$index] ?? '',
+		'row_type' => $rowType,
+		'table_responsive' => $responsive,
+	]) ?>
+<?php endforeach; ?>
+<?= $row->end() ?>

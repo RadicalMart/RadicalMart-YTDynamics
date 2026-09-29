@@ -1,0 +1,202 @@
+{
+  "@import": "./element.php",
+  "name": "rmvariants",
+  "title": "RM Variants",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {},
+  "defaults": {
+    "variant_fields": [],
+    "action": "ajax",
+    "style": "buttons",
+    "display_mode": "default",
+    "hover_breakpoint": "m",
+    "content_area": "panel",
+    "show_labels": true,
+    "disable_unavailable": true,
+    "update_url": true,
+    "button_style": "default"
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "content": {
+      "label": "Card content",
+      "description": "Build a custom product card with any YOOtheme elements, dynamic product fields and RM Button.",
+      "type": "builder-fragment"
+    },
+    "content_area": {
+      "label": "Content area",
+      "description": "Keep the builder content visible as the custom card body, or reveal it together with the variant controls.",
+      "type": "select",
+      "options": {
+        "Card body (always visible)": "card",
+        "Variant panel": "panel"
+      }
+    },
+    "product_id": {
+      "label": "Product ID",
+      "description": "Bind this field to RadicalMart Product > ID. On a product page the current request ID is used as a fallback.",
+      "type": "number",
+      "source": true
+    },
+    "variant_fields": {
+      "label": "Variant fields",
+      "description": "Select several fields to display and combine. Leave empty to show every variability field assigned to the meta product.",
+      "type": "select",
+      "default": [],
+      "options": [{"evaluate": "yootheme.builder.radicalmart_variability_fields"}],
+      "attrs": {
+        "multiple": true,
+        "class": "uk-height-small"
+      }
+    },
+    "action": {
+      "label": "Selection action",
+      "type": "select",
+      "options": {
+        "Update without reload": "ajax",
+        "Open product page": "navigate"
+      }
+    },
+    "style": {
+      "label": "Control style",
+      "type": "select",
+      "options": {
+        "Buttons and swatches": "buttons",
+        "Select fields": "select"
+      }
+    },
+    "display_mode": {
+      "label": "Display",
+      "description": "Keep the controls visible or reveal them as a floating card panel on hover and keyboard focus.",
+      "type": "select",
+      "options": {
+        "Always visible": "default",
+        "Reveal on card hover": "hover"
+      }
+    },
+    "hover_breakpoint": {
+      "label": "Hover breakpoint",
+      "description": "Below this breakpoint the panel remains visible so it is always accessible on touch devices.",
+      "type": "select",
+      "options": {
+        "Small (640px)": "s",
+        "Medium (960px)": "m",
+        "Large (1200px)": "l"
+      },
+      "show": "display_mode == 'hover'"
+    },
+    "button_style": {
+      "label": "Button style",
+      "type": "select",
+      "options": {
+        "Default": "default",
+        "Primary": "primary",
+        "Secondary": "secondary",
+        "Text": "text"
+      },
+      "show": "style == 'buttons'"
+    },
+    "show_labels": {
+      "type": "checkbox",
+      "text": "Show field labels"
+    },
+    "disable_unavailable": {
+      "type": "checkbox",
+      "text": "Disable unavailable combinations"
+    },
+    "update_url": {
+      "type": "checkbox",
+      "text": "Update the browser URL after AJAX selection",
+      "show": "action == 'ajax'"
+    },
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this card. Use the selectors below for the builder content, fields, options, statuses and actions.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rmvariants-card__content", ".rmvariants", ".rmvariants__field", ".rmvariants__label", ".rmvariants__select", ".rmvariants__options", ".rmvariants__option", ".rmvariants__color", ".rmvariants__status", ".rmvariants__actions"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {
+          "title": "Content",
+          "fields": [
+            "content",
+            "content_area"
+          ]
+        },
+        {
+          "title": "Settings",
+          "fields": [
+            {
+              "label": "Variants",
+              "type": "group",
+              "fields": [
+                "product_id",
+                "variant_fields",
+                "action",
+                "style",
+                "button_style",
+                "display_mode",
+                "hover_breakpoint",
+                "show_labels",
+                "disable_unavailable",
+                "update_url"
+              ]
+            },
+            {
+              "label": "General",
+              "type": "group",
+              "fields": [
+                "margin_top",
+                "margin_bottom",
+                "maxwidth",
+                "maxwidth_breakpoint",
+                "block_align",
+                "block_align_breakpoint",
+                "block_align_fallback",
+                "text_align",
+                "text_align_breakpoint",
+                "text_align_fallback",
+                "animation",
+                "visibility"
+              ]
+            }
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

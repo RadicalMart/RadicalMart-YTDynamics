@@ -2,10 +2,11 @@
 
 namespace YOOtheme;
 
-return [
-    'transforms' => [
-        'render' => function ($node) {
-            return !empty($node->props['image']);
-        },
-    ],
-];
+use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Element\ElementConfig;
+
+$config = ElementConfig::fromJson(__DIR__);
+$config['transforms']['render'] = static function ($node): bool {
+	return !empty($node->props['image']);
+};
+
+return $config;

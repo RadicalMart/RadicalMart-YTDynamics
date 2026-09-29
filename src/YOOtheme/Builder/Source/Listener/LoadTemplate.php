@@ -23,56 +23,54 @@ class LoadTemplate
 
     public function handle($event): void
     {
-        $template = Event::emit('builder.template', $event);
+        $view = Event::emit('builder.template', $event);
 
-        if (empty($template['type'])) {
+        if (empty($view['type'])) {
             return;
         }
 
-        $view = $event->getView();
-
-        $requestTemplate = $this->config->get('req.customizer.template');
+        $template = $this->config->get('req.customizer.template');
 
         if ($this->config->get('app.isCustomizer')) {
-            $this->config->set('customizer.view', $template['type']);
+            $this->config->set('customizer.view', $view['type']);
         }
 
-        if ($this->config->get('app.isBuilder') && empty($requestTemplate)) {
+        if ($this->config->get('app.isBuilder') && empty($template)) {
             return;
         }
 
         // get visible template
-        $visible = $this->templateHelper->match($template);
+        $visible = $this->templateHelper->match($view);
 
         // set template identifier
         if ($this->config->get('app.isCustomizer')) {
             $this->config->add('customizer.template', [
-                'id'      => $requestTemplate['id'] ?? null,
+                'id'      => $template['id'] ?? null,
                 'visible' => $visible['id'] ?? null,
             ]);
         }
 
-        if ($requestTemplate || $visible) {
-            $template += ($requestTemplate ?? $visible) + ['layout' => [], 'params' => []];
-
+        if ($template ??= $visible) {
             // get output from builder
             $output = $this->builder->render(
-                json_encode($template['layout']),
-                $template['params'] + ['prefix' => "template-{$template['id']}"],
+                json_encode($template['layout'] ?? []),
+                ($view['params'] ?? []) + [
+                    'prefix' => "template-{$template['id']}",
+                    'template' => $template['type'],
+                ],
             );
 
             // append frontend edit button?
-            if ($output && isset($template['editUrl']) && !$this->config->get('app.isCustomizer')) {
+            if ($output && isset($view['editUrl']) && !$this->config->get('app.isCustomizer')) {
                 $output .=
-                    "<a style=\"position: fixed!important\" class=\"uk-position-medium uk-position-bottom-right uk-position-z-index uk-button uk-button-primary\" href=\"{$template['editUrl']}\">" .
+                    "<a style=\"position: fixed!important\" class=\"uk-position-medium uk-position-bottom-right uk-position-z-index uk-button uk-button-primary\" href=\"{$view['editUrl']}\">" .
                     Text::_('JACTION_EDIT') .
                     '</a>';
             }
 
-            if ($output) {
-                $view->set('_output', $output);
-                $this->config->set('app.isBuilder', true);
-            }
+            $event->setOutput($output ?? '');
+            $this->config->set('app.isBuilder', true);
+            $this->config->set('app.template', $template);
         }
     }
 

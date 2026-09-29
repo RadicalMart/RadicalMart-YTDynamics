@@ -8,10 +8,13 @@ if (!empty($props['css']))
 }
 
 $content = $builder->render($children);
+$itemElement = $props['item_element'] ?? $props['html_element'] ?? '';
 
-$el = $this->el($props['html_element'] ?: 'div', [
+$el = $this->el($itemElement ?: 'div', [
 
 	'class' => [
+		'el-item',
+		'rm-switcher-item',
 		'uk-panel [uk-{panel_style: tile-.*}] {@panel_style: |tile-.*}',
 		'uk-card uk-{panel_style: card-.*} [uk-card-{!panel_padding: |default}]',
 		'uk-padding[-{!panel_padding: default}] {@panel_style: |tile-.*} {@panel_padding} {@!has_panel_image_no_padding} {@!has_no_padding}',
@@ -22,6 +25,6 @@ $el = $this->el($props['html_element'] ?: 'div', [
 
 ?>
 
-<?php echo $el($props, $attrs); ?>
-<?php echo $content; ?>
-<?php echo $el->end(); ?>
+<?= $el($props, $attrs) ?>
+<?= $content ?>
+<?= $el->end() ?>

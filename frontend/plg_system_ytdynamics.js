@@ -1,11 +1,19 @@
 const entry = {
-    "src/gallery": {
+    "gallery": {
         import: './src/gallery.es6',
         filename: 'gallery.js',
     },
     "src/picker-product": {
         import: './src/picker-product.es6',
         filename: 'picker-product.js',
+    },
+    "product-interactions": {
+        import: './src/product-interactions.es6',
+        filename: 'product-interactions.js',
+    },
+    "table": {
+        import: './src/table.es6',
+        filename: 'table.js',
     },
 };
 

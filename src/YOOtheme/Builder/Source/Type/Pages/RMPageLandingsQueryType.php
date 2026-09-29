@@ -87,12 +87,13 @@ class RMPageLandingsQueryType
 		if (!empty($root['items']))
 		{
 			$items = $root['items'];
-			RMProductType::hydrateImages($items);
 
 			if ($args['offset'] || $args['limit'])
 			{
 				$items = array_slice($items, (int) $args['offset'], (int) $args['limit'] ?: null);
 			}
+
+			RMProductType::hydrateImages($items);
 
 			return $items;
 		}

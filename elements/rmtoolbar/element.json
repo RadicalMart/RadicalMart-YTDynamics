@@ -8,9 +8,12 @@
   "element": true,
   "width": 500,
   "defaults": {
+    "show_ordering": true,
+    "ordering_width": "medium",
     "show_grid_button": true,
     "show_list_button": true,
-    "show_table_button": true
+    "show_table_button": true,
+    "switcher_breakpoint": "s"
   },
   "templates": {
     "render": "./templates/template.php",
@@ -90,6 +93,17 @@
       "type": "checkbox",
       "text": "Show Grid button"
     },
+    "show_ordering": {
+      "label": "Ordering",
+      "type": "checkbox",
+      "text": "Show ordering select"
+    },
+    "ordering_width": {
+      "label": "Ordering width",
+      "type": "select",
+      "options": {"Auto": "", "Small": "small", "Medium": "medium", "Large": "large", "Full width": "full"},
+      "show": "show_ordering"
+    },
     "show_list_button": {
       "type": "checkbox",
       "text": "Show List button"
@@ -97,6 +111,11 @@
     "show_table_button": {
       "type": "checkbox",
       "text": "Show Table button"
+    },
+    "switcher_breakpoint": {
+      "label": "Switcher visibility",
+      "type": "select",
+      "options": {"Always": "", "Tablet and larger": "s", "Desktop and larger": "m", "Large screens": "l"}
     },
     "position": "${builder.position}",
     "position_left": "${builder.position_left}",
@@ -125,14 +144,20 @@
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Enter your own custom CSS. The following selectors will be prefixed automatically for this element: <code>.el-element</code>, <code>.el-item</code>, <code>.el-content</code>",
+      "description": "Custom CSS is scoped to this element. Use the toolbar-part selectors listed below.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
       "attrs": {
         "debounce": 500,
         "hints": [
-          ".el-element"
+          ".el-element",
+          ".rm-toolbar__controls",
+          ".rm-toolbar__ordering",
+          ".rm-toolbar__select",
+          ".rm-toolbar__layouts",
+          ".rm-toolbar__layout-button",
+          ".rm-toolbar__loader"
         ]
       }
     },
@@ -152,8 +177,15 @@
               "fields": [
                 "show_grid_button",
                 "show_list_button",
-                "show_table_button"
+                "show_table_button",
+                "switcher_breakpoint"
               ]
+            },
+            {
+              "label": "Ordering",
+              "type": "group",
+              "divider": true,
+              "fields": ["show_ordering", "ordering_width"]
             },
             {
               "label": "Panel",

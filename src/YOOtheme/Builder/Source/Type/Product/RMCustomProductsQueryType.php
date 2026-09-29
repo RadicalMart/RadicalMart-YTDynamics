@@ -38,11 +38,15 @@ class RMCustomProductsQueryType
 						],
 						'order'           => [
 							'type' => 'String',
-							'defaultValue' => 'ordering',
+							'defaultValue' => 'id',
 						],
 						'order_direction' => [
 							'type' => 'String',
 							'defaultValue' => 'DESC',
+						],
+						// Kept for GraphQL queries saved by older plugin versions.
+						'order_alphanum' => [
+							'type' => 'Boolean',
 						],
 					],
 
@@ -99,9 +103,9 @@ class RMCustomProductsQueryType
 									'order'           => [
 										'label'   => trans('Order'),
 										'type'    => 'select',
-										'default' => 'ordering',
+										'default' => 'id',
 										'options' => [
-											trans('Ordering') => 'ordering',
+											trans('ID') => 'id',
 											trans('Price') => 'price',
 											trans('Created') => 'created',
 											trans('Title') => 'title',
@@ -136,7 +140,7 @@ class RMCustomProductsQueryType
 			'ids' => '',
 			'offset' => 0,
 			'limit' => 10,
-			'order' => 'ordering',
+			'order' => 'id',
 			'order_direction' => 'DESC',
 		];
 
@@ -157,8 +161,14 @@ class RMCustomProductsQueryType
 
 		$model->setState('filter.published', 1);
 
-		$model->setState('list.start', max(0, (int) $args['offset']));
-		$model->setState('list.limit', max(0, (int) $args['limit']));
+		$offset = max(0, (int) $args['offset']);
+		$limit = max(0, (int) $args['limit']);
+		$isPriceOrder = in_array($args['order'], ['price', 'p.ordering_price'], true);
+
+		// RadicalMart 3 no longer has ordering_price. Price sorting therefore has
+		// to happen after the model has prepared the current-currency price.
+		$model->setState('list.start', $isPriceOrder ? 0 : $offset);
+		$model->setState('list.limit', $isPriceOrder ? 0 : $limit);
 
 		if (!empty($args['ids']))
 		{
@@ -168,26 +178,49 @@ class RMCustomProductsQueryType
 		}
 
 		$orderColumns = [
-			'ordering' => 'p.ordering',
-			'price' => 'p.ordering_price',
+			'id' => 'p.id',
+			'ordering' => 'p.id',
+			'price' => 'p.id',
 			'created' => 'p.created',
 			'title' => 'p.title',
 			// Preserve values stored by older source configurations.
-			'p.ordering' => 'p.ordering',
-			'p.ordering_price' => 'p.ordering_price',
+			'p.id' => 'p.id',
+			'p.ordering' => 'p.id',
+			'p.ordering_price' => 'p.id',
 			'p.created' => 'p.created',
 			'p.title' => 'p.title',
 		];
-		$model->setState('list.ordering', $orderColumns[$args['order']] ?? $orderColumns['ordering']);
+		$model->setState('list.ordering', $orderColumns[$args['order']] ?? $orderColumns['id']);
+		$direction = strtoupper((string) $args['order_direction']) === 'ASC' ? 'ASC' : 'DESC';
 		$model->setState(
 			'list.direction',
-			strtoupper((string) $args['order_direction']) === 'ASC' ? 'ASC' : 'DESC',
+			$direction,
 		);
 
 		// Set language filter state
 		$model->setState('filter.language', Multilanguage::isEnabled());
 
-		return $model->getItems();
+		$items = $model->getItems();
+
+		if ($isPriceOrder)
+		{
+			usort($items, static function ($left, $right) use ($direction): int {
+				$leftPrice = (float) ($left->price['final'] ?? $left->price['base'] ?? 0);
+				$rightPrice = (float) ($right->price['final'] ?? $right->price['base'] ?? 0);
+				$result = $leftPrice <=> $rightPrice;
+
+				if ($result === 0)
+				{
+					$result = ((int) ($left->id ?? 0)) <=> ((int) ($right->id ?? 0));
+				}
+
+				return $direction === 'ASC' ? $result : -$result;
+			});
+
+			$items = array_slice($items, $offset, $limit ?: null);
+		}
+
+		return $items;
 	}
 
 }

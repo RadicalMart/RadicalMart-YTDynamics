@@ -1,0 +1,121 @@
+{
+  "@import": "./element.php",
+  "name": "rmtable_cell",
+  "title": "RM Table Cell",
+  "width": 500,
+  "placeholder": {},
+  "defaults": {
+    "cell_type": "auto",
+    "colspan": 1,
+    "rowspan": 1,
+    "cell_width": "",
+    "text_align": "",
+    "vertical_align": "",
+    "cell_background": "",
+    "visibility_mode": "",
+    "nowrap": false,
+    "remove_padding": false,
+    "scope": "auto",
+    "aria_sort": ""
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "text": {
+      "label": "Text",
+      "description": "Displayed when the cell has no nested Builder elements.",
+      "type": "editor",
+      "source": true
+    },
+    "content": {
+      "label": "Builder content",
+      "description": "Add any YOOtheme or RadicalMart elements to the cell.",
+      "type": "builder-fragment"
+    },
+    "mobile_label": {
+      "label": "Mobile label",
+      "description": "Optional label for stacked and card modes. By default it is taken from the matching header cell.",
+      "type": "text",
+      "source": true
+    },
+    "cell_type": {
+      "label": "Cell type",
+      "type": "select",
+      "options": {"Automatic": "auto", "Header <th>": "header", "Data <td>": "data"}
+    },
+    "scope": {
+      "label": "Header scope",
+      "type": "select",
+      "options": {"Automatic": "auto", "Column": "col", "Row": "row", "Column group": "colgroup", "Row group": "rowgroup"},
+      "show": "cell_type != 'data'"
+    },
+    "aria_sort": {
+      "label": "Sort state",
+      "type": "select",
+      "options": {"None": "", "Ascending": "ascending", "Descending": "descending", "Unsorted": "none"},
+      "show": "cell_type != 'data'"
+    },
+    "colspan": {"label": "Column span", "type": "number", "attrs": {"min": 1, "max": 24}},
+    "rowspan": {"label": "Row span", "type": "number", "attrs": {"min": 1, "max": 100}},
+    "cell_width": {
+      "label": "Width",
+      "type": "select",
+      "options": {"Auto": "", "Shrink": "shrink", "Expand": "expand", "Small": "small", "Medium": "medium", "Large": "large"}
+    },
+    "text_align": {
+      "label": "Text alignment",
+      "type": "select",
+      "options": {"Inherit": "", "Left": "left", "Center": "center", "Right": "right", "Justify": "justify"}
+    },
+    "vertical_align": {
+      "label": "Vertical alignment",
+      "type": "select",
+      "options": {"Inherit": "", "Top": "top", "Middle": "middle", "Bottom": "bottom"}
+    },
+    "cell_background": {
+      "label": "Background",
+      "type": "select",
+      "options": {"None": "", "Default": "default", "Muted": "muted", "Primary": "primary", "Secondary": "secondary"}
+    },
+    "visibility_mode": {
+      "label": "Responsive visibility",
+      "type": "select",
+      "options": {"Always": "", "Tablet and larger": "visible-s", "Desktop and larger": "visible-m", "Hide on desktop": "hidden-m"}
+    },
+    "nowrap": {"type": "checkbox", "text": "Prevent text wrapping"},
+    "remove_padding": {"type": "checkbox", "text": "Remove cell padding"},
+    "name": "${builder.nameItem}",
+    "status": "${builder.statusItem}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS for this cell. The cell itself is the item root.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-item", ".rm-table__cell-content"]}
+    }
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["text", "content", "mobile_label"]},
+        {
+          "title": "Settings",
+          "fields": [
+            {"label": "Semantics", "type": "group", "fields": ["cell_type", "scope", "aria_sort", "colspan", "rowspan"]},
+            {"label": "Layout", "type": "group", "divider": true, "fields": ["cell_width", "text_align", "vertical_align", "nowrap", "remove_padding"]},
+            {"label": "Style", "type": "group", "divider": true, "fields": ["cell_background", "visibility_mode"]}
+          ]
+        },
+        "${builder.advancedItem}"
+      ]
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "@import": "./element.php",
+  "name": "rmoffcanvas",
+  "title": "RM Offcanvas",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {},
+  "defaults": {
+    "label": "Open panel",
+    "button_style": "primary",
+    "button_size": "",
+    "mode": "slide",
+    "side": "right",
+    "panel_width": "medium",
+    "overlay": true,
+    "show_close": true,
+    "close_large": false,
+    "bg_close": true,
+    "esc_close": true,
+    "swiping": true,
+    "stack": false,
+    "container": false,
+    "role": "dialog"
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "content": {
+      "label": "Offcanvas content",
+      "description": "Build the offcanvas panel with any YOOtheme elements and dynamic sources.",
+      "type": "builder-fragment"
+    },
+    "label": {"label": "Button label", "type": "text", "source": true},
+    "icon": {"label": "Button icon", "type": "icon"},
+    "icon_align": {
+      "label": "Icon position",
+      "type": "select",
+      "options": {"Before label": "left", "After label": "right"},
+      "show": "icon"
+    },
+    "button_style": {
+      "label": "Button style",
+      "type": "select",
+      "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary", "Danger": "danger", "Text": "text", "Link": "link"}
+    },
+    "button_size": {
+      "label": "Button size",
+      "type": "select",
+      "options": {"Default": "", "Small": "small", "Large": "large"}
+    },
+    "fullwidth": {"type": "checkbox", "text": "Full width button"},
+    "mode": {
+      "label": "Animation",
+      "type": "select",
+      "options": {"Slide": "slide", "Push page": "push", "Reveal": "reveal", "None": "none"}
+    },
+    "side": {"label": "Side", "type": "select", "options": {"Left": "left", "Right": "right"}},
+    "panel_width": {
+      "label": "Panel width",
+      "type": "select",
+      "options": {"Small (320px)": "small", "Medium (420px)": "medium", "Large (520px)": "large", "X-Large (640px)": "xlarge"}
+    },
+    "overlay": {"type": "checkbox", "text": "Dim the page with an overlay"},
+    "show_close": {"type": "checkbox", "text": "Show close button"},
+    "close_large": {"type": "checkbox", "text": "Large close icon", "show": "show_close"},
+    "bg_close": {"type": "checkbox", "text": "Close by clicking the page"},
+    "esc_close": {"type": "checkbox", "text": "Close with Escape key"},
+    "swiping": {"type": "checkbox", "text": "Allow touch swipe to close"},
+    "stack": {"type": "checkbox", "text": "Allow stacking over another overlay"},
+    "container": {
+      "type": "checkbox",
+      "text": "Append offcanvas to the UIkit page container",
+      "description": "Useful when a parent clips the panel; leave disabled for page-push modes unless needed."
+    },
+    "role": {
+      "label": "Accessibility role",
+      "type": "select",
+      "options": {"Dialog": "dialog", "Alert dialog": "alertdialog"}
+    },
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this element. The offcanvas may be moved to the UIkit container, so use the stable RM selectors below.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-offcanvas__trigger", ".rm-offcanvas", ".rm-offcanvas__bar", ".rm-offcanvas__content", ".rm-offcanvas__close"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["content"]},
+        {
+          "title": "Settings",
+          "fields": [
+            {"label": "Button", "type": "group", "fields": ["label", "icon", "icon_align", "button_style", "button_size", "fullwidth"]},
+            {"label": "Offcanvas", "type": "group", "fields": ["mode", "side", "panel_width", "overlay", "show_close", "close_large", "bg_close", "esc_close", "swiping", "stack", "container", "role"]},
+            {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

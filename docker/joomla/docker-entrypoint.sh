@@ -111,14 +111,18 @@ joomla_get_host_port_by_colon() {
 # Function to install extension from URL
 joomla_install_extension_via_url() {
     local url=$1
+    local display_url="${url%%\?*}"
     if joomla_validate_url "$url"; then
         if php cli/joomla.php extension:install --url "$url" --no-interaction; then
-            joomla_log_info "Successfully installed $url"
+            joomla_log_info "Successfully installed $display_url"
+            return 0
         else
-            joomla_log_error "Failed to install $url"
+            joomla_log_error "Failed to install $display_url"
+            return 1
         fi
     else
-        joomla_log_error "Invalid URL: $url"
+        joomla_log_error "Invalid URL: $display_url"
+        return 1
     fi
 }
 
@@ -128,11 +132,14 @@ joomla_install_extension_via_path() {
     if joomla_validate_path "$path"; then
         if php cli/joomla.php extension:install --path "$path" --no-interaction; then
             joomla_log_info "Successfully installed $path"
+            return 0
         else
             joomla_log_error "Failed to install $path"
+            return 1
         fi
     else
         joomla_log_error "Invalid Path: $path"
+        return 1
     fi
 }
 
@@ -162,7 +169,7 @@ radicalmart_download_archive() {
 
     if curl -fSL -H "Authorization: Bearer ${API_TOKEN}" -o "${FULL_PATH}" "${URL}"; then
         echo "Загрузка успешно завершена."
-        return 0
+        joomla_install_extension_via_path "${FULL_PATH}"
     else
         echo "Ошибка при загрузке файла. Код выхода curl: $?"
         rm -f "${FULL_PATH}"

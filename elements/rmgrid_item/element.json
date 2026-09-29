@@ -4,17 +4,43 @@
   "title": "rmgrid_item",
   "width": 500,
   "defaults": {
-    "margin_top": "default",
-    "margin_bottom": "default"
+    "margin_top": "",
+    "margin_bottom": ""
   },
-  "placeholder": {},
+  "placeholder": {
+    "children": [
+      {
+        "type": "headline",
+        "props": {
+          "content": "Item",
+          "title_element": "h3",
+          "title_style": "h4"
+        }
+      },
+      {
+        "type": "text",
+        "props": {
+          "content": "Build this card with any YOOtheme or RadicalMart elements.",
+          "margin_bottom": ""
+        }
+      }
+    ]
+  },
   "templates": {
     "render": "./templates/template.php",
     "content": "./templates/content.php"
   },
   "fields": {
     "content": {
+      "label": "Card content",
+      "description": "Build a custom card with any YOOtheme or RadicalMart elements and dynamic sources.",
       "type": "builder-fragment"
+    },
+    "tags": {
+      "label": "Filter tags",
+      "description": "Comma-separated tags used by the RM Grid filter. This field can be mapped to a dynamic source.",
+      "type": "text",
+      "source": true
     },
     "panel_style": {
       "label": "Style",
@@ -26,19 +52,12 @@
         "Card Primary": "card-primary",
         "Card Secondary": "card-secondary",
         "Card Hover": "card-hover",
+        "Card Overlay": "card-overlay",
         "Tile Default": "tile-default",
         "Tile Muted": "tile-muted",
         "Tile Primary": "tile-primary",
-        "Tile Secondary": "tile-secondary",
-        "Tile Checked": "tile-checked"
+        "Tile Secondary": "tile-secondary"
       }
-    },
-    "panel_link": {
-      "label": "Link",
-      "description": "Link the whole panel if a link exists.",
-      "type": "checkbox",
-      "text": "Link panel",
-      "enable": "false"
     },
     "panel_padding": {
       "label": "Padding",
@@ -51,13 +70,6 @@
         "Large": "large"
       },
       "enable": "panel_style"
-    },
-    "panel_image_no_padding": {
-      "description": "Top, left or right aligned images can be attached to the panel edge. If the image is aligned to the left or right, it will also extend to cover the whole space.",
-      "type": "checkbox",
-      "text": "Align image without padding",
-      "show": "panel_style",
-      "enable": "false"
     },
     "item_maxwidth": {
       "type": "select",
@@ -72,18 +84,6 @@
         "2X-Large": "2xlarge"
       }
     },
-    "panel_content_width": {
-      "label": "1 Column Content Width",
-      "description": "Set an optional content width which doesn't affect the image if there is just one column.",
-      "type": "select",
-      "options": {
-        "Auto": "",
-        "X-Small": "xsmall",
-        "Small": "small"
-      },
-      "show": "!panel_style",
-      "enable": "false"
-    },
     "html_element": "${builder.html_element}",
     "position": "${builder.position}",
     "position_left": "${builder.position_left}",
@@ -96,22 +96,23 @@
     "animation": "${builder.animation}",
     "_parallax_button": "${builder._parallax_button}",
     "visibility": "${builder.visibility}",
-    "name": "${builder.name}",
-    "status": "${builder.status}",
+    "name": "${builder.nameItem}",
+    "status": "${builder.statusItem}",
     "source": "${builder.source}",
     "id": "${builder.id}",
     "class": "${builder.cls}",
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Enter your own custom CSS. The following selectors will be prefixed automatically for this element: <code>.el-element</code>",
+      "description": "Custom CSS for this RM Grid item. Use .el-element for the card root and .rm-grid-item__content for its Builder content.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
       "attrs": {
         "debounce": 500,
         "hints": [
-          ".el-element"
+          ".el-element",
+          ".rm-grid-item__content"
         ]
       }
     }
@@ -123,7 +124,8 @@
         {
           "title": "Content",
           "fields": [
-            "content"
+            "content",
+            "tags"
           ]
         },
         {

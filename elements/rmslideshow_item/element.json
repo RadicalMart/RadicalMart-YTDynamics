@@ -14,7 +14,20 @@
             "source": true,
             "enable": "image"
         },
-        "source": "${builder.source}"
+        "name": "${builder.nameItem}",
+        "status": "${builder.statusItem}",
+        "source": "${builder.source}",
+        "id": "${builder.id}",
+        "class": "${builder.cls}",
+        "attributes": "${builder.attrs}",
+        "css": {
+            "label": "CSS",
+            "description": "Custom CSS for this main slide. Thumbnail styling belongs to the parent RM Slideshow element.",
+            "type": "editor",
+            "editor": "code",
+            "mode": "css",
+            "attrs": {"debounce": 500, "hints": [".el-item", ".rmslideshow__slide__image", ".rmslideshow__lightbox", ".rmslideshow__lightbox-icon"]}
+        }
     },
     "fieldset": {
         "default": {

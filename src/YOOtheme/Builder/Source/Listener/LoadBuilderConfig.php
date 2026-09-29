@@ -4,6 +4,8 @@ namespace Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Listener;
 
 use Joomla\CMS\Factory;
 use Joomla\Plugin\System\YTDynamics\Event\YTDynamicsConfigEvent;
+use Joomla\Registry\Registry;
+use YOOtheme\Builder\Templates\TemplateHelper;
 use YOOtheme\Config;
 
 use function YOOtheme\trans;
@@ -12,7 +14,7 @@ class LoadBuilderConfig
 {
     public Config $config;
 
-    public function __construct(Config $config)
+    public function __construct(Config $config, private TemplateHelper $templateHelper)
     {
         $this->config = $config;
     }
@@ -43,10 +45,32 @@ class LoadBuilderConfig
         $fieldsetsModel->setState('list.limit', 0);
         $fieldsets = $fieldsetsModel->getItems();
 
+		/** @var \Joomla\Component\RadicalMart\Administrator\Model\FieldsModel $fieldsModel */
+		$fieldsModel = $radicalmart
+			->getMVCFactory()
+			->createModel('Fields', 'Administrator', ['ignore_request' => true]);
+		$fieldsModel->setState('filter.published', 1);
+		$fieldsModel->setState('list.limit', 0);
+		$variantFields = array_values(array_filter(
+			$fieldsModel->getItems(),
+			static function ($field): bool {
+				$params = $field->params instanceof Registry ? $field->params : new Registry($field->params ?? []);
+				return (int) $params->get('display_variability', 0) === 1;
+			},
+		));
+
         $templates = $this->getTemplates();
 
         $config->merge([
-            'templates'              => $templates,
+            'templates'                           => $templates,
+            'radicalmart_quickview_templates'     => $this->getQuickViewTemplates(),
+			'radicalmart_variability_fields'        => array_map(
+				static fn($field): array => [
+					'value' => (string) $field->alias,
+					'text'  => (string) $field->title,
+				],
+				$variantFields,
+			),
             'radicalmart_categories' => array_map(
                 fn($category) => [
                     'value' => (string)$category->id,
@@ -68,14 +92,36 @@ class LoadBuilderConfig
         );
     }
 
+	private function getQuickViewTemplates(): array
+	{
+		$options = [];
+		foreach ($this->templateHelper->templates as $id => $template)
+		{
+			if (
+				($template['type'] ?? '') !== 'com_radicalmart.product'
+				|| ($template['status'] ?? '') === 'disabled'
+			)
+			{
+				continue;
+			}
+
+			$options[] = [
+				'value' => (string) $id,
+				'text'  => (string) ($template['name'] ?? $id),
+			];
+		}
+
+		return $options;
+	}
+
     private function getTemplates(): array
     {
         $languageField = [
             'label'        => trans('Limit by Language'),
             'type'         => 'select',
             'defaultIndex' => 0,
-            'options'      => [['evaluate' => 'YOOtheme.builder.languages']],
-            'show'         => 'YOOtheme.builder.languages.length > 1 || lang',
+            'options'      => [['evaluate' => 'yootheme.builder.languages']],
+            'show'         => 'yootheme.builder.languages.length > 1 || lang',
         ];
 
         $productListViewField = [

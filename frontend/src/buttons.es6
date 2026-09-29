@@ -1,86 +1,96 @@
-export const addThumbButtonsClickHandlers = (emblaApiMain, emblaApiThumb) => {
-    const slidesThumbs = emblaApiThumb.slideNodes()
-
+export const addThumbButtonsClickHandlers = (emblaApiMain, slidesThumbs) => {
     const scrollToIndex = slidesThumbs.map(
-        (_, index) => () => emblaApiMain.scrollTo(index)
-    )
+        (_, index) => (event) => {
+            event.preventDefault();
+            emblaApiMain.scrollTo(index);
+        }
+    );
 
     slidesThumbs.forEach((slideNode, index) => {
-        slideNode.addEventListener('click', scrollToIndex[index], false)
-    })
+        slideNode.addEventListener('click', scrollToIndex[index], false);
+    });
 
     return () => {
         slidesThumbs.forEach((slideNode, index) => {
-            slideNode.removeEventListener('click', scrollToIndex[index], false)
-        })
-    }
-}
+            slideNode.removeEventListener('click', scrollToIndex[index], false);
+        });
+    };
+};
 
-export const addToggleThumbButtonsActive = (emblaApiMain, emblaApiThumb) => {
-    const slidesThumbs = emblaApiThumb.slideNodes()
-
+export const addToggleThumbButtonsActive = (emblaApiMain, slidesThumbs, emblaApiThumb = null) => {
     const toggleThumbBtnsState = () => {
-        emblaApiThumb.scrollTo(emblaApiMain.selectedScrollSnap())
-        const previous = emblaApiMain.previousScrollSnap()
-        const selected = emblaApiMain.selectedScrollSnap()
-        slidesThumbs[previous].classList.remove('rmslideshow-thumbs__slide--selected')
-        slidesThumbs[selected].classList.add('rmslideshow-thumbs__slide--selected')
-    }
+        const selected = emblaApiMain.selectedScrollSnap();
 
-    emblaApiMain.on('select', toggleThumbBtnsState)
-    emblaApiThumb.on('init', toggleThumbBtnsState)
+        emblaApiThumb?.scrollTo(selected);
+        slidesThumbs.forEach((slide, index) => {
+            const isSelected = index === selected;
+            slide.classList.toggle('rmslideshow-thumbs__slide--selected', isSelected);
+            slide.classList.toggle('uk-active', isSelected);
+            slide.setAttribute('aria-current', isSelected ? 'true' : 'false');
+        });
+    };
+
+    emblaApiMain
+        .on('select', toggleThumbBtnsState)
+        .on('reInit', toggleThumbBtnsState);
+    toggleThumbBtnsState();
 
     return () => {
-        const selected = emblaApiMain.selectedScrollSnap()
-        slidesThumbs[selected].classList.remove('rmslideshow-thumbs__slide--selected')
-    }
-}
+        slidesThumbs.forEach((slide) => {
+            slide.classList.remove('rmslideshow-thumbs__slide--selected');
+            slide.classList.remove('uk-active');
+            slide.removeAttribute('aria-current');
+        });
+    };
+};
 
 export const addPrevNextButtonsClickHandlers = (emblaApi, prevBtn, nextBtn) => {
-    const scrollPrev = () => {
-        emblaApi.scrollPrev()
-    }
-    const scrollNext = () => {
-        emblaApi.scrollNext()
-    }
-    prevBtn.addEventListener('click', scrollPrev, false)
-    nextBtn.addEventListener('click', scrollNext, false)
+    const scrollPrev = (event) => {
+        event.preventDefault();
+        emblaApi.scrollPrev();
+    };
+    const scrollNext = (event) => {
+        event.preventDefault();
+        emblaApi.scrollNext();
+    };
+    prevBtn.addEventListener('click', scrollPrev, false);
+    nextBtn.addEventListener('click', scrollNext, false);
 
     const removeTogglePrevNextButtonsActive = addTogglePrevNextButtonsActive(
         emblaApi,
         prevBtn,
         nextBtn
-    )
+    );
 
     return () => {
-        removeTogglePrevNextButtonsActive()
-        prevBtn.removeEventListener('click', scrollPrev, false)
-        nextBtn.removeEventListener('click', scrollNext, false)
-    }
-}
+        removeTogglePrevNextButtonsActive();
+        prevBtn.removeEventListener('click', scrollPrev, false);
+        nextBtn.removeEventListener('click', scrollNext, false);
+    };
+};
 
 function addTogglePrevNextButtonsActive(emblaApi, prevBtn, nextBtn) {
-    let togglePrevNextBtnsState = () => {
+    const togglePrevNextBtnsState = () => {
         if (emblaApi.canScrollPrev()) {
-            prevBtn.removeAttribute('disabled')
+            prevBtn.removeAttribute('disabled');
         } else {
-            prevBtn.setAttribute('disabled', 'disabled')
+            prevBtn.setAttribute('disabled', 'disabled');
         }
 
         if (emblaApi.canScrollNext()) {
-            nextBtn.removeAttribute('disabled')
+            nextBtn.removeAttribute('disabled');
         } else {
-            nextBtn.setAttribute('disabled', 'disabled')
+            nextBtn.setAttribute('disabled', 'disabled');
         }
-    }
+    };
 
     emblaApi
         .on('select', togglePrevNextBtnsState)
         .on('init', togglePrevNextBtnsState)
-        .on('reInit', togglePrevNextBtnsState)
+        .on('reInit', togglePrevNextBtnsState);
 
     return () => {
-        prevBtn.removeAttribute('disabled')
-        nextBtn.removeAttribute('disabled')
-    }
+        prevBtn.removeAttribute('disabled');
+        nextBtn.removeAttribute('disabled');
+    };
 }

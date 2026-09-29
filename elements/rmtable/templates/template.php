@@ -1,127 +1,114 @@
 <?php
 
-use YOOtheme\Arr;
 use Joomla\CMS\Factory;
 
-$mode = $props['mode'] ?? 'default';
+$assets = Factory::getApplication()->getDocument()->getWebAssetManager();
+$assets->getRegistry()->addExtensionRegistryFile('plg_system_ytdynamics');
+$assets->useStyle('plg_system_ytdynamics.table');
 
-if ($mode === 'radicalmart_table') {
-    $input = Factory::getApplication()->input;
-    $template = $input->get->getCmd('com_radicalmart_category_list_item_template')
-        ?: $input->cookie->getCmd('com_radicalmart_category_list_item_template', 'grid');
+$style = in_array(($props['table_style'] ?? ''), ['', 'divider', 'striped'], true)
+	? ($props['table_style'] ?? '') : 'divider';
+$size = in_array(($props['table_size'] ?? ''), ['', 'small', 'large'], true)
+	? ($props['table_size'] ?? '') : '';
+$responsive = in_array(($props['responsive_mode'] ?? 'scroll'), ['scroll', 'stack', 'cards', 'none'], true)
+	? ($props['responsive_mode'] ?? 'scroll') : 'scroll';
+$breakpoint = in_array(($props['responsive_breakpoint'] ?? 'm'), ['s', 'm', 'l', 'xl'], true)
+	? ($props['responsive_breakpoint'] ?? 'm') : 'm';
+$captionPosition = ($props['caption_position'] ?? 'top') === 'bottom' ? 'bottom' : 'top';
 
-    if ($template !== 'table') {
-        return;
-    }
+$sections = ['head' => [], 'body' => [], 'foot' => []];
+foreach ($children as $child)
+{
+	$type = in_array(($child->props['row_type'] ?? 'body'), ['head', 'body', 'foot'], true)
+		? ($child->props['row_type'] ?? 'body') : 'body';
+	$sections[$type][] = $child;
 }
 
-$text_fields = ['title', 'meta', 'content'];
-
-switch ($props['table_order']) {
-    case 1:
-        $fields = ['meta', 'image', 'title', 'content', 'link'];
-        break;
-    case 2:
-        $fields = ['title', 'image', 'meta', 'content', 'link'];
-        break;
-    case 3:
-        $fields = ['image', 'title', 'content', 'meta', 'link'];
-        break;
-    case 4:
-        $fields = ['image', 'title', 'meta', 'content', 'link'];
-        break;
-    case 5:
-        $fields = ['title', 'meta', 'content', 'link', 'image'];
-        break;
-    case 6:
-        $fields = ['meta', 'title', 'content', 'link', 'image'];
-        break;
+$columnLabels = [];
+if (!empty($sections['head'][0]->children))
+{
+	foreach ($sections['head'][0]->children as $cell)
+	{
+		$columnLabels[] = trim(strip_tags((string) ($cell->props['text'] ?? '')));
+	}
 }
 
-// Find empty fields
-$filtered = array_values(Arr::filter($fields, fn($field) =>
-    $props["show_{$field}"] && Arr::some($children, fn($child) =>
-        $child->props[$field] != ''
-    )
-));
+$columnCount = count($columnLabels);
+if ($columnCount === 0 && !empty($sections['body'][0]->children))
+{
+	$columnCount = count($sections['body'][0]->children);
+}
+$columnCount = max(1, $columnCount);
 
-$el = $this->el('div', [
+$itemCss = [];
+foreach ($children as $row)
+{
+	if (!empty($row->props['css']))
+	{
+		$itemCss[] = $row->props['css'];
+	}
+	foreach ($row->children ?? [] as $cell)
+	{
+		if (!empty($cell->props['css']))
+		{
+			$itemCss[] = $cell->props['css'];
+		}
+	}
+}
+$itemCss = preg_replace('/[\r\n\t\h]+/u', ' ', implode("\n", $itemCss));
 
-    // Responsive
-    'class' => [
-        'uk-overflow-auto {@table_responsive: overflow}',
-    ],
-
+$root = $this->el('div', [
+	'class' => [
+		'rm-table-wrapper',
+		'rm-table-wrapper--overflow uk-overflow-auto' => $responsive === 'scroll',
+		'rm-table-wrapper--sticky-header' => !empty($props['sticky_header']),
+		'rm-table-wrapper--sticky-first' => !empty($props['sticky_first']),
+		'rm-table-wrapper--sticky-last' => !empty($props['sticky_last']),
+	],
 ]);
-
 $table = $this->el('table', [
-
-    'class' => [
-
-        // Style
-        'uk-table',
-        'uk-table-{table_style}',
-        'uk-table-hover {@table_hover}',
-        'uk-table-justify {@table_justify}',
-
-        // Size
-        'uk-table-{table_size}',
-
-        // Vertical align
-        'uk-table-middle {@table_vertical_align}',
-
-        // Responsive
-        'uk-table-responsive {@table_responsive: responsive}',
-    ],
-
+	'class' => [
+		'rm-table uk-table',
+		'uk-table-' . $style => $style,
+		'uk-table-' . $size => $size,
+		'uk-table-hover' => !empty($props['table_hover']),
+		'uk-table-justify' => !empty($props['table_justify']),
+		'uk-table-middle' => !empty($props['table_vertical_align']),
+		'rm-table--' . $responsive,
+		'rm-table--breakpoint-' . $breakpoint => in_array($responsive, ['stack', 'cards'], true),
+	],
 ]);
-
 ?>
-
-<?php if ($props['table_responsive'] == 'overflow') : ?>
-<?= $el($props, $attrs) ?>
-    <?= $table($props) ?>
-<?php else : ?>
-    <?= $table($props, $attrs) ?>
-<?php endif ?>
-
-        <?php if (Arr::some($filtered, fn($field) => $props["table_head_{$field}"])) : ?>
-        <thead>
-            <tr>
-
-                <?php foreach ($filtered as $i => $field) {
-
-                    $lastColumn = $i !== 0 && !isset($filtered[$i + 1]);
-
-                    echo $this->el('th', [
-
-                        'class' => [
-                            // Last column alignment
-                            'uk-text-{table_last_align}[@m {@table_responsive: responsive}]' => $lastColumn,
-
-                            // Text align need to be set for table heading
-                            'uk-text-{text_align}[@{text_align_breakpoint} [uk-text-{text_align_fallback}] {@!text_align: justify}]' => !$lastColumn || !$props['table_last_align'],
-
-                            // Text nowrap
-                            'uk-text-nowrap' => $field == 'link' || in_array($field, $text_fields) && $props["table_width_{$field}"] == 'shrink',
-                        ],
-
-                    ], $props["table_head_{$field}"])->render($props);
-
-                } ?>
-
-            </tr>
-        </thead>
-        <?php endif ?>
-
-        <tbody>
-        <?php foreach ($children as $i => $child) : ?>
-        <tr class="el-item"><?= $builder->render($child, ['i' => $i, 'element' => $props, 'fields' => $fields, 'text_fields' => $text_fields, 'filtered' => $filtered]) ?></tr>
-        <?php endforeach ?>
-        </tbody>
-
-    <?= $table->end() ?>
-
-<?php if ($props['table_responsive'] == 'overflow') : ?>
-<?= $el->end() ?>
-<?php endif ?>
+<?php if ($itemCss !== '') : ?>
+	<style class="uk-margin-remove-adjacent"><?= $itemCss ?></style>
+<?php endif; ?>
+<?= $root($props, $attrs) ?>
+	<?= $table() ?>
+	<?php if (!empty($props['caption'])) : ?>
+		<caption class="rm-table__caption" style="caption-side: <?= $captionPosition ?>"><?= htmlspecialchars((string) $props['caption'], ENT_QUOTES, 'UTF-8') ?></caption>
+	<?php endif; ?>
+	<?php if ($sections['head']) : ?>
+		<thead class="rm-table__head">
+		<?php foreach ($sections['head'] as $row) : ?>
+			<?= $builder->render($row, ['column_labels' => $columnLabels, 'table_responsive' => $responsive]) ?>
+		<?php endforeach; ?>
+		</thead>
+	<?php endif; ?>
+	<tbody class="rm-table__body">
+	<?php if ($sections['body']) : ?>
+		<?php foreach ($sections['body'] as $row) : ?>
+			<?= $builder->render($row, ['column_labels' => $columnLabels, 'table_responsive' => $responsive]) ?>
+		<?php endforeach; ?>
+	<?php elseif (!empty($props['empty_text'])) : ?>
+		<tr class="rm-table__empty"><td colspan="<?= $columnCount ?>" class="rm-table__empty-cell uk-text-center uk-text-muted"><?= htmlspecialchars((string) $props['empty_text'], ENT_QUOTES, 'UTF-8') ?></td></tr>
+	<?php endif; ?>
+	</tbody>
+	<?php if ($sections['foot']) : ?>
+		<tfoot class="rm-table__foot">
+		<?php foreach ($sections['foot'] as $row) : ?>
+			<?= $builder->render($row, ['column_labels' => $columnLabels, 'table_responsive' => $responsive]) ?>
+		<?php endforeach; ?>
+		</tfoot>
+	<?php endif; ?>
+	<?= $table->end() ?>
+<?= $root->end() ?>

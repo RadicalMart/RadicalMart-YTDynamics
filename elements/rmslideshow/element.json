@@ -113,14 +113,31 @@
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Enter your own custom CSS. The following selectors will be prefixed automatically for this element: <code>.el-element</code>, <code>.el-item</code>, <code>.el-content</code>",
+      "description": "Custom CSS is scoped to this gallery. Use the selectors below for its layout, media, navigation and thumbnails.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
       "attrs": {
         "debounce": 500,
         "hints": [
-          ".el-element"
+          ".el-element",
+          ".rmslideshow",
+          ".rmslideshow__layout",
+          ".rmslideshow__main",
+          ".rmslideshow__viewport",
+          ".rmslideshow__container",
+          ".rmslideshow__slide",
+          ".rmslideshow__slide__image",
+          ".rmslideshow__lightbox",
+          ".rmslideshow__lightbox-icon",
+          ".rmslideshow__thumbs",
+          ".rmslideshow-thumbs",
+          ".rmslideshow-thumbs__viewport",
+          ".rmslideshow-thumbs__container",
+          ".rmslideshow-thumbs__slide",
+          ".rmslideshow-thumbs__slide__image",
+          ".rmslideshow-thumbs__navigate",
+          ".rmslideshow__slidenav"
         ]
       }
     },

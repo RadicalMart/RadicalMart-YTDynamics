@@ -1,0 +1,137 @@
+{
+  "@import": "./element.php",
+  "name": "rmmodal",
+  "title": "RM Modal",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {},
+  "defaults": {
+    "label": "Open modal",
+    "button_style": "primary",
+    "button_size": "",
+    "modal_size": "default",
+    "content_wrapper": "body",
+    "center": true,
+    "close_style": "default",
+    "close_large": false,
+    "show_close": true,
+    "overflow_auto": false,
+    "bg_close": true,
+    "esc_close": true,
+    "stack": false,
+    "container": true,
+    "role": "dialog"
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "content": {
+      "label": "Modal content",
+      "description": "Build the modal content with any YOOtheme elements and dynamic sources.",
+      "type": "builder-fragment"
+    },
+    "label": {"label": "Button label", "type": "text", "source": true},
+    "icon": {"label": "Button icon", "type": "icon"},
+    "icon_align": {
+      "label": "Icon position",
+      "type": "select",
+      "options": {"Before label": "left", "After label": "right"},
+      "show": "icon"
+    },
+    "button_style": {
+      "label": "Button style",
+      "type": "select",
+      "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary", "Danger": "danger", "Text": "text", "Link": "link"}
+    },
+    "button_size": {
+      "label": "Button size",
+      "type": "select",
+      "options": {"Default": "", "Small": "small", "Large": "large"}
+    },
+    "fullwidth": {"type": "checkbox", "text": "Full width button"},
+    "modal_size": {
+      "label": "Modal width",
+      "type": "select",
+      "options": {"Default": "default", "Content width": "auto", "Small": "small", "Large": "large", "X-Large": "xlarge", "Container": "container", "Full screen": "full"}
+    },
+    "content_wrapper": {
+      "label": "Content wrapper",
+      "type": "select",
+      "options": {"Modal body with padding": "body", "None — custom Builder layout": "none"},
+      "description": "Choose None to build custom header, body and footer sections with their UIkit classes."
+    },
+    "center": {"type": "checkbox", "text": "Vertically center modal"},
+    "close_style": {
+      "label": "Close button position",
+      "type": "select",
+      "options": {"Inside": "default", "Outside": "outside"},
+      "show": "show_close && modal_size != 'full'"
+    },
+    "close_large": {"type": "checkbox", "text": "Large close icon", "show": "show_close && modal_size != 'full'"},
+    "show_close": {"type": "checkbox", "text": "Show close button"},
+    "overflow_auto": {"type": "checkbox", "text": "Scroll long content inside the modal"},
+    "bg_close": {"type": "checkbox", "text": "Close by clicking the background"},
+    "esc_close": {"type": "checkbox", "text": "Close with Escape key"},
+    "stack": {"type": "checkbox", "text": "Allow stacking over another modal"},
+    "container": {
+      "type": "checkbox",
+      "text": "Append modal to the UIkit page container",
+      "description": "Prevents clipping by parent containers and transforms."
+    },
+    "role": {
+      "label": "Accessibility role",
+      "type": "select",
+      "options": {"Dialog": "dialog", "Alert dialog": "alertdialog"}
+    },
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this element. The modal itself may be moved to the UIkit container, so use the stable RM selectors below.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-modal__trigger", ".rm-modal", ".rm-modal__dialog", ".rm-modal__body", ".rm-modal__close"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["content"]},
+        {
+          "title": "Settings",
+          "fields": [
+            {"label": "Button", "type": "group", "fields": ["label", "icon", "icon_align", "button_style", "button_size", "fullwidth"]},
+            {"label": "Modal", "type": "group", "fields": ["modal_size", "content_wrapper", "center", "show_close", "close_style", "close_large", "overflow_auto", "bg_close", "esc_close", "stack", "container", "role"]},
+            {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

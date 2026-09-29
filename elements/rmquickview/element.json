@@ -1,0 +1,119 @@
+{
+  "@import": "./element.php",
+  "name": "rmquickview",
+  "title": "RM Quick View",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": false,
+  "width": 500,
+  "placeholder": {},
+  "defaults": {
+    "content_mode": "automatic",
+    "label": "Quick view",
+    "icon": "search",
+    "icon_align": "left",
+    "button_style": "default",
+    "button_size": "",
+    "fullwidth": false,
+    "modal_size": "container",
+    "show_description": true,
+    "show_code": true,
+    "show_variants": true,
+    "show_cart": true
+  },
+  "templates": {
+    "render": "./templates/template.php"
+  },
+  "fields": {
+    "content_mode": {
+      "label": "Content mode",
+      "type": "select",
+      "options": {
+        "Builder": "builder",
+        "Automatic product layout": "automatic"
+      }
+    },
+    "quickview_template": {
+      "label": "Product template",
+      "description": "Create it once in YOOtheme → Templates → RadicalMart Product, then select it here. It is rendered only after the customer opens Quick View.",
+      "type": "select",
+      "default": "",
+      "defaultIndex": 0,
+      "options": [{"evaluate": "yootheme.builder.radicalmart_quickview_templates"}],
+      "show": "content_mode == 'builder'"
+    },
+    "product_id": {"label": "Product ID", "type": "number", "source": true},
+    "label": {"label": "Label", "type": "text", "source": true},
+    "icon": {"label": "Icon", "type": "icon"},
+    "icon_align": {
+      "label": "Icon position",
+      "type": "select",
+      "options": {"Before label": "left", "After label": "right"},
+      "show": "icon"
+    },
+    "button_style": {
+      "label": "Style",
+      "type": "select",
+      "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary", "Danger": "danger", "Text": "text", "Link": "link"}
+    },
+    "button_size": {
+      "label": "Size",
+      "type": "select",
+      "options": {"Default": "", "Small": "small", "Large": "large"}
+    },
+    "fullwidth": {"type": "checkbox", "text": "Full width button"},
+    "modal_size": {
+      "label": "Modal width",
+      "type": "select",
+      "options": {"Default": "", "Container": "container", "Large": "large"}
+    },
+    "show_description": {"type": "checkbox", "text": "Show short description", "show": "content_mode == 'automatic'"},
+    "show_code": {"type": "checkbox", "text": "Show product code", "show": "content_mode == 'automatic'"},
+    "show_variants": {"type": "checkbox", "text": "Show variant selector", "show": "content_mode == 'automatic'"},
+    "show_cart": {"type": "checkbox", "text": "Show add-to-cart button", "show": "content_mode == 'automatic'"},
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this element. Quick View content is created on demand; its stable selectors are listed below.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rmquickview__trigger", ".rmquickview", ".rmquickview__dialog", ".rmquickview__close", ".rmquickview__body", ".rmquickview__layout", ".rmquickview__media", ".rmquickview__main-image", ".rmquickview__thumbs", ".rmquickview__thumb", ".rmquickview__content", ".rmquickview__title", ".rmquickview__code", ".rmquickview__price", ".rmquickview__stock", ".rmquickview__description", ".rmquickview__variants", ".rmquickview__cart", ".rmquickview__more", ".rmquickview__loader"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {
+          "title": "Content",
+          "fields": ["content_mode", "quickview_template", "product_id", "label", "icon", "icon_align"]
+        },
+        {
+          "title": "Settings",
+          "fields": [
+            {"label": "Button", "type": "group", "fields": ["button_style", "button_size", "fullwidth"]},
+            {"label": "Modal", "type": "group", "fields": ["modal_size", "show_description", "show_code", "show_variants", "show_cart"]},
+            {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

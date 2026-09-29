@@ -1,10 +1,16 @@
 {
   "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
   "name": "plg_system_ytdynamics",
-  "version": "1.0.0-dev",
+  "version": "1.4.0-dev",
   "description": "YTDynamics for YOOtheme Pro",
   "license": "GPL-3.0-or-later",
   "assets": [
+    {
+      "name": "plg_system_ytdynamics.gallery",
+      "type": "style",
+      "uri": "plg_system_ytdynamics/gallery.min.css",
+      "version": "auto"
+    },
     {
       "name": "plg_system_ytdynamics.gallery",
       "type": "script",
@@ -23,6 +29,28 @@
         "defer": true,
         "type": "module"
       },
+      "version": "auto"
+    },
+    {
+      "name": "plg_system_ytdynamics.product-interactions",
+      "type": "style",
+      "uri": "plg_system_ytdynamics/product-interactions.min.css",
+      "version": "auto"
+    },
+    {
+      "name": "plg_system_ytdynamics.product-interactions",
+      "type": "script",
+      "uri": "plg_system_ytdynamics/product-interactions.min.js",
+      "attributes": {
+        "defer": true,
+        "type": "module"
+      },
+      "version": "auto"
+    },
+    {
+      "name": "plg_system_ytdynamics.table",
+      "type": "style",
+      "uri": "plg_system_ytdynamics/table.min.css",
       "version": "auto"
     }
   ]

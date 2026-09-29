@@ -32,7 +32,7 @@ return [
 
 	'extend' => [
 		Builder::class => function (Builder $builder) {
-			$builder->addTypePath(JPATH_ROOT . '/plugins/system/ytdynamics/elements/*/element.json');
+			$builder->addTypePath(JPATH_ROOT . '/plugins/system/ytdynamics/elements/*/element.php');
 		},
 	]
 

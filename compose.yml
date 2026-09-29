@@ -9,7 +9,6 @@ services:
       MARIADB_USER: ${MYSQL_USER}
       MARIADB_PASSWORD: ${MYSQL_PASSWORD}
       MARIADB_EXTRA_FLAGS: --bind-address=0.0.0.0
-      MARIADB_HOST: '%'
     volumes:
       - joomla_db:/var/lib/mysql
     restart: unless-stopped
@@ -41,7 +40,7 @@ services:
       SOVMART_TOKEN: ${SOVMART_TOKEN}
       RADICAL_MART_VERSION_ID: ${RADICAL_MART_VERSION_ID}
       XDEBUG_CONFIG: client_host=host.docker.internal client_port=9003 idekey=PHPSTORM
-      XDEBUG_MODE: debug
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
     volumes:
       - ./www:/var/www/html
       - ./elements:/var/www/html/plugins/system/ytdynamics/elements

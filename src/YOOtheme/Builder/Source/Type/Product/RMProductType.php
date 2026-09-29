@@ -1,16 +1,18 @@
 <?php namespace Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Type\Product;
 
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Type\BaseType;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
 use function YOOtheme\trans;
 
 class RMProductType extends BaseType
 {
+	private static array $imageCache = [];
+
 	/**
 	 * @return array
 	 */
@@ -240,26 +242,39 @@ class RMProductType extends BaseType
 			return '';
 		}
 
-		if (!array_key_exists($id, $values))
+		$isMeta = property_exists($item, 'products');
+		$cacheKey = ($isMeta ? 'meta:' : 'product:') . $id;
+
+		if (!array_key_exists($cacheKey, $values))
 		{
 			try
 			{
-				$model = Factory::getApplication()->bootComponent('com_radicalmart')
-					->getMVCFactory()
-					->createModel('Product', 'Site', ['ignore_request' => true]);
-				$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
-				$model->setState('filter.published', 1);
-				$model->setState('filter.language', Multilanguage::isEnabled());
-				$product = $model->getItem($id);
-				$values[$id] = $product ? (string) ($product->fulltext ?? '') : '';
+				$db = Factory::getContainer()->get(DatabaseInterface::class);
+				$query = $db->createQuery()
+					->select($db->quoteName('fulltext'))
+					->from($db->quoteName($isMeta ? '#__radicalmart_metas' : '#__radicalmart_products'))
+					->where($db->quoteName('id') . ' = :id')
+					->where($db->quoteName('state') . ' = 1')
+					->bind(':id', $id, ParameterType::INTEGER);
+
+				if (Multilanguage::isEnabled())
+				{
+					$query->whereIn(
+						$db->quoteName('language'),
+						[Factory::getApplication()->getLanguage()->getTag(), '*'],
+						ParameterType::STRING,
+					);
+				}
+
+				$values[$cacheKey] = (string) ($db->setQuery($query)->loadResult() ?? '');
 			}
 			catch (\Throwable)
 			{
-				$values[$id] = '';
+				$values[$cacheKey] = '';
 			}
 		}
 
-		return $values[$id];
+		return $values[$cacheKey];
 	}
 
 	public static function hydrateImages(array $items): void
@@ -306,6 +321,16 @@ class RMProductType extends BaseType
 
 			if ($variantId > 0)
 			{
+				if (array_key_exists($variantId, self::$imageCache))
+				{
+					if (self::$imageCache[$variantId] !== '')
+					{
+						$item->image = self::$imageCache[$variantId];
+					}
+
+					continue;
+				}
+
 				$itemsByVariantId[$variantId][] = $item;
 			}
 		}
@@ -318,44 +343,42 @@ class RMProductType extends BaseType
 		try
 		{
 			$variantIds = array_keys($itemsByVariantId);
-			$model = Factory::getApplication()
-				->bootComponent('com_radicalmart')
-				->getMVCFactory()
-				->createModel('Products', 'Site', ['ignore_request' => true]);
-			$model->setState('params', ComponentHelper::getParams('com_radicalmart'));
-			$model->setState('filter.published', 1);
-			$model->setState('filter.language', Multilanguage::isEnabled());
-			$model->setState('filter.item_id', $variantIds);
-			$model->setState('list.limit', 0);
-
-			foreach ((array) $model->getItems() as $variant)
+			foreach ($variantIds as $variantId)
 			{
-				if (!is_object($variant) && !is_array($variant))
+				self::$imageCache[$variantId] = '';
+			}
+
+			$db = Factory::getContainer()->get(DatabaseInterface::class);
+			$query = $db->createQuery()
+				->select([$db->quoteName('id'), $db->quoteName('media')])
+				->from($db->quoteName('#__radicalmart_products'))
+				->whereIn($db->quoteName('id'), $variantIds, ParameterType::INTEGER)
+				->where($db->quoteName('state') . ' = 1');
+
+			if (Multilanguage::isEnabled())
+			{
+				$query->whereIn(
+					$db->quoteName('language'),
+					[Factory::getApplication()->getLanguage()->getTag(), '*'],
+					ParameterType::STRING,
+				);
+			}
+
+			foreach ($db->setQuery($query)->loadAssocList('id') as $variantId => $variant)
+			{
+				$image = (string) (new Registry($variant['media'] ?? ''))->get('image', '');
+				self::$imageCache[(int) $variantId] = $image;
+			}
+
+			foreach ($itemsByVariantId as $variantId => $variantItems)
+			{
+				$image = self::$imageCache[$variantId] ?? '';
+				if ($image === '')
 				{
 					continue;
 				}
 
-				$variantId = is_array($variant)
-					? (int) ($variant['id'] ?? 0)
-					: (int) ($variant->id ?? 0);
-				$image = is_array($variant)
-					? ($variant['image'] ?? null)
-					: ($variant->image ?? null);
-				$media = is_array($variant)
-					? ($variant['media'] ?? null)
-					: ($variant->media ?? null);
-
-				if (empty($image) && $media instanceof Registry)
-				{
-					$image = $media->get('image');
-				}
-
-				if ($variantId < 1 || empty($image) || empty($itemsByVariantId[$variantId]))
-				{
-					continue;
-				}
-
-				foreach ($itemsByVariantId[$variantId] as $item)
+				foreach ($variantItems as $item)
 				{
 					$item->image = $image;
 				}

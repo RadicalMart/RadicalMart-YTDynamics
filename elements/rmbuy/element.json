@@ -11,7 +11,13 @@
     "step": 1,
     "min": 1,
     "max": "",
-    "show_count": true
+    "show_count": true,
+    "label": "",
+    "icon": "",
+    "icon_align": "left",
+    "button_style": "primary",
+    "button_size": "",
+    "fullwidth": false
   },
   "templates": {
     "render": "./templates/template.php",
@@ -42,6 +48,30 @@
       "label": "Show count",
       "type": "checkbox"
     },
+    "label": {
+      "label": "Button label",
+      "description": "Leave empty to use the RadicalMart add-to-cart translation.",
+      "type": "text",
+      "source": true
+    },
+    "icon": {"label": "Button icon", "type": "icon"},
+    "icon_align": {
+      "label": "Icon position",
+      "type": "select",
+      "options": {"Before label": "left", "After label": "right"},
+      "show": "icon"
+    },
+    "button_style": {
+      "label": "Button style",
+      "type": "select",
+      "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary", "Danger": "danger", "Text": "text", "Link": "link"}
+    },
+    "button_size": {
+      "label": "Button size",
+      "type": "select",
+      "options": {"Default": "", "Small": "small", "Large": "large"}
+    },
+    "fullwidth": {"type": "checkbox", "text": "Full width button"},
     "position": "${builder.position}",
     "position_left": "${builder.position_left}",
     "position_right": "${builder.position_right}",
@@ -69,14 +99,21 @@
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Enter your own custom CSS. The following selectors will be prefixed automatically for this element: <code>.el-element</code>, <code>.el-item</code>, <code>.el-content</code>",
+      "description": "Custom CSS is scoped to this element. Use the root and RadicalMart component selectors listed below.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
       "attrs": {
         "debounce": 500,
         "hints": [
-          ".el-element"
+          ".el-element",
+          ".rm-buy",
+          ".rm-buy__quantity",
+          ".rm-buy__decrease",
+          ".rm-buy__input",
+          ".rm-buy__increase",
+          ".rm-buy__action",
+          ".rm-buy__button"
         ]
       }
     },
@@ -97,7 +134,13 @@
                 "product_id",
                 "step",
                 "min",
-                "max"
+                "max",
+                "label",
+                "icon",
+                "icon_align",
+                "button_style",
+                "button_size",
+                "fullwidth"
               ]
             },
             {
