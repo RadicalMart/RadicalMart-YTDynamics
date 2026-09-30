@@ -1,0 +1,62 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductspecifications",
+  "title": "RM Product Specifications",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": false,
+  "width": 500,
+  "defaults": {
+    "layout": "description-list",
+    "show_fieldset_titles": true,
+    "show_variant_fields": true,
+    "divider": true,
+    "striped": false,
+    "columns": "2"
+  },
+  "templates": {"render": "./templates/template.php"},
+  "fields": {
+    "product_id": {"label": "Product ID", "description": "Optional outside RM Product. The nearest product context is used automatically.", "type": "number", "source": true},
+    "layout": {"label": "Layout", "type": "select", "options": {"Description list": "description-list", "Table": "table", "Grid": "grid"}},
+    "show_fieldset_titles": {"type": "checkbox", "text": "Show fieldset titles"},
+    "show_variant_fields": {"type": "checkbox", "text": "Include fields used for variants"},
+    "divider": {"type": "checkbox", "text": "Show dividers between values"},
+    "striped": {"type": "checkbox", "text": "Use striped table rows", "show": "layout == 'table'"},
+    "columns": {"label": "Grid columns", "type": "select", "options": {"1": "1", "2": "2", "3": "3", "4": "4"}, "show": "layout == 'grid'"},
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "description": "Custom CSS is scoped to the specification list.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-specifications", ".rm-product-specifications__fieldset", ".rm-product-specifications__title", ".rm-product-specifications__list", ".rm-product-specifications__table", ".rm-product-specifications__grid", ".rm-product-specifications__item", ".rm-product-specifications__label", ".rm-product-specifications__value"]}},
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Settings", "fields": [
+          {"label": "Content", "type": "group", "fields": ["product_id", "show_fieldset_titles", "show_variant_fields"]},
+          {"label": "Layout", "type": "group", "fields": ["layout", "divider", "striped", "columns"]},
+          {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

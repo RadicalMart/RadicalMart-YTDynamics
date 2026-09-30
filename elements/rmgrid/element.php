@@ -47,12 +47,12 @@ $config['fields']['mode'] = [
 	],
 ];
 
-$config['fieldset']['default']['fields'][0]['fields'] = ['content'];
+$config = ElementConfig::setTabFields($config, 'Content', ['content']);
 $config = ElementConfig::keepSettingGroups(
 	$config,
 	['Grid', 'Columns', 'Filter', 'General']
 );
-array_unshift($config['fieldset']['default']['fields'][1]['fields'], [
+$config = ElementConfig::prependSettingGroup($config, [
 	'label' => 'Mode',
 	'type' => 'group',
 	'divider' => true,

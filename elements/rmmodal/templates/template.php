@@ -1,5 +1,7 @@
 <?php
 
+use Joomla\CMS\Language\Text;
+
 $content = trim($builder->render($children));
 $buttonStyle = in_array($props['button_style'] ?? '', ['default', 'primary', 'secondary', 'danger', 'text', 'link'], true)
 	? $props['button_style'] : 'primary';
@@ -10,10 +12,17 @@ $iconAlign = ($props['icon_align'] ?? 'left') === 'right' ? 'right' : 'left';
 $closeStyle = ($props['close_style'] ?? 'default') === 'outside' ? 'outside' : 'default';
 $role = ($props['role'] ?? 'dialog') === 'alertdialog' ? 'alertdialog' : 'dialog';
 $contentWrapper = ($props['content_wrapper'] ?? 'body') === 'none' ? 'none' : 'body';
+$label = trim((string) ($props['label'] ?? '')) ?: Text::_('PLG_YTDYNAMICS_OPEN_MODAL');
+$accessibleLabel = trim((string) ($props['accessible_label'] ?? '')) ?: $label;
 
-static $instance = 0;
-$instance++;
-$seed = (string) ($attrs['data-id'] ?? $props['id'] ?? 'modal') . '-' . $instance;
+$counterKey = '__ytdynamics_rmmodal_instance';
+$instance = (int) ($GLOBALS[$counterKey] ?? 0) + 1;
+$GLOBALS[$counterKey] = $instance;
+$seed = implode('-', [
+	(string) ($attrs['data-id'] ?? $props['id'] ?? 'modal'),
+	$label,
+	(string) $instance,
+]);
 $targetId = 'rm-modal-' . substr(hash('sha256', $seed), 0, 12);
 
 $widths = [
@@ -40,7 +49,7 @@ $modal = $this->el('div', [
 		'rm-modal',
 		'uk-modal-container' => $modalSize === 'container',
 		'uk-modal-full' => $modalSize === 'full',
-		'uk-flex-top' => !empty($props['center']),
+		'uk-flex-top' => !empty($props['center']) && $modalSize !== 'full',
 	],
 	'uk-modal' => sprintf(
 		'bg-close: %s; esc-close: %s; stack: %s; container: %s; role: %s',
@@ -50,15 +59,18 @@ $modal = $this->el('div', [
 		!array_key_exists('container', $props) || !empty($props['container']) ? 'true' : 'false',
 		$role,
 	),
+	'aria-label' => $accessibleLabel,
 ]);
 $dialog = $this->el('div', [
 	'class' => [
 		'rm-modal__dialog uk-modal-dialog',
 		'uk-width-auto' => $modalSize === 'auto',
-		'uk-margin-auto-vertical' => !empty($props['center']),
+		'uk-margin-auto-vertical' => !empty($props['center']) && $modalSize !== 'full',
+		'uk-width-1-1 uk-height-viewport' => $modalSize === 'full',
 	],
 	'style' => $widths[$modalSize] ?? false,
 	'uk-overflow-auto' => $contentWrapper === 'none' && !empty($props['overflow_auto']) ? true : false,
+	'aria-label' => $accessibleLabel,
 ]);
 $closeClass = $modalSize === 'full'
 	? 'uk-modal-close-full uk-close-large'
@@ -67,17 +79,17 @@ $closeClass = $modalSize === 'full'
 <?= $root($props, $attrs) ?>
 <?= $button($props) ?>
 <?php if (!empty($props['icon']) && $iconAlign === 'left') : ?>
-	<span uk-icon="icon: <?= htmlspecialchars($props['icon'], ENT_QUOTES, 'UTF-8') ?>"<?= !empty($props['label']) ? ' class="uk-margin-small-right"' : '' ?>></span>
+	<span uk-icon="icon: <?= htmlspecialchars($props['icon'], ENT_QUOTES, 'UTF-8') ?>" class="uk-margin-small-right"></span>
 <?php endif; ?>
-<?= htmlspecialchars((string) ($props['label'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+<?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
 <?php if (!empty($props['icon']) && $iconAlign === 'right') : ?>
-	<span uk-icon="icon: <?= htmlspecialchars($props['icon'], ENT_QUOTES, 'UTF-8') ?>"<?= !empty($props['label']) ? ' class="uk-margin-small-left"' : '' ?>></span>
+	<span uk-icon="icon: <?= htmlspecialchars($props['icon'], ENT_QUOTES, 'UTF-8') ?>" class="uk-margin-small-left"></span>
 <?php endif; ?>
 <?= $button->end() ?>
 <?= $modal() ?>
 <?= $dialog() ?>
 <?php if (!empty($props['show_close'])) : ?>
-	<button class="rm-modal__close <?= $closeClass ?>" type="button" uk-close aria-label="Close"></button>
+	<button class="rm-modal__close <?= $closeClass ?>" type="button" uk-close aria-label="<?= htmlspecialchars(Text::_('JLIB_HTML_BEHAVIOR_CLOSE'), ENT_QUOTES, 'UTF-8') ?>"></button>
 <?php endif; ?>
 <?php if ($contentWrapper === 'body') : ?>
 	<div class="rm-modal__body uk-modal-body"<?= !empty($props['overflow_auto']) ? ' uk-overflow-auto' : '' ?>><?= $content ?></div>

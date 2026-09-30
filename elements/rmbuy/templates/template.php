@@ -3,6 +3,16 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
+$productId = isset($rmProduct['id']) ? (int) $rmProduct['id'] : (int) ($props['product_id'] ?? 0);
+if ($productId < 1)
+{
+	$input = Factory::getApplication()->getInput();
+	if ($input->getCmd('option') === 'com_radicalmart' && $input->getCmd('view') === 'product')
+	{
+		$productId = $input->getInt('id');
+	}
+}
+
 $number = static function ($value, string $fallback): string {
 	return is_numeric($value) ? (string) (0 + $value) : $fallback;
 };
@@ -22,25 +32,36 @@ $buttonSize = in_array(($props['button_size'] ?? ''), ['', 'small', 'large'], tr
 $iconAlign = ($props['icon_align'] ?? 'left') === 'right' ? 'right' : 'left';
 $label = trim((string) ($props['label'] ?? ''));
 $label = $label !== '' ? $label : Text::_('COM_RADICALMART_CART_ADD');
+$successLabel = Text::_('COM_RADICALMART_CART_NOTIFICATION_ADD');
+$loadingLabel = Text::_('PLG_YTDYNAMICS_LOADING');
+$mobileStack = !array_key_exists('mobile_stack', $props) || !empty($props['mobile_stack']);
+$showCount = !empty($props['show_count']);
+$fullwidth = !empty($props['fullwidth']);
 
 $el = $this->el('div', []);
 
 $el_cart = $this->el('div', [
-	'class' => [
-		'rm-buy',
-		'uk-child-width-auto',
-		'uk-flex-nowrap',
-		'uk-flex-middle',
-		'uk-flex-{text_align}[@{text_align_breakpoint} [uk-flex-{text_align_fallback}]] {@!fullwidth}',
+		'class' => [
+			'rm-buy',
+			'uk-child-width-auto',
+			'uk-flex-wrap uk-flex-nowrap@s' => $mobileStack,
+			'uk-flex-nowrap' => !$mobileStack,
+			'uk-flex-middle',
+			'uk-flex-{text_align}[@{text_align_breakpoint} [uk-flex-{text_align_fallback}]]' => !$fullwidth,
 	],
 
 	'uk-grid'          => true,
 	'radicalmart-cart' => 'product',
-	'data-id'          => (int) ($props['product_id'] ?? 0),
+	'data-id'          => $productId,
+	'data-rm-cart-success' => $successLabel,
+	'data-rm-cart-loading' => $loadingLabel,
 ]);
 
 
 $assets = Factory::getApplication()->getDocument()->getWebAssetManager();
+$assets->getRegistry()->addExtensionRegistryFile('com_radicalmart');
+$assets->useScript('bootstrap.toast');
+$assets->useScript('bootstrap.offcanvas');
 $assets->useScript('com_radicalmart.site.cart');
 $assets->useScript('com_radicalmart.site');
 $assets->useScript('com_radicalmart.site.trigger');
@@ -49,7 +70,7 @@ $assets->useScript('com_radicalmart.site.trigger');
 
 <?= $el($props, $attrs) ?>
 <?= $el_cart($props) ?>
-<?php if (!empty($props['show_count'])) : ?>
+<?php if ($showCount) : ?>
     <div class="rm-buy__quantity uk-flex uk-flex-middle uk-button-group">
         <button type="button"
                 class="rm-buy__decrease uk-icon-button uk-margin-small-right"
@@ -75,12 +96,12 @@ $assets->useScript('com_radicalmart.site.trigger');
                 aria-label="<?= Text::_('PLG_YTDYNAMICS_QUANTITY_INCREASE') ?>"></button>
     </div>
 <?php endif; ?>
-    <div class="rm-buy__action<?= !empty($props['fullwidth']) ? ' uk-width-expand' : '' ?>">
-		<?php if (empty($props['show_count'])) : ?>
+	    <div class="rm-buy__action<?= $mobileStack && $showCount ? ' uk-width-1-1 ' . ($fullwidth ? 'uk-width-expand@s' : 'uk-width-auto@s') : ($fullwidth ? ' uk-width-expand' : '') ?>">
+			<?php if (!$showCount) : ?>
 	            <input radicalmart-cart="quantity" type="hidden" name="quantity" value="<?php echo $minAttr; ?>"/>
 		<?php endif; ?>
         <button radicalmart-cart="add" type="button"
-                class="rm-buy__button uk-button uk-button-<?= $buttonStyle ?> uk-text-nowrap<?= $buttonSize ? ' uk-button-' . $buttonSize : '' ?><?= !empty($props['fullwidth']) ? ' uk-width-1-1' : '' ?>">
+	                class="rm-buy__button uk-button uk-button-<?= $buttonStyle ?> uk-text-nowrap<?= $buttonSize ? ' uk-button-' . $buttonSize : '' ?><?= $fullwidth || ($mobileStack && $showCount) ? ' uk-width-1-1' : '' ?><?= !$fullwidth && $mobileStack && $showCount ? ' uk-width-auto@s' : '' ?>">
 			<?php if (!empty($props['icon']) && $iconAlign === 'left') : ?>
 				<span uk-icon="icon: <?= htmlspecialchars((string) $props['icon'], ENT_QUOTES, 'UTF-8') ?>"<?= $label !== '' ? ' class="uk-margin-small-right"' : '' ?>></span>
 			<?php endif; ?>

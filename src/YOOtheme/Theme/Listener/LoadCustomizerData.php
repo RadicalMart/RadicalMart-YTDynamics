@@ -2,6 +2,7 @@
 
 namespace Joomla\Plugin\System\YTDynamics\YOOtheme\Theme\Listener;
 
+use Joomla\CMS\Uri\Uri;
 use YOOtheme\Config;
 use YOOtheme\Metadata;
 
@@ -20,8 +21,7 @@ class LoadCustomizerData
     {
         $this->metadata->set('script:customizer.rm.product',
             [
-                'src'   => '/media/plg_system_ytdynamics/js/picker-product.min.js',
-                '',
+                'src'   => rtrim(Uri::root(true), '/') . '/media/plg_system_ytdynamics/js/picker-product.min.js',
                 'defer' => true,
             ],
         );

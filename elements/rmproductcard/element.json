@@ -1,0 +1,97 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductcard",
+  "title": "RM Product Card",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {
+        "type": "rmproductcard_main",
+        "children": [
+          {"type": "rmproductfield", "props": {"field": "image"}},
+          {"type": "rmproductfield", "props": {"field": "title", "title_element": "h3", "title_style": "h4", "margin_top": "small"}},
+          {"type": "rmproductfield", "props": {"field": "price", "text_style": "large", "margin_top": "small"}},
+          {"type": "rmproductfield", "props": {"field": "availability", "margin_top": "small"}}
+        ]
+      },
+      {
+        "type": "rmproductcard_dropdown",
+        "props": {"display_mode": "hover", "hover_breakpoint": "m", "panel_style": "default", "panel_padding": "small"},
+        "children": [
+          {"type": "rmvariantselector", "props": {"style": "buttons", "action": "ajax", "show_labels": true, "show_selected_value": true}},
+          {"type": "rmbuy", "props": {"show_count": false, "button_style": "primary", "mobile_stack": true, "margin_top": "small"}},
+          {"type": "rmquickview", "props": {"button_style": "text", "margin_top": "small"}}
+        ]
+      }
+    ]
+  },
+  "defaults": {"panel_style": "", "panel_padding": "default", "panel_hover": false},
+  "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
+  "fields": {
+    "content": {
+      "label": "Product card structure",
+      "description": "Use RM Product Card Main for permanent content and RM Product Card Dropdown for content revealed on hover. Add RM Variants wherever the controls should appear.",
+      "type": "builder-fragment"
+    },
+    "product_id": {
+      "label": "Product ID",
+      "description": "Bind this field to RadicalMart Product > ID. On a product page the current request ID is used as a fallback.",
+      "type": "number",
+      "source": true
+    },
+    "panel_style": {
+      "label": "Card style",
+      "description": "Optional UIkit card surface. Leave blank when RM Grid or another parent provides the card surface.",
+      "type": "select",
+      "options": {"None": "", "Default": "card-default", "Primary": "card-primary", "Secondary": "card-secondary"}
+    },
+    "panel_padding": {"label": "Card padding", "type": "select", "options": {"Small": "small", "Default": "default", "Large": "large"}, "show": "panel_style"},
+    "panel_hover": {"type": "checkbox", "text": "Use UIkit card hover effect", "show": "panel_style"},
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this product card.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-card", ".rm-product-card__main", ".rm-product-card__dropdown", ".rm-product-field", ".rmvariants", ".rm-buy"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["content"]},
+        {"title": "Settings", "fields": [
+          {"label": "Product", "type": "group", "fields": ["product_id"]},
+          {"label": "Card", "type": "group", "fields": ["panel_style", "panel_padding", "panel_hover"]},
+          {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

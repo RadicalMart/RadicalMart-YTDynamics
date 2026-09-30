@@ -15,6 +15,10 @@ const entry = {
         import: './src/table.es6',
         filename: 'table.js',
     },
+    "toolbar": {
+        import: './src/toolbar.es6',
+        filename: 'toolbar.js',
+    },
 };
 
 const webpackConfig = require('./webpack.config.js');

@@ -12,14 +12,26 @@ use Joomla\Registry\Registry;
 
 final class ProductPresentation
 {
+	/** @var array<int, object> */
+	private static array $products = [];
+
+	/** @var array<string, array> */
+	private static array $presentations = [];
+
 	public static function get(int $productId, bool $withVariants = true): array
 	{
+		$cacheKey = $productId . ':' . (int) $withVariants;
+		if (isset(self::$presentations[$cacheKey]))
+		{
+			return self::$presentations[$cacheKey];
+		}
+
 		$product = self::load($productId);
 
 		$result = self::normaliseProduct($product);
 		$result['variants'] = $withVariants ? self::normaliseVariants($product) : null;
 
-		return $result;
+		return self::$presentations[$cacheKey] = $result;
 	}
 
 	public static function load(int $productId): object
@@ -27,6 +39,11 @@ final class ProductPresentation
 		if ($productId < 1)
 		{
 			throw new \InvalidArgumentException(Text::_('PLG_YTDYNAMICS_ERROR_PRODUCT_ID'), 400);
+		}
+
+		if (isset(self::$products[$productId]))
+		{
+			return self::$products[$productId];
 		}
 
 		$model = Factory::getApplication()
@@ -51,8 +68,12 @@ final class ProductPresentation
 		{
 			throw new \RuntimeException(Text::_('PLG_YTDYNAMICS_ERROR_PRODUCT_NOT_FOUND'), 404);
 		}
+		if (empty($product->category) || (int) ($product->category->state ?? 0) !== 1)
+		{
+			throw new \RuntimeException(Text::_('PLG_YTDYNAMICS_ERROR_PRODUCT_NOT_FOUND'), 404);
+		}
 
-		return $product;
+		return self::$products[$productId] = $product;
 	}
 
 	private static function normaliseProduct(object $product): array
@@ -66,6 +87,9 @@ final class ProductPresentation
 			'code'      => (string) ($product->code ?? ''),
 			'link'      => self::absoluteUrl((string) ($product->link ?? '')),
 			'introtext' => trim(strip_tags((string) ($product->introtext ?? ''))),
+			'introtextHtml' => (string) ($product->introtext ?? ''),
+			'fulltext' => trim(strip_tags((string) ($product->fulltext ?? ''))),
+			'fulltextHtml' => (string) ($product->fulltext ?? ''),
 			'inStock'   => !empty($product->in_stock),
 			'quantity'  => [
 				'min'  => (float) ($quantity['min'] ?? 1),
@@ -80,7 +104,64 @@ final class ProductPresentation
 				'discountEnabled' => !empty($price['discount_enable']),
 			],
 			'media'     => self::normaliseMedia($product),
+			'fieldsets' => self::normaliseFieldsets($product),
 		];
+	}
+
+	private static function normaliseFieldsets(object $product): array
+	{
+		$fieldsets = [];
+		$variantAliases = array_fill_keys(array_map(
+			static fn($alias): string => (string) $alias,
+			array_keys((array) ($product->variability->fields ?? [])),
+		), true);
+
+		foreach ((array) ($product->fieldsets ?? []) as $fieldsetKey => $fieldset)
+		{
+			if (!is_object($fieldset))
+			{
+				continue;
+			}
+
+			$fields = [];
+			foreach ((array) ($fieldset->fields ?? []) as $fieldKey => $field)
+			{
+				if (!is_object($field) || !isset($field->value) || $field->value === false)
+				{
+					continue;
+				}
+
+				$value = is_scalar($field->value) ? (string) $field->value : '';
+				if (trim($value) === '')
+				{
+					continue;
+				}
+
+				$alias = (string) ($field->alias ?? $fieldKey);
+				$textValue = preg_replace('#<br\s*/?>#i', ' · ', $value) ?? $value;
+				$fields[] = [
+					'alias' => $alias,
+					'title' => (string) ($field->title ?? $alias),
+					'value' => $value,
+					'text' => trim(html_entity_decode(strip_tags($textValue), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+					'variant' => isset($variantAliases[$alias]),
+				];
+			}
+
+			if (!$fields)
+			{
+				continue;
+			}
+
+			$alias = (string) ($fieldset->alias ?? $fieldsetKey);
+			$fieldsets[] = [
+				'alias' => $alias,
+				'title' => (string) ($fieldset->title ?? ''),
+				'fields' => $fields,
+			];
+		}
+
+		return $fieldsets;
 	}
 
 	private static function normaliseVariants(object $product): ?array

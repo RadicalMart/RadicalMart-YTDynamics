@@ -1,0 +1,100 @@
+{
+  "@import": "./element.php",
+  "name": "rmproduct",
+  "title": "RM Product",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {
+        "type": "row",
+        "props": {"column_gap": "large", "row_gap": "large"},
+        "children": [
+          {
+            "type": "column",
+            "props": {"width_medium": "1-2"},
+            "children": [
+              {"type": "rmslideshow", "props": {"product_media": true, "gallery_orientation": "horizontal", "gallery_mobile_orientation": "horizontal", "nav": "thumbnav", "thumbnav_position": "bottom", "thumbnav_orientation": "horizontal", "lightbox": true}}
+            ]
+          },
+          {
+            "type": "column",
+            "props": {"width_medium": "1-2"},
+            "children": [
+              {"type": "rmproductfield", "props": {"field": "title", "title_element": "h1", "title_style": "h1", "link_product": false}},
+              {"type": "rmproductfield", "props": {"field": "code", "text_style": "meta", "margin_top": "small"}},
+              {"type": "rmproductfield", "props": {"field": "description", "text_style": "lead", "margin_top": "small"}},
+              {"type": "rmproductfield", "props": {"field": "price", "text_style": "large", "margin_top": "default"}},
+              {"type": "rmproductfield", "props": {"field": "availability", "margin_top": "small"}},
+              {"type": "rmvariantselector", "props": {"style": "buttons", "action": "ajax", "update_url": "replace", "margin_top": "default"}},
+              {"type": "rmbuy", "props": {"show_count": true, "button_style": "primary", "margin_top": "default"}}
+            ]
+          }
+        ]
+      },
+      {"type": "rmproductfield", "props": {"field": "full_description", "margin_top": "large"}},
+      {"type": "rmproductspecifications", "props": {"margin_top": "large"}}
+    ]
+  },
+  "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
+  "fields": {
+    "content": {
+      "label": "Product layout",
+      "description": "Build a complete product page. All nested RM product elements receive and update the same product state.",
+      "type": "builder-fragment"
+    },
+    "product_id": {
+      "label": "Product ID",
+      "description": "Bind to RadicalMart Product > ID. The current product request is used as a fallback.",
+      "type": "number",
+      "source": true
+    },
+    "update_document_title": {"type": "checkbox", "text": "Update the browser title when a variant changes"},
+    "update_document_metadata": {"type": "checkbox", "text": "Update canonical, description and social metadata when a variant changes"},
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to the complete product context.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product", ".rm-product-field", ".rmslideshow", ".rmvariants", ".rm-product-specifications", ".rm-buy"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "defaults": {"update_document_title": true, "update_document_metadata": true},
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["content"]},
+        {"title": "Settings", "fields": [
+          {"label": "Product", "type": "group", "fields": ["product_id", "update_document_title", "update_document_metadata"]},
+          {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

@@ -13,8 +13,14 @@
     "vertical_align": "",
     "cell_background": "",
     "visibility_mode": "",
-    "nowrap": false,
+    "wrap_mode": "normal",
+    "text_style": "",
+    "link_cell": false,
     "remove_padding": false,
+    "mobile_behavior": "show",
+    "mobile_label_position": "",
+    "mobile_text_align": "left",
+    "mobile_order": "",
     "scope": "auto",
     "aria_sort": ""
   },
@@ -42,27 +48,44 @@
     },
     "cell_type": {
       "label": "Cell type",
+      "description": "Automatic uses <th> in header rows and <td> everywhere else.",
       "type": "select",
       "options": {"Automatic": "auto", "Header <th>": "header", "Data <td>": "data"}
     },
     "scope": {
       "label": "Header scope",
+      "description": "Applied only when this cell is rendered as a <th>.",
       "type": "select",
       "options": {"Automatic": "auto", "Column": "col", "Row": "row", "Column group": "colgroup", "Row group": "rowgroup"},
       "show": "cell_type != 'data'"
     },
     "aria_sort": {
       "label": "Sort state",
+      "description": "Applied only when this cell is rendered as a <th>.",
       "type": "select",
       "options": {"None": "", "Ascending": "ascending", "Descending": "descending", "Unsorted": "none"},
       "show": "cell_type != 'data'"
+    },
+    "header_abbr": {
+      "label": "Header abbreviation",
+      "description": "A short alternative for a long header, exposed to assistive technology.",
+      "type": "text",
+      "source": true,
+      "show": "cell_type != 'data'"
+    },
+    "headers": {
+      "label": "Related header IDs",
+      "description": "Space-separated IDs of header cells for complex tables.",
+      "type": "text",
+      "source": true,
+      "show": "cell_type != 'header'"
     },
     "colspan": {"label": "Column span", "type": "number", "attrs": {"min": 1, "max": 24}},
     "rowspan": {"label": "Row span", "type": "number", "attrs": {"min": 1, "max": 100}},
     "cell_width": {
       "label": "Width",
       "type": "select",
-      "options": {"Auto": "", "Shrink": "shrink", "Expand": "expand", "Small": "small", "Medium": "medium", "Large": "large"}
+      "options": {"Auto": "", "Shrink": "shrink", "Expand": "expand", "16.66%": "1-6", "20%": "1-5", "25%": "1-4", "33.33%": "1-3", "40%": "2-5", "50%": "1-2", "60%": "3-5", "66.66%": "2-3", "75%": "3-4", "80%": "4-5", "83.33%": "5-6", "Small fixed": "small", "Medium fixed": "medium", "Large fixed": "large"}
     },
     "text_align": {
       "label": "Text alignment",
@@ -82,10 +105,47 @@
     "visibility_mode": {
       "label": "Responsive visibility",
       "type": "select",
-      "options": {"Always": "", "Tablet and larger": "visible-s", "Desktop and larger": "visible-m", "Hide on desktop": "hidden-m"}
+      "options": {"Always": "", "Phone only": "phone", "Tablet and larger": "visible-s", "Desktop and larger": "visible-m", "Large desktop and larger": "visible-l", "X-Large desktop and larger": "visible-xl", "Hide from tablet": "hidden-s", "Hide from desktop": "hidden-m", "Hide from large desktop": "hidden-l", "Hide from X-Large desktop": "hidden-xl"}
     },
-    "nowrap": {"type": "checkbox", "text": "Prevent text wrapping"},
+    "wrap_mode": {
+      "label": "Text wrapping",
+      "type": "select",
+      "options": {"Normal": "normal", "No wrap": "nowrap", "Truncate": "truncate", "Break long words": "break"}
+    },
+    "text_style": {
+      "label": "Text style",
+      "type": "select",
+      "options": {"Inherit": "", "Muted": "muted", "Meta": "meta", "Lead": "lead", "Small": "small", "Large": "large", "Bold": "bold"}
+    },
+    "link_cell": {
+      "type": "checkbox",
+      "text": "Use UIkit linked-cell behavior",
+      "description": "For a cell whose first child is a link. UIkit expands its clickable area."
+    },
     "remove_padding": {"type": "checkbox", "text": "Remove cell padding"},
+    "mobile_behavior": {
+      "label": "Responsive display",
+      "type": "select",
+      "options": {"Show": "show", "Hide": "hide", "Full-width content": "full"}
+    },
+    "mobile_label_position": {
+      "label": "Responsive label",
+      "type": "select",
+      "options": {"Inherit table": "", "Left": "left", "Above content": "top", "Hidden": "hidden"},
+      "enable": "mobile_behavior != 'hide'"
+    },
+    "mobile_text_align": {
+      "label": "Responsive alignment",
+      "type": "select",
+      "options": {"Left": "left", "Center": "center", "Right": "right"},
+      "enable": "mobile_behavior != 'hide'"
+    },
+    "mobile_order": {
+      "label": "Responsive order",
+      "type": "select",
+      "options": {"Normal": "", "First": "first", "Last": "last"},
+      "enable": "mobile_behavior != 'hide'"
+    },
     "name": "${builder.nameItem}",
     "status": "${builder.statusItem}",
     "source": "${builder.source}",
@@ -94,11 +154,11 @@
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Custom CSS for this cell. The cell itself is the item root.",
+      "description": "Custom CSS is scoped to this cell. Use .el-element for the cell root.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
-      "attrs": {"debounce": 500, "hints": [".el-item", ".rm-table__cell-content"]}
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-table__cell-content"]}
     }
   },
   "fieldset": {
@@ -109,9 +169,10 @@
         {
           "title": "Settings",
           "fields": [
-            {"label": "Semantics", "type": "group", "fields": ["cell_type", "scope", "aria_sort", "colspan", "rowspan"]},
-            {"label": "Layout", "type": "group", "divider": true, "fields": ["cell_width", "text_align", "vertical_align", "nowrap", "remove_padding"]},
-            {"label": "Style", "type": "group", "divider": true, "fields": ["cell_background", "visibility_mode"]}
+            {"label": "Semantics", "type": "group", "fields": ["cell_type", "scope", "aria_sort", "header_abbr", "headers", "colspan", "rowspan"]},
+            {"label": "Layout", "type": "group", "divider": true, "fields": ["cell_width", "text_align", "vertical_align", "wrap_mode", "remove_padding"]},
+            {"label": "Style", "type": "group", "divider": true, "fields": ["cell_background", "text_style", "link_cell", "visibility_mode"]},
+            {"label": "Responsive", "type": "group", "divider": true, "fields": ["mobile_behavior", "mobile_label_position", "mobile_text_align", "mobile_order"]}
           ]
         },
         "${builder.advancedItem}"

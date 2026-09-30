@@ -1,0 +1,68 @@
+{
+  "@import": "./element.php",
+  "name": "rmvariantselector",
+  "title": "RM Variants",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": false,
+  "width": 500,
+  "defaults": {
+    "variant_fields": [],
+    "action": "ajax",
+    "style": "buttons",
+    "show_labels": true,
+    "show_selected_value": true,
+    "disable_unavailable": true,
+    "update_url": "none",
+    "button_style": "default",
+    "image_fit": "cover"
+  },
+  "templates": {"render": "./templates/template.php"},
+  "fields": {
+    "product_id": {"label": "Product ID", "description": "Optional outside RM Product Card. Inside a card the parent product is inherited automatically.", "type": "number", "source": true},
+    "variant_fields": {"label": "Variant fields", "description": "Select several fields to display. Leave empty to show every variability field.", "type": "select", "default": [], "options": [{"evaluate": "yootheme.builder.radicalmart_variability_fields"}], "attrs": {"multiple": true, "class": "uk-height-small"}},
+    "action": {"label": "Selection action", "type": "select", "options": {"Update without reload": "ajax", "Open product page": "navigate"}},
+    "style": {"label": "Control style", "type": "select", "options": {"Buttons and swatches": "buttons", "Select fields": "select"}},
+    "button_style": {"label": "Option button style", "type": "select", "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary", "Text": "text"}, "show": "style == 'buttons'"},
+    "image_fit": {"label": "Image fit", "description": "Choose how variant images fill their option buttons.", "type": "select", "options": {"Cover": "cover", "Contain": "contain"}, "show": "style == 'buttons'"},
+    "show_labels": {"type": "checkbox", "text": "Show field labels"},
+    "show_selected_value": {"type": "checkbox", "text": "Show the selected value beside each label", "show": "show_labels"},
+    "disable_unavailable": {"type": "checkbox", "text": "Disable unavailable combinations"},
+    "update_url": {"label": "Browser URL", "description": "Keep the listing URL unchanged, replace it, or add every selected variant to browser history.", "type": "select", "options": {"Keep the current page URL": "none", "Replace the current URL": "replace", "Add a browser history entry": "push"}, "show": "action == 'ajax'"},
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "description": "Custom CSS is scoped to the variant controls.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rmvariants", ".rmvariants__field", ".rmvariants__label", ".rmvariants__selected", ".rmvariants__select", ".rmvariants__options", ".rmvariants__option", ".rmvariants__color", ".rmvariants__status"]}},
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["product_id", "variant_fields"]},
+        {"title": "Settings", "fields": [
+          {"label": "Variants", "type": "group", "fields": ["action", "style", "button_style", "image_fit", "show_labels", "show_selected_value", "disable_unavailable", "update_url"]},
+          {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

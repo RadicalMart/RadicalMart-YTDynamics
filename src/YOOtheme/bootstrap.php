@@ -9,8 +9,21 @@ use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Listener\LoadTemplat
 use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Source\Listener\MatchTemplate;
 use YOOtheme\Builder\BuilderConfig;
 use YOOtheme\Builder;
+use YOOtheme\Theme\Styler\StylerConfig;
 
 return [
+
+	'config' => [
+		StylerConfig::class => __DIR__ . '/config/styler.php',
+	],
+
+	'theme' => [
+		'styles' => [
+			'components' => [
+				'ytdynamics' => __DIR__ . '/assets/less/ytdynamics.less',
+			],
+		],
+	],
 
 	'routes' => [
 		['get', '/rm/products', [SourceController::class, 'products']],

@@ -23,6 +23,15 @@ $config['fields']['image_focal_point'] = [
 ];
 $config['fields']['thumbnail_focal_point'] = $config['fields']['image_focal_point'];
 $config['fields']['thumbnail_focal_point']['enable'] = 'thumbnail';
+$config = ElementConfig::setSettingGroupFields($config, 'Nav', [
+	'title',
+	'label',
+	'image',
+	'image_focal_point',
+	'image_alt',
+	'thumbnail',
+	'thumbnail_focal_point',
+]);
 $config['transforms']['render'] = static function ($node, $params): void {
 	$node->props['root'] = !$params['parent'];
 };

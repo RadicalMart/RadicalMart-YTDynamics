@@ -2,6 +2,7 @@
 
 $template = $template ?? 'slide';
 $index = $index ?? 0;
+$total = $total ?? 1;
 
 if ($template === 'thumb')
 {
@@ -10,11 +11,5 @@ if ($template === 'thumb')
 
 if ($template === 'slide')
 {
-	if (!empty($props['css']))
-	{
-		$css = preg_replace('/[\r\n\t\h]+/u', ' ', $props['css']);
-		echo "<style class=\"uk-margin-remove-adjacent\">{$css}</style>";
-	}
-
-	echo $this->render("{$__dir}/template-slide", compact('props', 'attrs'));
+	echo $this->render("{$__dir}/template-slide", compact('props', 'attrs', 'index', 'total'));
 }

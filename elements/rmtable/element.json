@@ -19,16 +19,44 @@
     "mode": "default",
     "table_style": "divider",
     "table_size": "",
+    "table_layout": "auto",
     "table_hover": true,
     "table_justify": false,
     "table_vertical_align": true,
+    "header_style": "",
+    "caption_position": "top",
+    "caption_align": "left",
+    "caption_style": "default",
+    "caption_visibility": "visible",
+    "container_style": "",
+    "container_size": "default",
+    "container_border": false,
+    "container_radius": false,
+    "container_shadow": "",
+    "table_min_width": "",
+    "table_max_height": "",
+    "scroll_shadow": true,
     "responsive_mode": "scroll",
     "responsive_breakpoint": "m",
+    "mobile_label_position": "auto",
+    "mobile_label_width": "36",
+    "mobile_label_style": "muted",
+    "mobile_label_gap": "default",
+    "mobile_cell_padding": "default",
+    "stack_row_padding": "default",
+    "stack_row_gap": "none",
+    "mobile_card_style": "default",
+    "mobile_card_gap": "default",
+    "mobile_card_padding": "default",
+    "mobile_card_min_width": "",
+    "mobile_footer": "show",
     "sticky_header": false,
+    "sticky_header_style": "default",
+    "sticky_offset": "0",
     "sticky_first": false,
     "sticky_last": false,
-    "caption_position": "top",
-    "empty_text": "No rows"
+    "sticky_responsive": true,
+    "empty_text": "PLG_YTDYNAMICS_TABLE_NO_ROWS"
   },
   "templates": {
     "render": "./templates/template.php",
@@ -43,14 +71,32 @@
     },
     "caption": {
       "label": "Caption",
-      "description": "Accessible title displayed with the table.",
+      "description": "Accessible table title. It can stay visible or be hidden visually for screen readers only.",
       "type": "text",
       "source": true
     },
     "caption_position": {
-      "label": "Caption position",
+      "label": "Position",
       "type": "select",
       "options": {"Top": "top", "Bottom": "bottom"},
+      "enable": "caption && caption_visibility == 'visible'"
+    },
+    "caption_align": {
+      "label": "Alignment",
+      "type": "select",
+      "options": {"Left": "left", "Center": "center", "Right": "right"},
+      "enable": "caption && caption_visibility == 'visible'"
+    },
+    "caption_style": {
+      "label": "Style",
+      "type": "select",
+      "options": {"Default": "default", "Muted": "muted", "Meta": "meta", "Lead": "lead", "Small": "small"},
+      "enable": "caption && caption_visibility == 'visible'"
+    },
+    "caption_visibility": {
+      "label": "Visibility",
+      "type": "select",
+      "options": {"Visible": "visible", "Screen readers only": "hidden"},
       "enable": "caption"
     },
     "empty_text": {"label": "Empty state", "type": "text", "source": true},
@@ -64,13 +110,67 @@
       "type": "select",
       "options": {"Default": "", "Small": "small", "Large": "large"}
     },
-    "table_hover": {"type": "checkbox", "text": "Highlight row on hover"},
+    "table_layout": {
+      "label": "Column layout",
+      "description": "Fixed layout keeps columns stable and makes truncation predictable.",
+      "type": "select",
+      "options": {"Automatic": "auto", "Fixed": "fixed"}
+    },
+    "table_hover": {"type": "checkbox", "text": "Highlight rows on hover"},
     "table_justify": {"type": "checkbox", "text": "Remove outer horizontal padding"},
     "table_vertical_align": {"type": "checkbox", "text": "Vertically center cells"},
+    "header_style": {
+      "label": "Header background",
+      "type": "select",
+      "options": {"Theme default": "", "Default": "default", "Muted": "muted", "Primary": "primary", "Secondary": "secondary"}
+    },
+    "container_style": {
+      "label": "Container",
+      "type": "select",
+      "options": {"None": "", "Card Default": "default", "Card Primary": "primary", "Card Secondary": "secondary"}
+    },
+    "container_size": {
+      "label": "Card size",
+      "type": "select",
+      "options": {"Small": "small", "Default": "default"},
+      "enable": "container_style"
+    },
+    "container_border": {"type": "checkbox", "text": "Show border"},
+    "container_radius": {"type": "checkbox", "text": "Rounded corners"},
+    "container_shadow": {
+      "label": "Box shadow",
+      "type": "select",
+      "options": {"None": "", "Small": "small", "Medium": "medium", "Large": "large", "X-Large": "xlarge"}
+    },
+    "table_min_width": {
+      "label": "Minimum table width",
+      "description": "Useful with horizontal scrolling when columns must not become too narrow.",
+      "type": "select",
+      "options": {"Automatic": "", "480px": "480", "640px": "640", "800px": "800", "960px": "960", "1200px": "1200"},
+      "enable": "responsive_mode == 'scroll' || responsive_mode == 'none'"
+    },
+    "table_max_height": {
+      "label": "Maximum height",
+      "description": "Creates a vertical scrolling region. Combine it with a sticky header.",
+      "type": "select",
+      "options": {"Automatic": "", "Small — 320px": "small", "Medium — 480px": "medium", "Large — 640px": "large"}
+    },
+    "scroll_shadow": {
+      "type": "checkbox",
+      "text": "Show scroll edge shadows",
+      "enable": "responsive_mode == 'scroll'"
+    },
+    "scroll_label": {
+      "label": "Scrollable region label",
+      "description": "Used by screen readers. The caption is used automatically when empty.",
+      "type": "text",
+      "source": true,
+      "show": "responsive_mode == 'scroll' || table_max_height || table_min_width"
+    },
     "responsive_mode": {
       "label": "Responsive mode",
       "type": "select",
-      "options": {"Horizontal scroll": "scroll", "Stacked rows": "stack", "Cards": "cards", "None": "none"}
+      "options": {"Horizontal scroll": "scroll", "Stacked rows": "stack", "Cards": "cards", "UIkit responsive": "uikit", "None": "none"}
     },
     "responsive_breakpoint": {
       "label": "Responsive breakpoint",
@@ -78,9 +178,107 @@
       "options": {"Small — 640px": "s", "Medium — 960px": "m", "Large — 1200px": "l", "X-Large — 1600px": "xl"},
       "show": "responsive_mode == 'stack' || responsive_mode == 'cards'"
     },
-    "sticky_header": {"type": "checkbox", "text": "Sticky header"},
+    "mobile_label_position": {
+      "label": "Label position",
+      "type": "select",
+      "options": {"Automatic": "auto", "Left": "left", "Above content": "top", "Hidden": "hidden"},
+      "show": "responsive_mode == 'stack' || responsive_mode == 'cards'"
+    },
+    "mobile_label_width": {
+      "label": "Label width",
+      "type": "select",
+      "options": {"30%": "30", "36%": "36", "40%": "40", "45%": "45"},
+      "show": "(responsive_mode == 'stack' || responsive_mode == 'cards') && mobile_label_position == 'left'"
+    },
+    "mobile_label_style": {
+      "label": "Label style",
+      "type": "select",
+      "options": {"Muted": "muted", "Default": "default", "Meta": "meta", "Bold": "bold"},
+      "show": "(responsive_mode == 'stack' || responsive_mode == 'cards') && mobile_label_position != 'hidden'"
+    },
+    "mobile_label_gap": {
+      "label": "Label spacing",
+      "description": "Distance between the responsive label and its value.",
+      "type": "select",
+      "options": {"Compact": "compact", "Small": "small", "Default": "default", "Large": "large"},
+      "show": "(responsive_mode == 'stack' || responsive_mode == 'cards') && mobile_label_position != 'hidden'"
+    },
+    "mobile_cell_padding": {
+      "label": "Cell vertical padding",
+      "type": "select",
+      "options": {"Compact": "compact", "Small": "small", "Default": "default", "Large": "large"},
+      "show": "responsive_mode == 'stack' || responsive_mode == 'cards'"
+    },
+    "stack_row_padding": {
+      "label": "Row padding",
+      "description": "Inner vertical and horizontal padding for stacked rows.",
+      "type": "select",
+      "options": {"None": "none", "Small": "small", "Default": "default", "Large": "large"},
+      "show": "responsive_mode == 'stack'"
+    },
+    "stack_row_gap": {
+      "label": "Row gap",
+      "type": "select",
+      "options": {"None": "none", "Small": "small", "Default": "default", "Large": "large"},
+      "show": "responsive_mode == 'stack'"
+    },
+    "mobile_card_style": {
+      "label": "Card background",
+      "type": "select",
+      "options": {"Default": "default", "Muted": "muted", "Primary": "primary", "Secondary": "secondary"},
+      "show": "responsive_mode == 'cards'"
+    },
+    "mobile_card_gap": {
+      "label": "Card gap",
+      "type": "select",
+      "options": {"None": "none", "Small": "small", "Default": "default", "Large": "large"},
+      "show": "responsive_mode == 'cards'"
+    },
+    "mobile_card_padding": {
+      "label": "Card padding",
+      "type": "select",
+      "options": {"Small": "small", "Default": "default", "Large": "large"},
+      "show": "responsive_mode == 'cards'"
+    },
+    "mobile_card_min_width": {
+      "label": "Card columns",
+      "description": "Automatic columns appear only when enough responsive width remains.",
+      "type": "select",
+      "options": {"One column": "", "Auto — minimum 240px": "240", "Auto — minimum 300px": "300", "Auto — minimum 360px": "360"},
+      "show": "responsive_mode == 'cards'"
+    },
+    "mobile_footer": {
+      "label": "Footer on mobile",
+      "type": "select",
+      "options": {"Show": "show", "Hide": "hide"},
+      "show": "responsive_mode == 'stack' || responsive_mode == 'cards'"
+    },
+    "sticky_header": {
+      "type": "checkbox",
+      "text": "Sticky header",
+      "description": "Keeps the header visible inside the table's vertical scroll region. Set Maximum height to enable it.",
+      "enable": "table_max_height"
+    },
+    "sticky_header_style": {
+      "label": "Sticky background",
+      "type": "select",
+      "options": {"Default": "default", "Muted": "muted", "Primary": "primary", "Secondary": "secondary"},
+      "enable": "sticky_header && table_max_height"
+    },
+    "sticky_offset": {
+      "label": "Top offset",
+      "type": "select",
+      "options": {"0px": "0", "20px": "20", "40px": "40", "80px": "80"},
+      "enable": "sticky_header && table_max_height"
+    },
     "sticky_first": {"type": "checkbox", "text": "Sticky first column"},
     "sticky_last": {"type": "checkbox", "text": "Sticky last column"},
+    "sticky_responsive": {
+      "type": "checkbox",
+      "text": "Prevent sticky columns from overlapping",
+      "description": "Automatically releases horizontal sticky columns when their combined width is too large for the scroll area.",
+      "enable": "sticky_first || sticky_last"
+    },
     "margin_top": "${builder.margin_top}",
     "margin_bottom": "${builder.margin_bottom}",
     "maxwidth": "${builder.maxwidth}",
@@ -98,11 +296,11 @@
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Custom CSS is scoped to this table. Use the selectors below for semantic sections, rows, cells and cell content.",
+      "description": "Custom CSS is scoped to this table. Use .el-element for the outer frame and the selectors below for its semantic parts.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
-      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-table", ".rm-table__caption", ".rm-table__head", ".rm-table__body", ".rm-table__foot", ".rm-table__row", ".rm-table__cell", ".rm-table__cell-content", ".rm-table__empty", ".rm-table__empty-cell"]}
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-table-frame", ".rm-table-wrapper", ".rm-table", ".rm-table__caption", ".rm-table__head", ".rm-table__body", ".rm-table__foot", ".rm-table__row", ".rm-table__cell", ".rm-table__cell-content", ".rm-table__empty", ".rm-table__empty-cell"]}
     },
     "transform": "${builder.transform}"
   },
@@ -110,13 +308,15 @@
     "default": {
       "type": "tabs",
       "fields": [
-        {"title": "Content", "fields": ["content", "mode", "caption", "caption_position", "empty_text"]},
+        {"title": "Content", "fields": ["content", "mode", "caption", "empty_text"]},
         {
           "title": "Settings",
           "fields": [
-            {"label": "Table", "type": "group", "fields": ["table_style", "table_size", "table_hover", "table_justify", "table_vertical_align"]},
-            {"label": "Responsive", "type": "group", "divider": true, "fields": ["responsive_mode", "responsive_breakpoint"]},
-            {"label": "Sticky", "type": "group", "divider": true, "fields": ["sticky_header", "sticky_first", "sticky_last"]},
+            {"label": "Table", "type": "group", "fields": ["table_style", "table_size", "table_layout", "table_hover", "table_justify", "table_vertical_align", "header_style"]},
+            {"label": "Caption", "type": "group", "divider": true, "fields": ["caption_visibility", "caption_position", "caption_align", "caption_style"]},
+            {"label": "Container", "type": "group", "divider": true, "fields": ["container_style", "container_size", "container_border", "container_radius", "container_shadow", "table_min_width", "table_max_height", "scroll_shadow", "scroll_label"]},
+            {"label": "Responsive", "type": "group", "divider": true, "fields": ["responsive_mode", "responsive_breakpoint", "mobile_label_position", "mobile_label_width", "mobile_label_style", "mobile_label_gap", "mobile_cell_padding", "stack_row_padding", "stack_row_gap", "mobile_card_style", "mobile_card_gap", "mobile_card_padding", "mobile_card_min_width", "mobile_footer"]},
+            {"label": "Sticky", "type": "group", "divider": true, "fields": ["sticky_header", "sticky_header_style", "sticky_offset", "sticky_first", "sticky_last", "sticky_responsive"]},
             {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "animation", "visibility"]}
           ]
         },

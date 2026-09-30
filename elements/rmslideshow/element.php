@@ -7,7 +7,9 @@ use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Element\ElementConfig;
 $config = ElementConfig::fromJson(__DIR__);
 $config['title'] = 'RM Slideshow';
 $config['defaults'] = ($config['defaults'] ?? []) + [
+	'product_media' => false,
 	'gallery_orientation' => 'vertical',
+	'gallery_mobile_orientation' => 'inherit',
 	'gallery_height' => 600,
 	'gallery_mobile_height' => 320,
 	'slideshow_loop' => true,
@@ -17,6 +19,7 @@ $config['defaults'] = ($config['defaults'] ?? []) + [
 	'slideshow_autoplay_interval' => 7,
 	'nav' => 'thumbnav',
 	'thumbnav_orientation' => 'auto',
+	'thumbnav_mobile_orientation' => 'inherit',
 	'thumbnav_position' => '',
 	'thumbnav_size' => 100,
 	'nav_arrows' => true,
@@ -34,11 +37,33 @@ $config['defaults'] = ($config['defaults'] ?? []) + [
 	'lightbox_caption' => true,
 ];
 $config['fields'] = ($config['fields'] ?? []) + [
+	'product_media' => [
+		'label' => 'Content Source',
+		'type' => 'checkbox',
+		'text' => 'Use the current RadicalMart product media',
+	],
+	'product_id' => [
+		'label' => 'Product ID',
+		'description' => 'Optional outside RM Product. The nearest product context is used automatically.',
+		'type' => 'number',
+		'source' => true,
+		'show' => 'product_media',
+	],
 	'gallery_orientation' => [
-		'label' => 'Main Slideshow Direction',
-		'description' => 'Set the movement direction of the large slides independently from the thumbnails.',
+		'label' => 'Main Direction',
+		'description' => 'Set the actual movement, drag and autoplay axis of the large slides. This is independent from the navigation direction.',
 		'type' => 'select',
 		'options' => [
+			'Vertical' => 'vertical',
+			'Horizontal' => 'horizontal',
+		],
+	],
+	'gallery_mobile_orientation' => [
+		'label' => 'Mobile Main Direction',
+		'description' => 'Set the movement, drag and autoplay axis of the large slides on phone widths.',
+		'type' => 'select',
+		'options' => [
+			'Inherit' => 'inherit',
 			'Vertical' => 'vertical',
 			'Horizontal' => 'horizontal',
 		],
@@ -129,11 +154,22 @@ $config['fields'] = ($config['fields'] ?? []) + [
 		],
 	],
 	'thumbnav_orientation' => [
-		'label' => 'Thumbnail Direction',
-		'description' => 'Set the thumbnail movement direction independently from the main slideshow. Auto derives it from the thumbnail position.',
+		'label' => 'Navigation Direction',
+		'description' => 'Set the actual movement and drag axis of the thumbnail navigation independently from the main slideshow. Auto derives it from the navigation position.',
 		'type' => 'select',
 		'options' => [
 			'Auto' => 'auto',
+			'Vertical' => 'vertical',
+			'Horizontal' => 'horizontal',
+		],
+		'enable' => "nav == 'thumbnav'",
+	],
+	'thumbnav_mobile_orientation' => [
+		'label' => 'Mobile Navigation Direction',
+		'description' => 'Set the thumbnail movement and drag axis on phone widths independently from the main slideshow.',
+		'type' => 'select',
+		'options' => [
+			'Inherit' => 'inherit',
 			'Vertical' => 'vertical',
 			'Horizontal' => 'horizontal',
 		],
@@ -279,13 +315,14 @@ $config['fields'] = ($config['fields'] ?? []) + [
 		'enable' => 'lightbox',
 	],
 ];
-array_splice($config['fieldset']['default']['fields'][1]['fields'], 0, 0, [
+$groups = [
 	[
 		'label' => 'Slideshow',
 		'type' => 'group',
 		'divider' => true,
 		'fields' => [
 			'gallery_orientation',
+			'gallery_mobile_orientation',
 			'gallery_height',
 			'gallery_mobile_height',
 			'image_fit',
@@ -315,6 +352,7 @@ array_splice($config['fieldset']['default']['fields'][1]['fields'], 0, 0, [
 			'fields' => [
 			'nav',
 			'thumbnav_orientation',
+			'thumbnav_mobile_orientation',
 			'thumbnav_position',
 			'thumbnav_size',
 			'thumbnail_count',
@@ -348,6 +386,10 @@ array_splice($config['fieldset']['default']['fields'][1]['fields'], 0, 0, [
 			'lightbox_nav',
 		],
 	],
-]);
+];
+foreach (array_reverse($groups) as $group)
+{
+	$config = ElementConfig::prependSettingGroup($config, $group);
+}
 
 return $config;

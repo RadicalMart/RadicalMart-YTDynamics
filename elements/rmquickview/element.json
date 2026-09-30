@@ -11,13 +11,23 @@
   "placeholder": {},
   "defaults": {
     "content_mode": "automatic",
-    "label": "Quick view",
+    "label": "",
+    "accessible_label": "",
     "icon": "search",
     "icon_align": "left",
     "button_style": "default",
     "button_size": "",
     "fullwidth": false,
     "modal_size": "container",
+    "modal_class": "",
+    "content_padding": "default",
+    "modal_center": true,
+    "mobile_fullscreen": true,
+    "show_close": true,
+    "close_large": false,
+    "bg_close": true,
+    "esc_close": true,
+    "overflow_auto": false,
     "show_description": true,
     "show_code": true,
     "show_variants": true,
@@ -46,6 +56,12 @@
     },
     "product_id": {"label": "Product ID", "type": "number", "source": true},
     "label": {"label": "Label", "type": "text", "source": true},
+    "accessible_label": {
+      "label": "Accessible modal name",
+      "description": "Name announced for the dialog. The button label is used when empty.",
+      "type": "text",
+      "source": true
+    },
     "icon": {"label": "Icon", "type": "icon"},
     "icon_align": {
       "label": "Icon position",
@@ -67,14 +83,47 @@
     "modal_size": {
       "label": "Modal width",
       "type": "select",
-      "options": {"Default": "", "Container": "container", "Large": "large"}
+      "options": {"Default": "", "Small": "small", "Large": "large", "X-Large": "xlarge", "Container": "container", "Full screen": "full"}
     },
+    "modal_class": {
+      "label": "Modal CSS class",
+      "description": "Optional class added to the detached modal, for example shop-quick-view. Use it to scope modal-specific custom CSS.",
+      "type": "text"
+    },
+    "content_padding": {
+      "label": "Content padding",
+      "type": "select",
+      "options": {"None": "none", "Small": "small", "Default": "default", "Large": "large"}
+    },
+    "modal_center": {"type": "checkbox", "text": "Vertically center the dialog", "show": "modal_size != 'full'"},
+    "mobile_fullscreen": {
+      "type": "checkbox",
+      "text": "Use a full-screen dialog on phones",
+      "description": "Disable this to keep a floating modal on narrow screens.",
+      "show": "modal_size != 'full'"
+    },
+    "show_close": {"type": "checkbox", "text": "Show close button"},
+    "close_large": {"type": "checkbox", "text": "Large close icon", "show": "show_close"},
+    "bg_close": {"type": "checkbox", "text": "Close by clicking the background"},
+    "esc_close": {"type": "checkbox", "text": "Close with Escape key"},
+    "overflow_auto": {"type": "checkbox", "text": "Scroll long content inside the dialog"},
     "show_description": {"type": "checkbox", "text": "Show short description", "show": "content_mode == 'automatic'"},
     "show_code": {"type": "checkbox", "text": "Show product code", "show": "content_mode == 'automatic'"},
     "show_variants": {"type": "checkbox", "text": "Show variant selector", "show": "content_mode == 'automatic'"},
     "show_cart": {"type": "checkbox", "text": "Show add-to-cart button", "show": "content_mode == 'automatic'"},
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
     "margin_top": "${builder.margin_top}",
     "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
     "text_align": "${builder.text_align}",
     "text_align_breakpoint": "${builder.text_align_breakpoint}",
     "text_align_fallback": "${builder.text_align_fallback}",
@@ -88,7 +137,7 @@
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Custom CSS is scoped to this element. Quick View content is created on demand; its stable selectors are listed below.",
+      "description": "Custom CSS is scoped to the trigger element. Style modal content globally with the stable .rmquickview selectors below.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
@@ -102,14 +151,14 @@
       "fields": [
         {
           "title": "Content",
-          "fields": ["content_mode", "quickview_template", "product_id", "label", "icon", "icon_align"]
+          "fields": ["content_mode", "quickview_template", "product_id", "label", "accessible_label", "icon", "icon_align"]
         },
         {
           "title": "Settings",
           "fields": [
             {"label": "Button", "type": "group", "fields": ["button_style", "button_size", "fullwidth"]},
-            {"label": "Modal", "type": "group", "fields": ["modal_size", "show_description", "show_code", "show_variants", "show_cart"]},
-            {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+            {"label": "Modal", "type": "group", "fields": ["modal_size", "modal_class", "content_padding", "modal_center", "mobile_fullscreen", "show_close", "close_large", "bg_close", "esc_close", "overflow_auto", "show_description", "show_code", "show_variants", "show_cart"]},
+            {"label": "General", "type": "group", "fields": ["position", "position_left", "position_right", "position_top", "position_bottom", "position_z_index", "margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
           ]
         },
         "${builder.advanced}"

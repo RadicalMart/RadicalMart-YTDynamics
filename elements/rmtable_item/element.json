@@ -13,7 +13,11 @@
   "defaults": {
     "row_type": "body",
     "row_background": "",
-    "row_active": false
+    "row_active": false,
+    "row_divider": "",
+    "row_visibility": "",
+    "mobile_card_style": "",
+    "mobile_card_shadow": ""
   },
   "templates": {
     "render": "./templates/template.php",
@@ -33,6 +37,33 @@
       "options": {"None": "", "Muted": "muted", "Primary": "primary", "Secondary": "secondary"}
     },
     "row_active": {"type": "checkbox", "text": "Active row state"},
+    "row_divider": {
+      "label": "Divider",
+      "type": "select",
+      "options": {"None": "", "Top": "top", "Bottom": "bottom", "Top and bottom": "both"}
+    },
+    "row_visibility": {
+      "label": "Responsive visibility",
+      "type": "select",
+      "options": {"Always": "", "Phone only": "phone", "Tablet and larger": "visible-s", "Desktop and larger": "visible-m", "Large desktop and larger": "visible-l", "X-Large desktop and larger": "visible-xl", "Hide from tablet": "hidden-s", "Hide from desktop": "hidden-m", "Hide from large desktop": "hidden-l", "Hide from X-Large desktop": "hidden-xl"}
+    },
+    "row_aria_label": {
+      "label": "Accessible label",
+      "description": "Optional aria-label for this row.",
+      "type": "text",
+      "source": true
+    },
+    "mobile_card_style": {
+      "label": "Mobile card background",
+      "description": "Overrides the parent card background for this row.",
+      "type": "select",
+      "options": {"Inherit": "", "Default": "default", "Muted": "muted", "Primary": "primary", "Secondary": "secondary"}
+    },
+    "mobile_card_shadow": {
+      "label": "Mobile card shadow",
+      "type": "select",
+      "options": {"Inherit": "", "None": "none", "Small": "small", "Medium": "medium", "Large": "large"}
+    },
     "name": "${builder.nameItem}",
     "status": "${builder.statusItem}",
     "source": "${builder.source}",
@@ -41,11 +72,11 @@
     "attributes": "${builder.attrs}",
     "css": {
       "label": "CSS",
-      "description": "Custom CSS for this table row and its cells.",
+      "description": "Custom CSS is scoped to this row. Use .el-element for the row root.",
       "type": "editor",
       "editor": "code",
       "mode": "css",
-      "attrs": {"debounce": 500, "hints": [".el-item", ".rm-table__cell", ".rm-table__cell-content"]}
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-table__cell", ".rm-table__cell-content"]}
     }
   },
   "fieldset": {
@@ -53,7 +84,10 @@
       "type": "tabs",
       "fields": [
         {"title": "Content", "fields": ["content", "row_type"]},
-        {"title": "Settings", "fields": [{"label": "Row", "type": "group", "fields": ["row_background", "row_active"]}]},
+        {"title": "Settings", "fields": [
+          {"label": "Row", "type": "group", "fields": ["row_background", "row_active", "row_divider", "row_visibility", "row_aria_label"]},
+          {"label": "Responsive card", "type": "group", "divider": true, "fields": ["mobile_card_style", "mobile_card_shadow"]}
+        ]},
         "${builder.advancedItem}"
       ]
     }

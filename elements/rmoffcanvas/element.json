@@ -10,12 +10,14 @@
   "width": 500,
   "placeholder": {},
   "defaults": {
-    "label": "Open panel",
+    "label": "",
+    "accessible_label": "",
     "button_style": "primary",
     "button_size": "",
     "mode": "slide",
     "side": "right",
     "panel_width": "medium",
+    "panel_padding": "default",
     "overlay": true,
     "show_close": true,
     "close_large": false,
@@ -66,6 +68,12 @@
       "type": "select",
       "options": {"Small (320px)": "small", "Medium (420px)": "medium", "Large (520px)": "large", "X-Large (640px)": "xlarge"}
     },
+    "panel_padding": {
+      "label": "Panel padding",
+      "description": "Choose None when the Builder content provides its own spacing.",
+      "type": "select",
+      "options": {"None": "none", "Small": "small", "Default": "default", "Large": "large"}
+    },
     "overlay": {"type": "checkbox", "text": "Dim the page with an overlay"},
     "show_close": {"type": "checkbox", "text": "Show close button"},
     "close_large": {"type": "checkbox", "text": "Large close icon", "show": "show_close"},
@@ -83,6 +91,18 @@
       "type": "select",
       "options": {"Dialog": "dialog", "Alert dialog": "alertdialog"}
     },
+    "accessible_label": {
+      "label": "Accessible name",
+      "description": "Name announced for the panel. The button label is used when empty.",
+      "type": "text",
+      "source": true
+    },
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
     "margin_top": "${builder.margin_top}",
     "margin_bottom": "${builder.margin_bottom}",
     "maxwidth": "${builder.maxwidth}",
@@ -120,8 +140,8 @@
           "title": "Settings",
           "fields": [
             {"label": "Button", "type": "group", "fields": ["label", "icon", "icon_align", "button_style", "button_size", "fullwidth"]},
-            {"label": "Offcanvas", "type": "group", "fields": ["mode", "side", "panel_width", "overlay", "show_close", "close_large", "bg_close", "esc_close", "swiping", "stack", "container", "role"]},
-            {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+            {"label": "Offcanvas", "type": "group", "fields": ["mode", "side", "panel_width", "panel_padding", "overlay", "show_close", "close_large", "bg_close", "esc_close", "swiping", "stack", "container", "role", "accessible_label"]},
+            {"label": "General", "type": "group", "fields": ["position", "position_left", "position_right", "position_top", "position_bottom", "position_z_index", "margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
           ]
         },
         "${builder.advanced}"

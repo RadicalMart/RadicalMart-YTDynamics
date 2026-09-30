@@ -21,6 +21,12 @@ $lightboxCaption = htmlspecialchars((string) $caption, ENT_QUOTES, 'UTF-8');
 $slide = $this->el('div', [
 	'class' => ['el-item', 'rmslideshow__slide'],
 	'role' => 'group',
+	'aria-roledescription' => Text::_('PLG_YTDYNAMICS_GALLERY_SLIDE'),
+	'aria-label' => Text::sprintf(
+		'PLG_YTDYNAMICS_GALLERY_SLIDE_POSITION',
+		(int) ($index ?? 0) + 1,
+		max(1, (int) ($total ?? 1)),
+	),
 ]);
 
 ?>

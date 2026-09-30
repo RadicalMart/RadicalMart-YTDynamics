@@ -1,0 +1,142 @@
+// Name:            YTDynamics
+// Description:     RadicalMart Builder elements integrated with YOOtheme Pro
+//
+// Component:       `rm-*`
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+// Keep the public component variables mapped to UIkit by default. They are
+// discovered by the YOOtheme Style Editor and can still be overridden for a
+// specific site without changing the element CSS.
+
+// All RM elements: colors and surfaces
+// --------------------------------------------------------------------------
+
+@ytdynamics-color:                              @global-color;
+@ytdynamics-emphasis-color:                     @global-emphasis-color;
+@ytdynamics-muted-color:                        @global-muted-color;
+@ytdynamics-inverse-color:                      @global-inverse-color;
+
+@ytdynamics-background:                         @global-background;
+@ytdynamics-muted-background:                   @global-muted-background;
+@ytdynamics-primary-background:                 @global-primary-background;
+@ytdynamics-secondary-background:               @global-secondary-background;
+@ytdynamics-success-background:                 @global-success-background;
+@ytdynamics-warning-background:                 @global-warning-background;
+@ytdynamics-danger-background:                  @global-danger-background;
+
+// All RM elements: borders and shadows
+// --------------------------------------------------------------------------
+
+@ytdynamics-border-width:                       @global-border-width;
+@ytdynamics-border:                             @global-border;
+@ytdynamics-border-radius:                      @global-border-radius;
+@ytdynamics-scroll-shadow-color:                fade(@global-emphasis-color, 16%);
+
+@ytdynamics-small-box-shadow:                   @global-small-box-shadow;
+@ytdynamics-medium-box-shadow:                  @global-medium-box-shadow;
+@ytdynamics-large-box-shadow:                   @global-large-box-shadow;
+@ytdynamics-xlarge-box-shadow:                  @global-xlarge-box-shadow;
+
+// All RM elements: spacing and controls
+// --------------------------------------------------------------------------
+
+@ytdynamics-small-margin:                       @global-small-margin;
+@ytdynamics-margin:                             @global-margin;
+@ytdynamics-medium-margin:                      @global-medium-margin;
+@ytdynamics-large-margin:                       @global-large-margin;
+
+@ytdynamics-small-gutter:                       @global-small-gutter;
+@ytdynamics-gutter:                             @global-gutter;
+@ytdynamics-medium-gutter:                      @global-medium-gutter;
+@ytdynamics-large-gutter:                       @global-large-gutter;
+
+@ytdynamics-control-height:                     @global-control-height;
+@ytdynamics-control-small-height:               @global-control-small-height;
+@ytdynamics-control-large-height:               @global-control-large-height;
+
+// All RM elements: typography and motion
+// --------------------------------------------------------------------------
+
+@ytdynamics-font-size:                          @global-font-size;
+@ytdynamics-small-font-size:                    @global-small-font-size;
+@ytdynamics-medium-font-size:                   @global-medium-font-size;
+@ytdynamics-line-height:                        @global-line-height;
+@ytdynamics-primary-font-weight:                @global-primary-font-weight;
+@ytdynamics-meta-text-transform:                 @text-meta-text-transform;
+@ytdynamics-meta-letter-spacing:                 @text-meta-letter-spacing;
+@ytdynamics-transition-duration:                @transition-duration;
+
+// RM Table: header typography
+// --------------------------------------------------------------------------
+
+@ytdynamics-table-header-font-size:             @table-header-cell-font-size;
+@ytdynamics-table-header-font-weight:           @table-header-cell-font-weight;
+
+
+/* ========================================================================
+   Component: YTDynamics theme bridge
+ ========================================================================== */
+
+:root {
+    --ytdynamics-color: @ytdynamics-color;
+    --ytdynamics-emphasis-color: @ytdynamics-emphasis-color;
+    --ytdynamics-muted-color: @ytdynamics-muted-color;
+    --ytdynamics-inverse-color: @ytdynamics-inverse-color;
+
+    --ytdynamics-background: @ytdynamics-background;
+    --ytdynamics-muted-background: @ytdynamics-muted-background;
+    --ytdynamics-primary-background: @ytdynamics-primary-background;
+    --ytdynamics-secondary-background: @ytdynamics-secondary-background;
+    --ytdynamics-success-background: @ytdynamics-success-background;
+    --ytdynamics-warning-background: @ytdynamics-warning-background;
+    --ytdynamics-danger-background: @ytdynamics-danger-background;
+
+    --ytdynamics-border-width: @ytdynamics-border-width;
+    --ytdynamics-border: @ytdynamics-border;
+    --ytdynamics-border-radius: @ytdynamics-border-radius;
+    --ytdynamics-scroll-shadow-color: @ytdynamics-scroll-shadow-color;
+
+    --ytdynamics-small-box-shadow: @ytdynamics-small-box-shadow;
+    --ytdynamics-medium-box-shadow: @ytdynamics-medium-box-shadow;
+    --ytdynamics-large-box-shadow: @ytdynamics-large-box-shadow;
+    --ytdynamics-xlarge-box-shadow: @ytdynamics-xlarge-box-shadow;
+
+    --ytdynamics-small-margin: @ytdynamics-small-margin;
+    --ytdynamics-margin: @ytdynamics-margin;
+    --ytdynamics-medium-margin: @ytdynamics-medium-margin;
+    --ytdynamics-large-margin: @ytdynamics-large-margin;
+
+    --ytdynamics-small-gutter: @ytdynamics-small-gutter;
+    --ytdynamics-gutter: @ytdynamics-gutter;
+    --ytdynamics-medium-gutter: @ytdynamics-medium-gutter;
+    --ytdynamics-large-gutter: @ytdynamics-large-gutter;
+
+    --ytdynamics-control-height: @ytdynamics-control-height;
+    --ytdynamics-control-small-height: @ytdynamics-control-small-height;
+    --ytdynamics-control-large-height: @ytdynamics-control-large-height;
+
+    --ytdynamics-font-size: @ytdynamics-font-size;
+    --ytdynamics-small-font-size: @ytdynamics-small-font-size;
+    --ytdynamics-medium-font-size: @ytdynamics-medium-font-size;
+    --ytdynamics-line-height: @ytdynamics-line-height;
+    --ytdynamics-primary-font-weight: @ytdynamics-primary-font-weight;
+    --ytdynamics-meta-text-transform: @ytdynamics-meta-text-transform;
+    --ytdynamics-meta-letter-spacing: @ytdynamics-meta-letter-spacing;
+    --ytdynamics-transition-duration: @ytdynamics-transition-duration;
+
+    // RM Table
+    --ytdynamics-table-header-font-size: @ytdynamics-table-header-font-size;
+    --ytdynamics-table-header-font-weight: @ytdynamics-table-header-font-weight;
+
+    // Breakpoints cannot be consumed by CSS media queries as custom
+    // properties, but exporting them keeps JS integrations aligned with UIkit.
+    --ytdynamics-breakpoint-small: @breakpoint-small;
+    --ytdynamics-breakpoint-medium: @breakpoint-medium;
+    --ytdynamics-breakpoint-large: @breakpoint-large;
+    --ytdynamics-breakpoint-xlarge: @breakpoint-xlarge;
+}

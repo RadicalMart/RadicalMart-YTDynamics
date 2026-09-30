@@ -1,0 +1,69 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductcard_area",
+  "title": "RM Product Card Area",
+  "group": "RadicalMart",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {"type": "text", "props": {"content": "Add product fields, buttons or any Builder elements here."}}
+    ]
+  },
+  "defaults": {
+    "area": "visible",
+    "position": "after"
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "content": {
+      "label": "Area content",
+      "description": "Use any YOOtheme or RadicalMart elements. Product fields inherit the current product and react to variant changes.",
+      "type": "builder-fragment"
+    },
+    "area": {
+      "label": "Area",
+      "type": "select",
+      "options": {
+        "Always visible": "visible",
+        "Reveal panel": "reveal"
+      }
+    },
+    "position": {
+      "label": "Position in reveal panel",
+      "type": "select",
+      "options": {
+        "Before variant controls": "before",
+        "After variant controls": "after"
+      },
+      "show": "area == 'reveal'"
+    },
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS for this card area. Use .el-element or the area selectors.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-card__area", ".rm-product-card__area--visible", ".rm-product-card__area--reveal"]}
+    }
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["content", "area", "position"]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductcard_main",
+  "title": "RM Product Card Main",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {"type": "rmproductfield", "props": {"field": "image"}},
+      {"type": "rmproductfield", "props": {"field": "title", "title_element": "h3", "title_style": "h4", "margin_top": "small"}},
+      {"type": "rmproductfield", "props": {"field": "price", "text_style": "large", "margin_top": "small"}}
+    ]
+  },
+  "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
+  "fields": {
+    "content": {"label": "Permanent card content", "description": "This Builder area is always visible.", "type": "builder-fragment"},
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "description": "Custom CSS for the permanent card area.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-card__main"]}}
+  },
+  "fieldset": {"default": {"type": "tabs", "fields": [{"title": "Content", "fields": ["content"]}, "${builder.advanced}"]}}
+}

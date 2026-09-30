@@ -1,7 +1,7 @@
 {
   "@import": "./element.php",
   "name": "rmbuy",
-  "title": "RM Button",
+  "title": "RM Add to Cart",
   "group": "RadicalMart",
   "icon": "${url:images/icon.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
@@ -17,6 +17,7 @@
     "icon_align": "left",
     "button_style": "primary",
     "button_size": "",
+    "mobile_stack": true,
     "fullwidth": false
   },
   "templates": {
@@ -41,7 +42,7 @@
     },
     "max": {
       "label": "Max",
-      "type": "text",
+      "type": "number",
       "source": true
     },
     "show_count": {
@@ -70,6 +71,11 @@
       "label": "Button size",
       "type": "select",
       "options": {"Default": "", "Small": "small", "Large": "large"}
+    },
+    "mobile_stack": {
+      "type": "checkbox",
+      "text": "Stack quantity and button on phones",
+      "description": "Prevents overflow in narrow cards, modal windows and offcanvas panels. Desktop layout remains inline."
     },
     "fullwidth": {"type": "checkbox", "text": "Full width button"},
     "position": "${builder.position}",
@@ -140,6 +146,7 @@
                 "icon_align",
                 "button_style",
                 "button_size",
+                "mobile_stack",
                 "fullwidth"
               ]
             },

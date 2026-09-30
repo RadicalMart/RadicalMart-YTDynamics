@@ -36,6 +36,8 @@ export const addToggleThumbButtonsActive = (emblaApiMain, slidesThumbs, emblaApi
     toggleThumbBtnsState();
 
     return () => {
+        emblaApiMain.off('select', toggleThumbBtnsState);
+        emblaApiMain.off('reInit', toggleThumbBtnsState);
         slidesThumbs.forEach((slide) => {
             slide.classList.remove('rmslideshow-thumbs__slide--selected');
             slide.classList.remove('uk-active');
@@ -90,6 +92,9 @@ function addTogglePrevNextButtonsActive(emblaApi, prevBtn, nextBtn) {
         .on('reInit', togglePrevNextBtnsState);
 
     return () => {
+        emblaApi.off('select', togglePrevNextBtnsState);
+        emblaApi.off('init', togglePrevNextBtnsState);
+        emblaApi.off('reInit', togglePrevNextBtnsState);
         prevBtn.removeAttribute('disabled');
         nextBtn.removeAttribute('disabled');
     };

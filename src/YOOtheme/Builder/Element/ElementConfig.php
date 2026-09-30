@@ -83,6 +83,8 @@ final class ElementConfig
 		$config = self::fromJson($directory);
 		$config['title'] = 'Item';
 		$config['fields']['item_element'] = '${builder.html_element_item}';
+		$config['fields']['name'] = '${builder.nameItem}';
+		$config['fields']['status'] = '${builder.statusItem}';
 		unset($config['fields']['html_element']);
 		$config['fieldset'] = self::replaceValues(
 			$config['fieldset'] ?? [],
@@ -97,19 +99,74 @@ final class ElementConfig
 
 	public static function keepSettingGroups(array $config, array $labels): array
 	{
-		$tabs = &$config['fieldset']['default']['fields'];
-
-		if (!isset($tabs[1]['fields']) || !is_array($tabs[1]['fields']))
+		$index = self::findTabIndex($config, 'Settings');
+		if ($index === null || !isset($config['fieldset']['default']['fields'][$index]['fields']))
 		{
 			return $config;
 		}
 
-		$tabs[1]['fields'] = array_values(array_filter(
-			$tabs[1]['fields'],
+		$config['fieldset']['default']['fields'][$index]['fields'] = array_values(array_filter(
+			$config['fieldset']['default']['fields'][$index]['fields'],
 			static fn($group) => !is_array($group) || in_array($group['label'] ?? '', $labels, true)
 		));
 
 		return $config;
+	}
+
+	public static function setTabFields(array $config, string $title, array $fields): array
+	{
+		$index = self::findTabIndex($config, $title);
+		if ($index !== null)
+		{
+			$config['fieldset']['default']['fields'][$index]['fields'] = $fields;
+		}
+
+		return $config;
+	}
+
+	public static function setSettingGroupFields(array $config, string $label, array $fields): array
+	{
+		$index = self::findTabIndex($config, 'Settings');
+		if ($index === null)
+		{
+			return $config;
+		}
+
+		foreach ($config['fieldset']['default']['fields'][$index]['fields'] ?? [] as &$group)
+		{
+			if (is_array($group) && ($group['label'] ?? '') === $label)
+			{
+				$group['fields'] = $fields;
+				break;
+			}
+		}
+		unset($group);
+
+		return $config;
+	}
+
+	public static function prependSettingGroup(array $config, array $group): array
+	{
+		$index = self::findTabIndex($config, 'Settings');
+		if ($index !== null && isset($config['fieldset']['default']['fields'][$index]['fields']))
+		{
+			array_unshift($config['fieldset']['default']['fields'][$index]['fields'], $group);
+		}
+
+		return $config;
+	}
+
+	private static function findTabIndex(array $config, string $title): ?int
+	{
+		foreach ($config['fieldset']['default']['fields'] ?? [] as $index => $tab)
+		{
+			if (is_array($tab) && ($tab['title'] ?? '') === $title)
+			{
+				return $index;
+			}
+		}
+
+		return null;
 	}
 
 	private static function replaceValues(array $items, array $replacements): array

@@ -1,7 +1,7 @@
 {
   "@import": "./element.php",
   "name": "rmslideshow",
-  "title": "RM slideshow",
+  "title": "RM Slideshow",
   "group": "RadicalMart",
   "icon": "${url:images/icon.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
@@ -16,7 +16,8 @@
     "content": {
       "label": "Items",
       "type": "content-items",
-      "item": "rmslideshow_item"
+      "item": "rmslideshow_item",
+      "show": "!product_media"
     },
     "panel_style": {
       "label": "Style",
@@ -150,6 +151,8 @@
         {
           "title": "Content",
           "fields": [
+            "product_media",
+            "product_id",
             "content"
           ]
         },

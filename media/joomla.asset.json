@@ -52,6 +52,26 @@
       "type": "style",
       "uri": "plg_system_ytdynamics/table.min.css",
       "version": "auto"
+    },
+    {
+      "name": "plg_system_ytdynamics.table",
+      "type": "script",
+      "uri": "plg_system_ytdynamics/table.min.js",
+      "attributes": {
+        "defer": true,
+        "type": "module"
+      },
+      "version": "auto"
+    },
+    {
+      "name": "plg_system_ytdynamics.toolbar",
+      "type": "script",
+      "uri": "plg_system_ytdynamics/toolbar.min.js",
+      "attributes": {
+        "defer": true,
+        "type": "module"
+      },
+      "version": "auto"
     }
   ]
 }

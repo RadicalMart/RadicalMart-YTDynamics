@@ -3,6 +3,7 @@
 namespace YOOtheme;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
@@ -60,21 +61,24 @@ if ($icon && $icon->name === 'button')
 }
 
 $input = Factory::getApplication()->getInput();
-
-
+$hasRadicalMartSearch = ComponentHelper::isEnabled('com_radicalmart_search');
+$searchOption = $hasRadicalMartSearch ? 'com_radicalmart_search' : 'com_finder';
+$searchView = $hasRadicalMartSearch ? 'search' : 'search';
+$queryName = $hasRadicalMartSearch ? 'keyword' : 'q';
 $form->attr([
-	'action' => Route::_('index.php?option=com_radicalmart_search&view=search'),
+	'action' => Route::_('index.php?option=' . $searchOption . '&view=' . $searchView),
 	'method' => 'get',
 ]);
 
 $search->attr([
-	'name'  => 'keyword',
-	'value' => $input->getCmd('option') === 'com_radicalmart_search'
-		? $input->getString('keyword', '')
+	'name'  => $queryName,
+	'value' => $input->getCmd('option') === $searchOption
+		? $input->getString($queryName, '')
 		: '',
 ]);
 
-$hidden = '<input type="hidden" name="option" value="com_radicalmart_search">';
+$hidden = '<input type="hidden" name="option" value="' . $searchOption . '">'
+	. '<input type="hidden" name="view" value="' . $searchView . '">';
 
 
 ?>

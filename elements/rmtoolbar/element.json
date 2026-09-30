@@ -115,7 +115,8 @@
     "switcher_breakpoint": {
       "label": "Switcher visibility",
       "type": "select",
-      "options": {"Always": "", "Tablet and larger": "s", "Desktop and larger": "m", "Large screens": "l"}
+      "options": {"Always": "", "Tablet and larger": "s", "Desktop and larger": "m", "Large screens": "l"},
+      "show": "show_grid_button || show_list_button || show_table_button"
     },
     "position": "${builder.position}",
     "position_left": "${builder.position_left}",

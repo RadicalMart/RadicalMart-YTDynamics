@@ -1,0 +1,40 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductcard_dropdown",
+  "title": "RM Product Card Dropdown",
+  "group": "RadicalMart",
+  "icon": "${url:images/icon.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {"type": "rmvariantselector", "props": {"style": "buttons", "action": "ajax", "show_labels": true, "show_selected_value": true}},
+      {"type": "rmbuy", "props": {"show_count": false, "button_style": "primary", "mobile_stack": true, "margin_top": "small"}}
+    ]
+  },
+  "defaults": {"display_mode": "hover", "hover_breakpoint": "m", "panel_style": "default", "panel_padding": "default", "show_divider": false, "max_height": 680},
+  "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
+  "fields": {
+    "content": {"label": "Dropdown content", "description": "This Builder area is displayed below the permanent card content and can float over the grid on hover.", "type": "builder-fragment"},
+    "display_mode": {"label": "Display", "type": "select", "options": {"Always visible": "default", "Reveal on card hover": "hover"}},
+    "hover_breakpoint": {"label": "Hover breakpoint", "description": "Below this width the area stays in the normal document flow for touch devices.", "type": "select", "options": {"Small (640px)": "s", "Medium (960px)": "m", "Large (1200px)": "l", "X-Large (1600px)": "xl"}, "show": "display_mode == 'hover'"},
+    "panel_style": {"label": "Panel style", "type": "select", "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary"}},
+    "panel_padding": {"label": "Panel padding", "type": "select", "options": {"None": "none", "Small": "small", "Default": "default", "Large": "large"}},
+    "show_divider": {"type": "checkbox", "text": "Show a divider above the dropdown"},
+    "max_height": {"label": "Maximum height", "description": "Limit the floating panel height and enable scrolling when necessary.", "type": "range", "attrs": {"min": 240, "max": 1000, "step": 20}, "show": "display_mode == 'hover'"},
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "description": "Custom CSS for the dropdown area.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-card__dropdown", ".rm-product-card__dropdown--hover", ".rmvariants", ".rm-buy"]}}
+  },
+  "fieldset": {"default": {"type": "tabs", "fields": [
+    {"title": "Content", "fields": ["content"]},
+    {"title": "Settings", "fields": [{"label": "Dropdown", "type": "group", "fields": ["display_mode", "hover_breakpoint", "panel_style", "panel_padding", "show_divider", "max_height"]}]},
+    "${builder.advanced}"
+  ]}}
+}

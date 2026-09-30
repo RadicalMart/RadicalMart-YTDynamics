@@ -10,7 +10,8 @@
   "width": 500,
   "placeholder": {},
   "defaults": {
-    "label": "Open modal",
+    "label": "",
+    "accessible_label": "",
     "button_style": "primary",
     "button_size": "",
     "modal_size": "default",
@@ -89,6 +90,18 @@
       "type": "select",
       "options": {"Dialog": "dialog", "Alert dialog": "alertdialog"}
     },
+    "accessible_label": {
+      "label": "Accessible name",
+      "description": "Name announced for the dialog. The button label is used when empty.",
+      "type": "text",
+      "source": true
+    },
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
     "margin_top": "${builder.margin_top}",
     "margin_bottom": "${builder.margin_bottom}",
     "maxwidth": "${builder.maxwidth}",
@@ -126,8 +139,8 @@
           "title": "Settings",
           "fields": [
             {"label": "Button", "type": "group", "fields": ["label", "icon", "icon_align", "button_style", "button_size", "fullwidth"]},
-            {"label": "Modal", "type": "group", "fields": ["modal_size", "content_wrapper", "center", "show_close", "close_style", "close_large", "overflow_auto", "bg_close", "esc_close", "stack", "container", "role"]},
-            {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+            {"label": "Modal", "type": "group", "fields": ["modal_size", "content_wrapper", "center", "show_close", "close_style", "close_large", "overflow_auto", "bg_close", "esc_close", "stack", "container", "role", "accessible_label"]},
+            {"label": "General", "type": "group", "fields": ["position", "position_left", "position_right", "position_top", "position_bottom", "position_z_index", "margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
           ]
         },
         "${builder.advanced}"
