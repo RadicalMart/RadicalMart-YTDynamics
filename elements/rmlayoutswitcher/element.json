@@ -1,0 +1,178 @@
+{
+  "@import": "./element.php",
+  "name": "rmlayoutswitcher",
+  "title": "RM Layout Switcher",
+  "group": "RadicalMart — Catalog",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "width": 500,
+  "defaults": {
+    "show_grid_button": true,
+    "show_compact_button": true,
+    "show_list_button": true,
+    "show_table_button": false,
+    "switcher_style": "icon",
+    "tile_label": "",
+    "compact_label": "",
+    "list_label": "",
+    "price_label": "",
+    "switcher_breakpoint": "s"
+  },
+  "templates": {
+    "render": "./templates/template.php"
+  },
+  "fields": {
+    "show_grid_button": {
+      "label": "Layouts",
+      "type": "checkbox",
+      "text": "Show Tile button"
+    },
+    "show_compact_button": {
+      "type": "checkbox",
+      "text": "Show Compact button"
+    },
+    "show_list_button": {
+      "type": "checkbox",
+      "text": "Show List button"
+    },
+    "show_table_button": {
+      "type": "checkbox",
+      "text": "Show Price button"
+    },
+    "switcher_style": {
+      "label": "Button style",
+      "type": "select",
+      "options": {
+        "Icons": "icon",
+        "Text": "text",
+        "Icons and text": "icon_text"
+      }
+    },
+    "tile_label": {
+      "label": "Tile label",
+      "type": "text",
+      "show": "show_grid_button"
+    },
+    "compact_label": {
+      "label": "Compact label",
+      "type": "text",
+      "show": "show_compact_button"
+    },
+    "list_label": {
+      "label": "List label",
+      "type": "text",
+      "show": "show_list_button"
+    },
+    "price_label": {
+      "label": "Price label",
+      "type": "text",
+      "show": "show_table_button"
+    },
+    "switcher_breakpoint": {
+      "label": "Icon buttons visibility",
+      "description": "Below the selected breakpoint a compact select is rendered instead.",
+      "type": "select",
+      "options": {
+        "Always": "",
+        "Tablet and larger": "s",
+        "Desktop and larger": "m",
+        "Large screens": "l"
+      }
+    },
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this layout switcher.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {
+        "debounce": 500,
+        "hints": [
+          ".el-element",
+          ".rm-toolbar__layouts",
+          ".rm-toolbar__layout-button",
+          ".rm-toolbar__layout-select"
+        ]
+      }
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {
+          "title": "Settings",
+          "fields": [
+            {
+              "label": "Layouts",
+              "type": "group",
+              "fields": [
+                "show_grid_button",
+                "show_compact_button",
+                "show_list_button",
+                "show_table_button",
+                "switcher_style",
+                "tile_label",
+                "compact_label",
+                "list_label",
+                "price_label",
+                "switcher_breakpoint"
+              ]
+            },
+            {
+              "label": "General",
+              "type": "group",
+              "fields": [
+                "position",
+                "position_left",
+                "position_right",
+                "position_top",
+                "position_bottom",
+                "position_z_index",
+                "margin_top",
+                "margin_bottom",
+                "maxwidth",
+                "maxwidth_breakpoint",
+                "block_align",
+                "block_align_breakpoint",
+                "block_align_fallback",
+                "text_align",
+                "text_align_breakpoint",
+                "text_align_fallback",
+                "animation",
+                "visibility"
+              ]
+            }
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

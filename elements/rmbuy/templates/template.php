@@ -32,7 +32,7 @@ $buttonSize = in_array(($props['button_size'] ?? ''), ['', 'small', 'large'], tr
 $iconAlign = ($props['icon_align'] ?? 'left') === 'right' ? 'right' : 'left';
 $label = trim((string) ($props['label'] ?? ''));
 $label = $label !== '' ? $label : Text::_('COM_RADICALMART_CART_ADD');
-$successLabel = Text::_('COM_RADICALMART_CART_NOTIFICATION_ADD');
+$successLabel = Text::_('PLG_YTDYNAMICS_CART_ADDED');
 $loadingLabel = Text::_('PLG_YTDYNAMICS_LOADING');
 $mobileStack = !array_key_exists('mobile_stack', $props) || !empty($props['mobile_stack']);
 $showCount = !empty($props['show_count']);

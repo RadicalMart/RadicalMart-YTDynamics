@@ -22,6 +22,18 @@ class RMProductImageType extends BaseType
 						'label' => trans('Alt'),
 					],
 				],
+				'type' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Media type'),
+					],
+				],
+				'poster' => [
+					'type'     => 'String',
+					'metadata' => [
+						'label' => trans('Video poster'),
+					],
+				],
 			]
 		]);
 	}

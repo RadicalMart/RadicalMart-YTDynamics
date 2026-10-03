@@ -2,36 +2,8 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\Plugin\System\YTDynamics\Service\ProductPresentation;
 
-$productMediaMode = filter_var($props['product_media'] ?? false, FILTER_VALIDATE_BOOLEAN);
-$product = isset($rmProduct) && is_array($rmProduct) ? $rmProduct : null;
-if ($productMediaMode && !$product)
-{
-	$productId = (int) ($props['product_id'] ?? 0);
-	if ($productId < 1)
-	{
-		$input = Factory::getApplication()->getInput();
-		if ($input->getCmd('option') === 'com_radicalmart' && $input->getCmd('view') === 'product')
-		{
-			$productId = $input->getInt('id');
-		}
-	}
-	if ($productId > 0)
-	{
-		try
-		{
-			$product = ProductPresentation::get($productId);
-		}
-		catch (\Throwable)
-		{
-			$product = null;
-		}
-	}
-}
-$productMedia = $productMediaMode ? array_values((array) ($product['media'] ?? [])) : [];
-
-if (empty($children) && !$productMedia)
+if (empty($children))
 {
 	return;
 }
@@ -102,6 +74,14 @@ $mobileThumbAxis = match ($mobileThumbnavOrientation) {
 	default => $thumbAxis,
 };
 $thumbnavPosition = $requestedThumbnavPosition ?: ($thumbAxis === 'y' ? 'left' : 'bottom');
+$requestedMobileThumbnavPosition = in_array(($props['thumbnav_mobile_position'] ?? 'auto'), ['auto', 'inherit', 'left', 'right', 'top', 'bottom'], true)
+	? ($props['thumbnav_mobile_position'] ?? 'auto')
+	: 'auto';
+$mobileThumbnavPosition = match ($requestedMobileThumbnavPosition) {
+	'inherit' => $thumbnavPosition,
+	'left', 'right', 'top', 'bottom' => $requestedMobileThumbnavPosition,
+	default => $mobileThumbAxis === 'y' ? 'left' : 'bottom',
+};
 $loop = $toBoolean($props['slideshow_loop'] ?? null, true);
 $drag = $toBoolean($props['slideshow_drag'] ?? null, true);
 $autoplay = $toBoolean($props['slideshow_autoplay'] ?? null);
@@ -119,6 +99,14 @@ $imagePositionKey = in_array(($props['image_position'] ?? 'center'), [
 	'bottom-left', 'bottom-center', 'bottom-right',
 ], true) ? ($props['image_position'] ?? 'center') : 'center';
 $imagePosition = str_replace('-', ' ', $imagePositionKey);
+$backgroundColor = trim((string) ($props['background_color'] ?? ''));
+$blendModes = [
+	'normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn',
+	'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity',
+];
+$mixBlendMode = in_array(($props['mix_blend_mode'] ?? 'normal'), $blendModes, true)
+	? (string) ($props['mix_blend_mode'] ?? 'normal')
+	: 'normal';
 $slidenav = ($props['slidenav'] ?? 'default') === 'default';
 $slidenavHover = $toBoolean($props['slidenav_hover'] ?? null);
 $slidenavLarge = $toBoolean($props['slidenav_large'] ?? null);
@@ -165,14 +153,15 @@ if (!$lightboxBgClose)
 
 $lightboxOptions = implode('; ', $lightboxOptions);
 $navigationSize = 40;
-$thumbnailHeight = max(40, ($galleryHeight - ($navigationSize * 2) - (($thumbnailCount - 1) * $thumbnailGap)) / $thumbnailCount);
+$navigationSpace = $nav === 'thumbnav' && $navArrows ? $navigationSize * 2 : 0;
+$thumbnailHeight = max(40, ($galleryHeight - $navigationSpace - (($thumbnailCount - 1) * $thumbnailGap)) / $thumbnailCount);
 $thumbnailWidth = 100 / $thumbnailCount;
 $thumbnailWidthOffset = (($thumbnailCount - 1) * $thumbnailGap) / $thumbnailCount;
 $galleryStyle = sprintf(
 	'--rm-gallery-height:%dpx;--rm-gallery-mobile-height:%dpx;--rm-gallery-thumbnails:%d;--rm-gallery-gap:%dpx;'
 	. '--rm-gallery-thumbnail-gap:%dpx;--rm-gallery-thumbnail-height:%.2fpx;'
 	. '--rm-gallery-thumbnail-width:%.6f%%;--rm-gallery-thumbnail-width-offset:%.2fpx;'
-	. '--rm-gallery-navigation-size:%dpx;--rm-gallery-thumbnav-size:%dpx;'
+	. '--rm-gallery-navigation-size:%dpx;--rm-gallery-navigation-space:%dpx;--rm-gallery-thumbnav-size:%dpx;'
 	. '--rm-gallery-image-fit:%s;--rm-gallery-image-position:%s',
 	$galleryHeight,
 	$galleryMobileHeight,
@@ -183,10 +172,16 @@ $galleryStyle = sprintf(
 	$thumbnailWidth,
 	$thumbnailWidthOffset,
 	$navigationSize,
+	$navigationSpace,
 	$thumbnavSize,
 	$imageFit,
 	$imagePosition
 );
+$galleryStyle .= ';--rm-gallery-image-blend-mode:' . $mixBlendMode;
+if ($backgroundColor !== '')
+{
+	$galleryStyle .= ';--rm-gallery-background:' . $backgroundColor;
+}
 $border = in_array(($props['slideshow_border'] ?? ''), ['', 'rounded'], true)
 	? ($props['slideshow_border'] ?? '')
 	: '';
@@ -201,24 +196,18 @@ $mediaClasses = trim(implode(' ', array_filter([
 ])));
 $mainPreviousPosition = $orientation === 'vertical' ? 'uk-position-top-center' : 'uk-position-center-left';
 $mainNextPosition = $orientation === 'vertical' ? 'uk-position-bottom-center' : 'uk-position-center-right';
-$itemCount = $productMediaMode ? count($productMedia) : count($children);
 $loading = ($props['image_loading'] ?? 'lazy') === 'eager' ? 'eager' : 'lazy';
 $captionEnabled = $toBoolean($props['lightbox_caption'] ?? null, true);
-$thumbClasses = trim(implode(' ', array_filter([
-	'uk-display-block',
-	'uk-overflow-hidden',
-	'uk-background-muted',
-	$border ? 'uk-border-' . $border : '',
-	$boxShadow ? 'uk-box-shadow-' . $boxShadow : '',
-])));
 
 ?>
 <?= $el($props, $attrs) ?>
-    <div class="rmslideshow rmslideshow--<?= $orientation ?> rmslideshow--mobile-<?= $mobileOrientation ?> rmslideshow--nav-<?= $nav ?: 'none' ?> rmslideshow--thumbnav-position-<?= $thumbnavPosition ?> rmslideshow--thumbnav-<?= $thumbAxis === 'y' ? 'vertical' : 'horizontal' ?> rmslideshow--thumbnav-mobile-<?= $mobileThumbAxis === 'y' ? 'vertical' : 'horizontal' ?><?= $nav === 'thumbnav' ? ($navArrows ? ' rmslideshow--thumbnav-arrows' : ' rmslideshow--thumbnav-no-arrows') : '' ?> uk-position-relative<?= $slidenavHover ? ' uk-visible-toggle' : '' ?>"
+    <div class="rmslideshow rmslideshow--<?= $orientation ?> rmslideshow--mobile-<?= $mobileOrientation ?> rmslideshow--nav-<?= $nav ?: 'none' ?> rmslideshow--thumbnav-position-<?= $thumbnavPosition ?> rmslideshow--thumbnav-mobile-position-<?= $mobileThumbnavPosition ?> rmslideshow--thumbnav-<?= $thumbAxis === 'y' ? 'vertical' : 'horizontal' ?> rmslideshow--thumbnav-mobile-<?= $mobileThumbAxis === 'y' ? 'vertical' : 'horizontal' ?><?= $nav === 'thumbnav' ? ($navArrows ? ' rmslideshow--thumbnav-arrows' : ' rmslideshow--thumbnav-no-arrows') : '' ?><?= $backgroundColor !== '' ? ' rmslideshow--custom-background' : '' ?> uk-position-relative<?= $slidenavHover ? ' uk-visible-toggle' : '' ?>"
          data-orientation="<?= $orientation ?>"
 		 data-mobile-orientation="<?= $mobileOrientation ?>"
 		 data-thumb-axis="<?= $thumbAxis ?>"
 		 data-thumb-mobile-axis="<?= $mobileThumbAxis ?>"
+		 data-thumb-position="<?= $thumbnavPosition ?>"
+		 data-thumb-mobile-position="<?= $mobileThumbnavPosition ?>"
 		 data-nav="<?= $nav ?>"
 		 data-loop="<?= $loop ? 'true' : 'false' ?>"
 		 data-drag="<?= $drag ? 'true' : 'false' ?>"
@@ -226,12 +215,12 @@ $thumbClasses = trim(implode(' ', array_filter([
 		 data-autoplay="<?= $autoplay ? 'true' : 'false' ?>"
 		 data-autoplay-delay="<?= $autoplayInterval * 1000 ?>"
 		 data-autoplay-pause="<?= $autoplayPause ? 'true' : 'false' ?>"
-		 data-rm-product-gallery="<?= $productMediaMode ? 'true' : 'false' ?>"
+		 data-rm-product-gallery="<?= !empty($props['sync_product_media']) ? 'true' : 'false' ?>"
 		 data-lightbox="<?= $lightbox ? 'true' : 'false' ?>"
 		 data-lightbox-caption="<?= $captionEnabled ? 'true' : 'false' ?>"
 		 data-image-loading="<?= $loading ?>"
 		<?= $slidenavHover ? ' tabindex="-1"' : '' ?>
-         style="<?= $galleryStyle ?>">
+         style="<?= htmlspecialchars($galleryStyle, ENT_QUOTES, 'UTF-8') ?>">
         <div class="rmslideshow__layout">
             <?php if ($nav) : ?>
             <div class="rmslideshow__thumbs rmslideshow__thumbs--<?= $nav ?>">
@@ -245,16 +234,9 @@ $thumbClasses = trim(implode(' ', array_filter([
 					<?php endif ?>
                     <div class="rmslideshow-thumbs__viewport">
 						<ul class="rmslideshow-thumbs__container <?= $nav === 'dotnav' ? 'uk-dotnav uk-flex-center' : 'uk-thumbnav' . ($thumbAxis === 'y' ? ' uk-thumbnav-vertical' : '') . ' uk-flex-nowrap' ?>">
-							<?php if ($productMediaMode) : foreach ($productMedia as $index => $media) :
-								$src = htmlspecialchars((string) ($media['src'] ?? ''), ENT_QUOTES, 'UTF-8');
-								$alt = htmlspecialchars((string) ($media['alt'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
-								<li class="rmslideshow-thumbs__slide">
-									<?php if ($nav === 'dotnav') : ?><a href="#" aria-label="<?= htmlspecialchars(Text::sprintf('PLG_YTDYNAMICS_GALLERY_SHOW_IMAGE', $index + 1), ENT_QUOTES, 'UTF-8') ?>"></a>
-									<?php else : ?><a href="#" class="<?= $thumbClasses ?>" aria-label="<?= htmlspecialchars(Text::sprintf('PLG_YTDYNAMICS_GALLERY_SHOW_IMAGE', $index + 1), ENT_QUOTES, 'UTF-8') ?>"><span class="rmslideshow-thumbs__slide__image uk-flex uk-flex-center uk-flex-middle"><img src="<?= $src ?>" alt="<?= $alt ?>" loading="<?= $loading ?>"></span></a><?php endif ?>
-								</li>
-							<?php endforeach; else : foreach ($children as $index => $child) : ?>
+							<?php foreach ($children as $index => $child) : ?>
 								<?= $builder->render($child, ['element' => $props, 'template' => 'thumb', 'index' => $index]) ?>
-							<?php endforeach; endif ?>
+							<?php endforeach ?>
 						</ul>
                     </div>
 					<?php if ($nav === 'thumbnav' && $navArrows) : ?>
@@ -273,18 +255,9 @@ $thumbClasses = trim(implode(' ', array_filter([
 					 aria-roledescription="carousel"
 					 aria-label="<?= htmlspecialchars(Text::_('PLG_YTDYNAMICS_GALLERY'), ENT_QUOTES, 'UTF-8') ?>">
 	                    <div class="rmslideshow__container"<?= $lightbox ? ' uk-lightbox="' . htmlspecialchars($lightboxOptions, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
-							<?php if ($productMediaMode) : foreach ($productMedia as $index => $media) :
-								$src = htmlspecialchars((string) ($media['src'] ?? ''), ENT_QUOTES, 'UTF-8');
-								$alt = htmlspecialchars((string) ($media['alt'] ?? ''), ENT_QUOTES, 'UTF-8');
-								$label = htmlspecialchars(Text::sprintf('PLG_YTDYNAMICS_GALLERY_SLIDE_POSITION', $index + 1, max(1, $itemCount)), ENT_QUOTES, 'UTF-8'); ?>
-								<div class="el-item rmslideshow__slide" role="group" aria-roledescription="<?= htmlspecialchars(Text::_('PLG_YTDYNAMICS_GALLERY_SLIDE'), ENT_QUOTES, 'UTF-8') ?>" aria-label="<?= $label ?>">
-									<?php if ($lightbox) : ?><a class="rmslideshow__lightbox uk-display-block uk-position-relative uk-transition-toggle" href="<?= $src ?>" data-rm-lightbox data-type="image" data-alt="<?= $alt ?>" aria-label="<?= htmlspecialchars(Text::_('PLG_YTDYNAMICS_GALLERY_OPEN_IMAGE') . ($alt !== '' ? ': ' . $alt : ''), ENT_QUOTES, 'UTF-8') ?>"<?= $captionEnabled && $alt !== '' ? ' data-caption="' . $alt . '"' : '' ?>><?php endif ?>
-									<div class="rmslideshow__slide__image uk-flex uk-flex-center uk-flex-middle"><img src="<?= $src ?>" alt="<?= $alt ?>" loading="<?= $loading ?>"></div>
-									<?php if ($lightbox) : ?><span class="rmslideshow__lightbox-icon uk-position-center uk-transition-fade" uk-overlay-icon aria-hidden="true"></span></a><?php endif ?>
-								</div>
-							<?php endforeach; else : foreach ($children as $index => $child) : ?>
+							<?php foreach ($children as $index => $child) : ?>
 								<?= $builder->render($child, ['element' => $props, 'template' => 'slide', 'index' => $index, 'total' => count($children)]) ?>
-							<?php endforeach; endif ?>
+							<?php endforeach ?>
                     </div>
                 </div>
 				<?php if ($slidenav) :

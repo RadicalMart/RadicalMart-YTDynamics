@@ -1,0 +1,142 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductgallery",
+  "title": "RM Product Gallery",
+  "group": "RadicalMart — Product Data",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {"type": "rmproductgallery_item"},
+      {"type": "rmproductgallery_item"},
+      {"type": "rmproductgallery_item"}
+    ]
+  },
+  "defaults": {
+    "columns_s": 2,
+    "columns_m": 2,
+    "columns_l": 2,
+    "columns_xl": 2,
+    "column_gap": 4,
+    "row_gap": 4,
+    "initial_items": 4,
+    "show_more": true,
+    "show_more_label": "Показать ещё фото",
+    "collapse_after_expand": false,
+    "show_less_label": "Скрыть дополнительные фото",
+    "button_style": "default",
+    "button_size": "",
+    "button_fullwidth": false,
+    "image_ratio": "3/4",
+    "image_fit": "cover",
+    "image_position": "center",
+    "image_loading": "lazy",
+    "background_color": "#f7f7fb",
+    "mix_blend_mode": "normal",
+    "border": "rounded",
+    "box_shadow": "",
+    "mobile_layout": "scroll",
+    "mobile_columns": 1,
+    "mobile_item_width": 78,
+    "mobile_column_gap": 4,
+    "mobile_row_gap": 4,
+    "mobile_scrollbar": false,
+    "lightbox": true,
+    "lightbox_controls": true,
+    "lightbox_counter": true,
+    "lightbox_caption": true,
+    "lightbox_bg_close": true,
+    "lightbox_animation": ""
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "content": {
+      "label": "Media items",
+      "description": "Add images manually or use Dynamic Content on an item and select the RadicalMart product Media collection.",
+      "type": "content-items",
+      "item": "rmproductgallery_item",
+      "media": [
+        {"type": "image", "item": {"image": "src", "image_alt": "alt"}},
+        {"type": "video", "item": {"video": "src", "image_alt": "alt"}}
+      ]
+    },
+    "sync_product_media": {
+      "type": "checkbox",
+      "text": "Refresh items when a RadicalMart variant changes",
+      "description": "Enable this when the items use the current product Media collection. Leave disabled for a static slideshow."
+    },
+    "columns_s": {"label": "Phone landscape", "type": "select", "options": {"1 Column": 1, "2 Columns": 2, "3 Columns": 3, "4 Columns": 4}},
+    "columns_m": {"label": "Tablet landscape", "type": "select", "options": {"1 Column": 1, "2 Columns": 2, "3 Columns": 3, "4 Columns": 4, "5 Columns": 5, "6 Columns": 6}},
+    "columns_l": {"label": "Desktop", "type": "select", "options": {"1 Column": 1, "2 Columns": 2, "3 Columns": 3, "4 Columns": 4, "5 Columns": 5, "6 Columns": 6}},
+    "columns_xl": {"label": "Large screens", "type": "select", "options": {"1 Column": 1, "2 Columns": 2, "3 Columns": 3, "4 Columns": 4, "5 Columns": 5, "6 Columns": 6}},
+    "column_gap": {"label": "Column gap", "description": "Exact horizontal gap between media tiles in pixels.", "type": "range", "attrs": {"min": 0, "max": 80, "step": 1}},
+    "row_gap": {"label": "Row gap", "description": "Exact vertical gap between media tiles in pixels.", "type": "range", "attrs": {"min": 0, "max": 80, "step": 1}},
+    "initial_items": {"label": "Initially visible media", "description": "Use 0 to show every item immediately.", "type": "range", "attrs": {"min": 0, "max": 20, "step": 1}},
+    "show_more": {"type": "checkbox", "text": "Show a button for hidden media", "show": "initial_items != 0"},
+    "show_more_label": {"label": "Show more label", "type": "text", "source": true, "show": "initial_items != 0 && show_more"},
+    "collapse_after_expand": {"type": "checkbox", "text": "Allow the gallery to collapse again", "show": "initial_items != 0 && show_more"},
+    "show_less_label": {"label": "Show less label", "type": "text", "source": true, "show": "initial_items != 0 && show_more && collapse_after_expand"},
+    "button_style": {"label": "Button style", "type": "select", "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary", "Danger": "danger", "Text": "text", "Link": "link"}, "show": "initial_items != 0 && show_more"},
+    "button_size": {"label": "Button size", "type": "select", "options": {"Default": "", "Small": "small", "Large": "large"}, "show": "initial_items != 0 && show_more"},
+    "button_fullwidth": {"type": "checkbox", "text": "Full-width button", "show": "initial_items != 0 && show_more"},
+    "image_ratio": {"label": "Media ratio", "type": "select", "options": {"Original": "", "Square 1:1": "1/1", "Portrait 3:4": "3/4", "Portrait 2:3": "2/3", "Landscape 4:3": "4/3", "Landscape 3:2": "3/2", "Widescreen 16:9": "16/9"}},
+    "image_fit": {"label": "Image fit", "type": "select", "options": {"Contain": "contain", "Cover": "cover"}},
+    "image_position": {"label": "Image position", "type": "select", "options": {"Center": "center", "Top Left": "top-left", "Top Center": "top-center", "Top Right": "top-right", "Center Left": "center-left", "Center Right": "center-right", "Bottom Left": "bottom-left", "Bottom Center": "bottom-center", "Bottom Right": "bottom-right"}},
+    "image_loading": {"label": "Image loading", "type": "select", "options": {"Lazy": "lazy", "Eager": "eager"}},
+    "background_color": {"label": "Background color", "description": "Set the color behind every gallery image. Leave empty to use the theme background.", "type": "color"},
+    "mix_blend_mode": {"label": "Image blend mode", "type": "select", "options": {"Normal": "normal", "Multiply": "multiply", "Screen": "screen", "Overlay": "overlay", "Darken": "darken", "Lighten": "lighten", "Color Dodge": "color-dodge", "Color Burn": "color-burn", "Hard Light": "hard-light", "Soft Light": "soft-light", "Difference": "difference", "Exclusion": "exclusion", "Hue": "hue", "Saturation": "saturation", "Color": "color", "Luminosity": "luminosity"}},
+    "border": {"label": "Tile border", "type": "select", "options": {"None": "", "Rounded": "rounded", "Pill": "pill", "Circle": "circle"}},
+    "box_shadow": {"label": "Tile box shadow", "type": "select", "options": {"None": "", "Small": "small", "Medium": "medium", "Large": "large", "X-Large": "xlarge", "Bottom": "bottom"}},
+    "mobile_layout": {"label": "Mobile layout", "description": "Horizontal scroll reproduces the product gallery behavior used in the reference.", "type": "select", "options": {"Horizontal scroll": "scroll", "Grid": "grid", "Stack": "stack"}},
+    "mobile_columns": {"label": "Mobile columns", "type": "select", "options": {"1 Column": 1, "2 Columns": 2}, "show": "mobile_layout == 'grid'"},
+    "mobile_item_width": {"label": "Mobile item width", "description": "Percentage of the gallery viewport occupied by one tile.", "type": "range", "attrs": {"min": 50, "max": 100, "step": 1}, "show": "mobile_layout == 'scroll'"},
+    "mobile_column_gap": {"label": "Mobile column gap", "type": "range", "attrs": {"min": 0, "max": 40, "step": 1}},
+    "mobile_row_gap": {"label": "Mobile row gap", "type": "range", "attrs": {"min": 0, "max": 40, "step": 1}, "show": "mobile_layout != 'scroll'"},
+    "mobile_scrollbar": {"type": "checkbox", "text": "Show the horizontal scrollbar", "show": "mobile_layout == 'scroll'"},
+    "lightbox": {"type": "checkbox", "text": "Open media in a lightbox"},
+    "lightbox_controls": {"type": "checkbox", "text": "Show lightbox controls always", "show": "lightbox"},
+    "lightbox_counter": {"type": "checkbox", "text": "Show lightbox counter", "show": "lightbox"},
+    "lightbox_caption": {"type": "checkbox", "text": "Use media alt text as caption", "show": "lightbox"},
+    "lightbox_bg_close": {"type": "checkbox", "text": "Close on background click", "show": "lightbox"},
+    "lightbox_animation": {"label": "Lightbox animation", "type": "select", "options": {"Slide": "", "Fade": "fade", "Scale": "scale"}, "show": "lightbox"},
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "description": "Custom CSS is scoped to this gallery.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-gallery", ".rm-product-gallery__items", ".rm-product-gallery__item", ".rm-product-gallery__media", ".rm-product-gallery__play", ".rm-product-gallery__more", ".rm-product-gallery__more-button"]}},
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["content"]},
+        {"title": "Settings", "fields": [
+          {"label": "Grid", "type": "group", "fields": ["sync_product_media", "columns_s", "columns_m", "columns_l", "columns_xl", "column_gap", "row_gap", "initial_items", "show_more", "show_more_label", "collapse_after_expand", "show_less_label", "button_style", "button_size", "button_fullwidth"]},
+          {"label": "Media", "type": "group", "fields": ["image_ratio", "image_fit", "image_position", "image_loading", "background_color", "mix_blend_mode", "border", "box_shadow"]},
+          {"label": "Mobile", "type": "group", "fields": ["mobile_layout", "mobile_columns", "mobile_item_width", "mobile_column_gap", "mobile_row_gap", "mobile_scrollbar"]},
+          {"label": "Lightbox", "type": "group", "fields": ["lightbox", "lightbox_controls", "lightbox_counter", "lightbox_caption", "lightbox_bg_close", "lightbox_animation"]},
+          {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "animation", "visibility"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

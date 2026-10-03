@@ -1,0 +1,157 @@
+{
+  "@import": "./element.php",
+  "name": "rmproducthovergallery",
+  "title": "RM Product Card Slideshow",
+  "description": "Product-card slideshow that changes images by pointer position, like the Aspro catalogue cards.",
+  "group": "RadicalMart — Product Card",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "width": 500,
+  "defaults": {
+    "link_product": true,
+    "max_images": 0,
+    "image_loading": "lazy",
+    "image_fit": "contain",
+    "image_position": "center",
+    "image_ratio": "1/1",
+    "image_height": "",
+    "image_resize_width": 800,
+    "image_resize_height": 0,
+    "image_padding": "",
+    "image_border": "",
+    "image_box_shadow": "",
+    "background_color": "",
+    "mix_blend_mode": "normal",
+    "transition": "fade",
+    "indicator_style": "bars",
+    "reset_on_leave": true
+  },
+  "templates": {
+    "render": "./templates/template.php"
+  },
+  "fields": {
+    "product_id": {
+      "label": "Product ID",
+      "type": "number",
+      "source": true
+    },
+    "link_product": {
+      "type": "checkbox",
+      "text": "Link to the related product"
+    },
+    "max_images": {
+      "label": "Maximum images",
+      "description": "Use 0 to include the complete product gallery.",
+      "type": "number",
+      "attrs": {"min": 0, "max": 20, "step": 1}
+    },
+    "image_loading": {
+      "label": "Loading",
+      "type": "select",
+      "options": {"Lazy": "lazy", "Eager": "eager"}
+    },
+    "image_fit": {
+      "label": "Image fit",
+      "type": "select",
+      "options": {"Contain": "contain", "Cover": "cover"}
+    },
+    "image_position": {
+      "label": "Image position",
+      "description": "Position the product image inside its frame for both contain and cover modes.",
+      "type": "select",
+      "options": {"Center": "center", "Top Left": "top-left", "Top Center": "top-center", "Top Right": "top-right", "Center Left": "center-left", "Center Right": "center-right", "Bottom Left": "bottom-left", "Bottom Center": "bottom-center", "Bottom Right": "bottom-right"}
+    },
+    "image_ratio": {
+      "label": "Image ratio",
+      "type": "select",
+      "options": {"Original": "", "Square 1:1": "1/1", "Landscape 4:3": "4/3", "Landscape 3:2": "3/2", "Widescreen 16:9": "16/9"}
+    },
+    "image_height": {
+      "label": "Image height",
+      "description": "Optional CSS length, for example 320px. Overrides the ratio.",
+      "type": "text"
+    },
+    "image_resize_width": {
+      "label": "Generated image width",
+      "type": "number",
+      "attrs": {"min": 0, "max": 2400, "step": 50}
+    },
+    "image_resize_height": {
+      "label": "Generated image height",
+      "type": "number",
+      "attrs": {"min": 0, "max": 2400, "step": 50}
+    },
+    "image_padding": {
+      "label": "Image padding",
+      "type": "select",
+      "options": {"None": "", "Small": "small", "Default": "default", "Large": "large"}
+    },
+    "image_border": {
+      "label": "Image frame border",
+      "type": "select",
+      "options": {"None": "", "Rounded": "rounded", "Circle": "circle", "Pill": "pill"}
+    },
+    "image_box_shadow": {
+      "label": "Image frame shadow",
+      "type": "select",
+      "options": {"None": "", "Small": "small", "Medium": "medium", "Large": "large", "X-Large": "xlarge", "Bottom": "bottom"}
+    },
+    "background_color": {
+      "label": "Background color",
+      "description": "Set the color behind the product images.",
+      "type": "color"
+    },
+    "mix_blend_mode": {
+      "label": "Image blend mode",
+      "description": "Blend product images with the selected background color.",
+      "type": "select",
+      "options": {"Normal": "normal", "Multiply": "multiply", "Screen": "screen", "Overlay": "overlay", "Darken": "darken", "Lighten": "lighten", "Color Dodge": "color-dodge", "Color Burn": "color-burn", "Hard Light": "hard-light", "Soft Light": "soft-light", "Difference": "difference", "Exclusion": "exclusion", "Hue": "hue", "Saturation": "saturation", "Color": "color", "Luminosity": "luminosity"}
+    },
+    "transition": {
+      "label": "Image transition",
+      "type": "select",
+      "options": {"Fade": "fade", "Instant": "none"}
+    },
+    "indicator_style": {
+      "label": "Indicators",
+      "type": "select",
+      "options": {"Bars": "bars", "Dots": "dots", "Hidden": "none"}
+    },
+    "reset_on_leave": {
+      "type": "checkbox",
+      "text": "Return to the first image when pointer leaves"
+    },
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-hover-gallery", ".rm-product-hover-gallery__viewport", ".rm-product-hover-gallery__image", ".rm-product-hover-gallery__indicators"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Settings", "fields": [
+          {"label": "Content", "type": "group", "fields": ["product_id", "link_product", "max_images"]},
+          {"label": "Image", "type": "group", "fields": ["image_loading", "image_fit", "image_position", "image_ratio", "image_height", "image_resize_width", "image_resize_height", "image_padding", "image_border", "image_box_shadow", "background_color", "mix_blend_mode"]},
+          {"label": "Card slideshow", "type": "group", "fields": ["transition", "indicator_style", "reset_on_leave"]},
+          {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "visibility"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

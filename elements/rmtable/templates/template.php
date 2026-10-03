@@ -106,12 +106,13 @@ $frame = $this->el('div', [
 	'class' => [
 		'rm-table-frame',
 		'uk-card uk-card-' . $containerStyle => $containerStyle,
+		'uk-light' => in_array($containerStyle, ['primary', 'secondary'], true),
 		'uk-card-body' => $containerStyle,
 		'uk-card-small' => $containerStyle && $containerSize === 'small',
 		'rm-table-frame--border' => !empty($props['container_border']),
 		'uk-border-rounded' => !empty($props['container_radius']),
 		'uk-box-shadow-' . $containerShadow => $containerShadow,
-		'rm-table-frame--scroll-shadow' => $responsive === 'scroll' && !empty($props['scroll_shadow']),
+		'rm-table-frame--scroll-shadow' => $scrollRegion && !empty($props['scroll_shadow']),
 	],
 ]);
 
@@ -128,6 +129,7 @@ $wrapper = $this->el('div', [
 		'rm-table-wrapper--sticky-safe' => !empty($props['sticky_responsive']),
 		'rm-table-wrapper--sticky-offset-' . $stickyOffset => $stickyHeader,
 	],
+	'data-rm-table' => true,
 	'data-rm-table-scroll' => $scrollRegion ? true : false,
 	'role' => $scrollRegion ? 'region' : false,
 	'aria-label' => $scrollRegion && $scrollLabel !== '' ? $scrollLabel : false,
@@ -179,7 +181,7 @@ $renderRows = static function (array $rows, string $section) use ($builder, $col
 			<caption class="rm-table__caption uk-text-<?= $captionAlign ?><?= $captionHidden ? ' uk-hidden-visually' : '' ?><?= $captionStyle !== 'default' ? ' uk-text-' . $captionStyle : '' ?>" style="caption-side: <?= $captionPosition ?>"><?= htmlspecialchars($caption, ENT_QUOTES, 'UTF-8') ?></caption>
 		<?php endif; ?>
 		<?php if ($sections['head']) : ?>
-			<thead class="rm-table__head<?= $headerStyle ? ' uk-background-' . $headerStyle : '' ?><?= in_array($headerStyle, ['primary', 'secondary'], true) ? ' uk-light' : '' ?>">
+			<thead class="rm-table__head<?= $headerStyle ? ' uk-background-' . $headerStyle : '' ?><?= in_array($stickyHeader ? $stickyStyle : $headerStyle, ['primary', 'secondary'], true) ? ' uk-light' : '' ?>">
 				<?php $renderRows($sections['head'], 'head'); ?>
 			</thead>
 		<?php endif; ?>

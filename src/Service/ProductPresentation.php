@@ -18,6 +18,41 @@ final class ProductPresentation
 	/** @var array<string, array> */
 	private static array $presentations = [];
 
+	/**
+	 * Resolve the product passed by a parent Builder element, an explicitly
+	 * configured id, or the current public RadicalMart product route.
+	 */
+	public static function resolve(?array $product = null, int $productId = 0, bool $withVariants = false): ?array
+	{
+		if (!empty($product['id']))
+		{
+			return $product;
+		}
+
+		if ($productId < 1)
+		{
+			$input = Factory::getApplication()->getInput();
+			if ($input->getCmd('option') === 'com_radicalmart' && $input->getCmd('view') === 'product')
+			{
+				$productId = $input->getInt('id');
+			}
+		}
+
+		if ($productId < 1)
+		{
+			return null;
+		}
+
+		try
+		{
+			return self::get($productId, $withVariants);
+		}
+		catch (\Throwable)
+		{
+			return null;
+		}
+	}
+
 	public static function get(int $productId, bool $withVariants = true): array
 	{
 		$cacheKey = $productId . ':' . (int) $withVariants;
@@ -80,6 +115,12 @@ final class ProductPresentation
 	{
 		$price = isset($product->price) && is_array($product->price) ? $product->price : [];
 		$quantity = isset($product->quantity) && is_array($product->quantity) ? $product->quantity : [];
+		$plugins = $product->plugins ?? [];
+		if ($plugins instanceof Registry)
+		{
+			$plugins = $plugins->toArray();
+		}
+		$plugins = is_array($plugins) ? $plugins : [];
 
 		return [
 			'id'        => (int) $product->id,
@@ -96,16 +137,160 @@ final class ProductPresentation
 				'max'  => isset($quantity['max']) && (float) $quantity['max'] > 0
 					? (float) $quantity['max'] : null,
 				'step' => (float) ($quantity['step'] ?? 1),
+				'all' => (float) ($quantity['all'] ?? 0),
+				'stockAccounting' => !empty($quantity['stock_accounting']),
+				'units' => (string) ($quantity['units'] ?? ''),
+				'unit' => (string) ($quantity['units_string'] ?? $quantity['units'] ?? ''),
+				'unitShort' => (string) ($quantity['units_string_short'] ?? $quantity['units'] ?? ''),
 			],
 			'price'     => [
 				'final'           => (string) ($price['final_string'] ?? ''),
 				'base'            => (string) ($price['base_string'] ?? ''),
 				'discount'        => (string) ($price['discount_string'] ?? ''),
 				'discountEnabled' => !empty($price['discount_enable']),
+				'finalValue'      => (float) ($price['final'] ?? 0),
+				'baseValue'       => (float) ($price['base'] ?? 0),
+				'benefit'         => (string) ($price['benefit_string'] ?? ''),
+				'benefitValue'    => (float) ($price['benefit'] ?? 0),
+				'currency'        => (string) ($price['currency'] ?? ''),
 			],
+			'category'  => self::normaliseCategory($product->category ?? null),
+			'manufacturers' => self::normaliseCategories($product->manufacturers ?? []),
+			'badges'    => self::normaliseCategories($product->badges ?? []),
+			'rating'    => self::normaliseRating($product, $plugins),
+			'bonus'     => self::normaliseBonus($product, $plugins),
 			'media'     => self::normaliseMedia($product),
+			'mediaAll'  => self::normaliseAllMedia($product),
 			'fieldsets' => self::normaliseFieldsets($product),
 		];
+	}
+
+	private static function normaliseCategory(mixed $category): ?array
+	{
+		if (!is_object($category) || empty($category->id))
+		{
+			return null;
+		}
+
+		$media = $category->media ?? [];
+		if ($media instanceof Registry)
+		{
+			$media = $media->toArray();
+		}
+		$media = is_array($media) ? $media : [];
+
+		return [
+			'id' => (int) $category->id,
+			'title' => (string) ($category->title ?? ''),
+			'link' => self::absoluteUrl((string) ($category->link ?? '')),
+			'icon' => self::absoluteUrl((string) ($media['icon'] ?? '')),
+			'image' => self::absoluteUrl((string) ($media['image'] ?? '')),
+		];
+	}
+
+	private static function normaliseCategories(mixed $categories): array
+	{
+		$result = [];
+		foreach ((array) $categories as $category)
+		{
+			$normalised = self::normaliseCategory($category);
+			if ($normalised !== null)
+			{
+				$result[] = $normalised;
+			}
+		}
+
+		return $result;
+	}
+
+	private static function normaliseRating(object $product, array $plugins): array
+	{
+		$value = self::firstNumeric([
+			$product->rating ?? null,
+			$product->rating_value ?? null,
+			self::nestedValue($plugins, ['rating', 'value']),
+			self::nestedValue($plugins, ['reviews', 'rating']),
+		]);
+		$count = self::firstNumeric([
+			$product->rating_count ?? null,
+			$product->reviews_count ?? null,
+			self::nestedValue($plugins, ['rating', 'count']),
+			self::nestedValue($plugins, ['reviews', 'count']),
+		]);
+
+		return [
+			'available' => $value !== null,
+			'value' => $value !== null ? max(0, min(5, $value)) : 0,
+			'max' => 5,
+			'count' => $count !== null ? max(0, (int) $count) : 0,
+		];
+	}
+
+	private static function normaliseBonus(object $product, array $plugins): array
+	{
+		$value = self::firstNumeric([
+			$product->bonus ?? null,
+			$product->bonuses ?? null,
+			$product->points ?? null,
+			self::nestedValue($plugins, ['bonus', 'value']),
+			self::nestedValue($plugins, ['bonuses', 'value']),
+			self::nestedValue($plugins, ['points', 'value']),
+		]);
+		$text = self::firstScalar([
+			$product->bonus_string ?? null,
+			$product->bonuses_string ?? null,
+			$product->points_string ?? null,
+			self::nestedValue($plugins, ['bonus', 'text']),
+			self::nestedValue($plugins, ['bonuses', 'text']),
+			self::nestedValue($plugins, ['points', 'text']),
+		]);
+
+		return [
+			'available' => $value !== null || $text !== '',
+			'value' => $value,
+			'text' => $text !== '' ? $text : ($value !== null ? (string) $value : ''),
+		];
+	}
+
+	private static function nestedValue(array $source, array $path): mixed
+	{
+		$value = $source;
+		foreach ($path as $key)
+		{
+			if (!is_array($value) || !array_key_exists($key, $value))
+			{
+				return null;
+			}
+			$value = $value[$key];
+		}
+
+		return $value;
+	}
+
+	private static function firstNumeric(array $values): ?float
+	{
+		foreach ($values as $value)
+		{
+			if (is_numeric($value))
+			{
+				return (float) $value;
+			}
+		}
+
+		return null;
+	}
+
+	private static function firstScalar(array $values): string
+	{
+		foreach ($values as $value)
+		{
+			if (is_scalar($value) && trim((string) $value) !== '')
+			{
+				return trim((string) $value);
+			}
+		}
+
+		return '';
 	}
 
 	private static function normaliseFieldsets(object $product): array
@@ -279,6 +464,54 @@ final class ProductPresentation
 				continue;
 			}
 			$add((string) ($item['src'] ?? ''), (string) ($item['alt'] ?? ''));
+		}
+
+		return $items;
+	}
+
+	private static function normaliseAllMedia(object $product): array
+	{
+		$media = $product->media ?? new Registry();
+		if (!$media instanceof Registry)
+		{
+			$media = new Registry($media);
+		}
+
+		$items = [];
+		$seen = [];
+		$add = static function (array $item) use (&$items, &$seen, $product): void {
+			$type = strtolower((string) ($item['type'] ?? 'image'));
+			$type = in_array($type, ['video', 'youtube', 'vimeo'], true) ? 'video' : 'image';
+			$src = self::absoluteUrl((string) ($item['src'] ?? $item['url'] ?? $item['link'] ?? ''));
+			if ($src === '' || isset($seen[$type . ':' . $src]))
+			{
+				return;
+			}
+			$seen[$type . ':' . $src] = true;
+			$items[] = [
+				'type' => $type,
+				'src' => $src,
+				'poster' => self::absoluteUrl((string) ($item['poster'] ?? $item['preview'] ?? $item['thumbnail'] ?? $item['thumb'] ?? $item['image'] ?? '')),
+				'alt' => (string) ($item['alt'] ?? $item['title'] ?? $product->title ?? ''),
+			];
+		};
+
+		$mainImage = (string) $media->get('image', '');
+		if ($mainImage !== '')
+		{
+			$add(['type' => 'image', 'src' => $mainImage]);
+		}
+		foreach ((array) $media->get('gallery', []) as $item)
+		{
+			if (is_string($item))
+			{
+				$item = ['type' => 'image', 'src' => $item];
+			}
+			else
+			{
+				$item = is_object($item) ? get_object_vars($item) : (array) $item;
+			}
+			$add($item);
 		}
 
 		return $items;

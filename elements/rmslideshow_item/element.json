@@ -14,6 +14,33 @@
             "source": true,
             "enable": "image"
         },
+        "image_fit": {
+            "label": "Image Fit",
+            "description": "Override the slideshow image fit for this slide.",
+            "type": "select",
+            "options": {"Inherit": "", "Contain": "contain", "Cover": "cover"},
+            "source": true
+        },
+        "image_position": {
+            "label": "Image Position",
+            "description": "Override the slideshow image position for this slide.",
+            "type": "select",
+            "options": {"Inherit": "", "Center": "center", "Top Left": "top-left", "Top Center": "top-center", "Top Right": "top-right", "Center Left": "center-left", "Center Right": "center-right", "Bottom Left": "bottom-left", "Bottom Center": "bottom-center", "Bottom Right": "bottom-right"},
+            "source": true
+        },
+        "background_color": {
+            "label": "Background Color",
+            "description": "Override the slideshow background for this slide and its thumbnail.",
+            "type": "color",
+            "source": true
+        },
+        "mix_blend_mode": {
+            "label": "Image Blend Mode",
+            "description": "Override the slideshow blend mode for this slide.",
+            "type": "select",
+            "options": {"Inherit": "", "Normal": "normal", "Multiply": "multiply", "Screen": "screen", "Overlay": "overlay", "Darken": "darken", "Lighten": "lighten", "Color Dodge": "color-dodge", "Color Burn": "color-burn", "Hard Light": "hard-light", "Soft Light": "soft-light", "Difference": "difference", "Exclusion": "exclusion", "Hue": "hue", "Saturation": "saturation", "Color": "color", "Luminosity": "luminosity"},
+            "source": true
+        },
         "name": "${builder.nameItem}",
         "status": "${builder.statusItem}",
         "source": "${builder.source}",
@@ -38,6 +65,12 @@
                     "fields": [
                         "image",
                         "image_alt"
+                    ]
+                },
+                {
+                    "title": "Settings",
+                    "fields": [
+                        {"label": "Media", "type": "group", "fields": ["image_fit", "image_position", "background_color", "mix_blend_mode"]}
                     ]
                 },
                 "${builder.advancedItem}"

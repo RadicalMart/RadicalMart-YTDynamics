@@ -8,6 +8,23 @@ const clone = (value) => {
         : JSON.parse(JSON.stringify(value));
 };
 
+const productDiscountText = (price = {}, mode = 'amount') => {
+    if (mode === 'legacy') return String(price.discount || '');
+
+    const base = Number(price.baseValue) || 0;
+    const final = Number(price.finalValue) || 0;
+    const percent = base > 0 && final < base
+        ? Math.max(0, Math.round(((base - final) / base) * 100))
+        : 0;
+    const amount = String(price.discount || '').replace(/^[-−\s]+/, '');
+    const percentText = percent > 0 ? `-${percent}%` : '';
+    const amountText = amount ? `-${amount}` : '';
+
+    if (mode === 'percent') return percentText;
+    if (mode === 'both') return [percentText, amountText].filter(Boolean).join(' · ');
+    return amountText;
+};
+
 const loadedAssets = new Map();
 
 const assetKey = (asset, type) => `${type}:${asset.name || asset.uri || asset.content || ''}`;
@@ -114,19 +131,24 @@ const ensureRadicalMartDisplay = () => {
     }));
 };
 
-const labels = document.documentElement.lang.toLowerCase().startsWith('ru') ? {
-    loading: 'Загрузка…', error: 'Не удалось загрузить товар.', inStock: 'В наличии',
-    outOfStock: 'Нет в наличии', quantity: 'Количество', addToCart: 'В корзину',
-    details: 'Подробнее', quickView: 'Быстрый просмотр', noImage: 'Нет изображения'
-} : {
-    loading: 'Loading…', error: 'Unable to load product.', inStock: 'In stock',
-    outOfStock: 'Not available', quantity: 'Quantity', addToCart: 'Add to cart',
-    details: 'Details', quickView: 'Quick view', noImage: 'No image'
-};
-
 const translate = (key, fallback) => {
     const translated = window.Joomla?.Text?._?.(key);
     return translated && translated !== key ? translated : fallback;
+};
+
+const labels = {
+    loading: translate('PLG_YTDYNAMICS_LOADING', 'Loading…'),
+    error: translate('PLG_YTDYNAMICS_ERROR_LOAD_PRODUCT', 'Unable to load product.'),
+    emptyProduct: translate('PLG_YTDYNAMICS_ERROR_EMPTY_PRODUCT', 'Product data is empty.'),
+    emptyQuickView: translate('PLG_YTDYNAMICS_ERROR_EMPTY_QUICK_VIEW', 'Quick View layout is empty.'),
+    inStock: translate('COM_RADICALMART_IN_STOCK', 'In stock'),
+    outOfStock: translate('COM_RADICALMART_NOT_IN_STOCK', 'Not available'),
+    quantity: translate('PLG_YTDYNAMICS_QUANTITY', 'Quantity'),
+    addToCart: translate('COM_RADICALMART_CART_ADD', 'Add to cart'),
+    cartAdded: translate('PLG_YTDYNAMICS_CART_ADDED', 'Product added to cart'),
+    details: translate('PLG_YTDYNAMICS_DETAILS', 'Details'),
+    quickView: translate('PLG_YTDYNAMICS_QUICK_VIEW', 'Quick view'),
+    noImage: translate('PLG_YTDYNAMICS_NO_IMAGE', 'No image')
 };
 
 const element = (tag, className = '', attributes = {}) => {
@@ -157,7 +179,7 @@ const requestProduct = async (endpoint, task, productId, signal = null) => {
 
     let data = payload.data;
     if (Array.isArray(data) && data.length === 1 && typeof data[0] === 'object') data = data[0];
-    if (!data || !data.id) throw new Error('Product data is empty.');
+    if (!data || !data.id) throw new Error(labels.emptyProduct);
     return data;
 };
 
@@ -179,7 +201,7 @@ const requestQuickViewLayout = async (endpoint, productId, templateId, signal = 
 
     let data = payload.data;
     if (Array.isArray(data) && data.length === 1 && typeof data[0] === 'object') data = data[0];
-    if (!data || !data.html) throw new Error('Quick View layout is empty.');
+    if (!data || !data.html) throw new Error(labels.emptyQuickView);
     return data;
 };
 
@@ -197,19 +219,166 @@ const appendSpecificationValue = (node, field) => {
     if (!node.childNodes.length && field.text) node.append(text(field.text));
 };
 
+const updateOptionalElement = (node, available) => {
+    node.hidden = !available;
+    node.setAttribute('aria-hidden', available ? 'false' : 'true');
+};
+
+const findProductField = (product = {}, alias = '') => {
+    if (!alias) return null;
+    for (const fieldset of product.fieldsets || []) {
+        const field = (fieldset.fields || []).find((item) => String(item.alias || '') === alias);
+        if (field) return field;
+    }
+    return null;
+};
+
+const renderProductCustomField = (container, product = {}) => {
+    const field = findProductField(product, container.dataset.fieldAlias || '');
+    const fallback = container.dataset.emptyText || '';
+    const label = container.querySelector('[data-rm-product-custom-label]');
+    const value = container.querySelector('[data-rm-product-custom-value]');
+    const available = Boolean(field) || fallback !== '';
+
+    if (label) {
+        label.textContent = `${field?.title || container.dataset.fieldAlias || ''}${container.dataset.labelSeparator || ''}`;
+        label.hidden = container.dataset.showLabel !== 'true';
+    }
+    if (value) {
+        if (field && container.dataset.valueMode === 'formatted') {
+            value.innerHTML = field.value || '';
+            if (!value.childNodes.length && field.text) value.append(text(field.text));
+        } else {
+            value.textContent = field?.text || fallback;
+        }
+    }
+    updateOptionalElement(container, available);
+};
+
+const renderProductBadges = (container, badges = []) => {
+    const limit = Math.max(0, Number(container.dataset.limit) || 0);
+    const items = limit ? badges.slice(0, limit) : badges;
+    const list = container.querySelector('[data-rm-product-badges-list]');
+    if (!list) return;
+
+    const fragment = document.createDocumentFragment();
+    items.forEach((badge) => {
+        const tag = container.dataset.linkBadges !== 'false' && badge.link ? 'a' : 'span';
+        const item = element(tag, 'rm-product-badges__item');
+        if (tag === 'a') item.href = badge.link;
+        if (badge.icon && container.dataset.showIcons !== 'false') {
+            item.append(element('img', 'rm-product-badges__icon', {
+                src: badge.icon,
+                alt: badge.title || '',
+                loading: 'lazy'
+            }));
+            if (container.dataset.showTitles === 'true') {
+                const label = element('span', 'rm-product-badges__label');
+                label.append(text(badge.title));
+                item.append(label);
+            }
+        } else {
+            const style = container.dataset.labelStyle || '';
+            const label = element('span', `rm-product-badges__label uk-label${style ? ` uk-label-${style}` : ''}`);
+            label.append(text(badge.title));
+            item.append(label);
+        }
+        fragment.append(item);
+    });
+    list.replaceChildren(fragment);
+    updateOptionalElement(container, items.length > 0);
+};
+
+const renderProductRating = (container, rating = {}) => {
+    const available = Boolean(rating.available);
+    const value = Math.max(0, Math.min(Number(rating.max) || 5, Number(rating.value) || 0));
+    const max = Math.max(1, Number(rating.max) || 5);
+    const percent = `${(value / max) * 100}%`;
+    const stars = container.querySelector('[data-rm-product-rating-stars]');
+    const valueNode = container.querySelector('[data-rm-product-rating-value]');
+    const countNode = container.querySelector('[data-rm-product-rating-count]');
+    if (stars) stars.style.setProperty('--rm-product-rating-percent', percent);
+    if (valueNode) valueNode.textContent = value.toLocaleString(undefined, {maximumFractionDigits: 1});
+    if (countNode) {
+        countNode.textContent = String(Math.max(0, Number(rating.count) || 0));
+        countNode.hidden = container.dataset.showCount !== 'true';
+    }
+    container.setAttribute('aria-label', `${value} / ${max}`);
+    updateOptionalElement(container, available || container.dataset.showEmpty === 'true');
+};
+
+const renderProductBonus = (container, bonus = {}) => {
+    const value = container.querySelector('[data-rm-product-bonus-value]');
+    if (value) value.textContent = bonus.text || '';
+    updateOptionalElement(container, Boolean(bonus.available) || container.dataset.showEmpty === 'true');
+};
+
+const renderProductStock = (container, product = {}) => {
+    const quantity = product.quantity || {};
+    const amount = Number(quantity.all) || 0;
+    const status = container.querySelector('[data-rm-product-stock-status]');
+    const amountNode = container.querySelector('[data-rm-product-stock-amount]');
+    const progress = container.querySelector('[data-rm-product-stock-progress]');
+    if (status) {
+        status.textContent = product.inStock ? container.dataset.labelIn : container.dataset.labelOut;
+        status.classList.toggle('uk-text-success', Boolean(product.inStock));
+        status.classList.toggle('uk-text-muted', !product.inStock);
+    }
+    if (amountNode) {
+        amountNode.textContent = quantity.stockAccounting
+            ? `${amount} ${quantity.unitShort || quantity.units || ''}`.trim()
+            : '';
+        amountNode.hidden = container.dataset.showQuantity !== 'true' || !quantity.stockAccounting;
+    }
+    if (progress) {
+        const threshold = Math.max(1, Number(container.dataset.progressThreshold) || 10);
+        progress.max = threshold;
+        progress.value = Math.min(amount, threshold);
+        progress.hidden = container.dataset.showProgress !== 'true' || !quantity.stockAccounting;
+    }
+};
+
+const renderProductUnit = (container, product = {}) => {
+    const quantity = product.quantity || {};
+    const unit = container.dataset.unitStyle === 'long'
+        ? quantity.unit || quantity.units
+        : quantity.unitShort || quantity.units;
+    const unitNode = container.querySelector('[data-rm-product-unit-label]');
+    const priceNode = container.querySelector('[data-rm-product-unit-price]');
+    if (unitNode) unitNode.textContent = unit || '';
+    if (priceNode) priceNode.textContent = product.price?.final || '';
+    updateOptionalElement(container, Boolean(unit));
+};
+
 const renderProductSpecifications = (container, sourceFieldsets = []) => {
     const showVariants = container.dataset.showVariantFields !== 'false';
+    const selectedFields = new Set(String(container.dataset.selectedFields || '')
+        .split(',').map((alias) => alias.trim()).filter(Boolean));
+    const fieldLimit = Math.max(0, Math.min(24, Number.parseInt(container.dataset.fieldLimit || '0', 10) || 0));
     const showTitles = container.dataset.showFieldsetTitles !== 'false';
     const divider = container.dataset.divider !== 'false';
     const striped = container.dataset.striped === 'true';
     const layout = ['description-list', 'table', 'grid'].includes(container.dataset.layout)
         ? container.dataset.layout : 'description-list';
-    const columns = ['1', '2', '3', '4'].includes(container.dataset.columns)
-        ? container.dataset.columns : '2';
-    const fieldsets = sourceFieldsets.map((fieldset) => ({
-        ...fieldset,
-        fields: (fieldset.fields || []).filter((field) => showVariants || !field.variant)
-    })).filter((fieldset) => fieldset.fields.length);
+    const responsiveColumn = (value, fallback) => ['1', '2', '3', '4'].includes(value) ? value : fallback;
+    const legacyColumns = responsiveColumn(container.dataset.columns, '2');
+    const columnsSmall = responsiveColumn(container.dataset.columnsSmall, '1');
+    const columnsMedium = responsiveColumn(container.dataset.columnsMedium, legacyColumns);
+    const columnsLarge = responsiveColumn(container.dataset.columnsLarge, legacyColumns);
+    const tableResponsive = ['scroll', 'stack'].includes(container.dataset.tableResponsive)
+        ? container.dataset.tableResponsive : 'scroll';
+    let fieldsRemaining = fieldLimit || Number.POSITIVE_INFINITY;
+    const fieldsets = [];
+    sourceFieldsets.forEach((fieldset) => {
+        if (fieldsRemaining <= 0) return;
+        const fields = (fieldset.fields || []).filter((field) => (
+            (showVariants || !field.variant)
+            && (!selectedFields.size || selectedFields.has(String(field.alias || '')))
+        )).slice(0, fieldsRemaining);
+        if (!fields.length) return;
+        fieldsets.push({...fieldset, fields});
+        fieldsRemaining -= fields.length;
+    });
     const content = container.querySelector('.rm-product-specifications__content');
     if (!content) return;
 
@@ -235,9 +404,11 @@ const renderProductSpecifications = (container, sourceFieldsets = []) => {
                 body.append(row);
             });
             table.append(body);
-            section.append(table);
+            const wrapper = element('div', `rm-product-specifications__table-wrap${tableResponsive === 'scroll' ? ' uk-overflow-auto' : ''}`);
+            wrapper.append(table);
+            section.append(wrapper);
         } else if (layout === 'grid') {
-            const grid = element('div', `rm-product-specifications__grid uk-child-width-1-1 uk-child-width-1-${columns}@m${divider ? ' uk-grid-divider' : ''}`, {'uk-grid': true});
+            const grid = element('div', `rm-product-specifications__grid uk-child-width-1-1 uk-child-width-1-${columnsSmall}@s uk-child-width-1-${columnsMedium}@m uk-child-width-1-${columnsLarge}@l${divider ? ' uk-grid-divider' : ''}`, {'uk-grid': true});
             fieldset.fields.forEach((field) => {
                 const item = element('div', 'rm-product-specifications__item');
                 const label = element('div', 'rm-product-specifications__label uk-text-meta');
@@ -269,15 +440,55 @@ const renderProductSpecifications = (container, sourceFieldsets = []) => {
     window.UIkit?.update?.(container);
 };
 
+const renderProductHoverGallery = (container, product = {}) => {
+    const limit = Math.max(0, Math.min(20, Number.parseInt(container.dataset.maxImages || '0', 10) || 0));
+    const items = (product.media || []).filter((item) => item?.src);
+    const media = limit ? items.slice(0, limit) : items;
+    const viewport = container.querySelector('.rm-product-hover-gallery__viewport');
+    if (!viewport) return;
+
+    const fragment = document.createDocumentFragment();
+    media.forEach((item, index) => {
+        const image = element('img', `rm-product-hover-gallery__image${index === 0 ? ' rm-product-hover-gallery__image--active' : ''}`, {
+            'data-rm-product-hover-image': true,
+            'data-index': index,
+            src: item.src,
+            alt: item.alt || product.title || '',
+            loading: index === 0 ? (container.dataset.loading || 'lazy') : 'lazy',
+            decoding: 'async',
+            'aria-hidden': index === 0 ? 'false' : 'true'
+        });
+        fragment.append(image);
+    });
+
+    const indicatorStyle = container.dataset.indicators || 'bars';
+    if (media.length > 1 && indicatorStyle !== 'none') {
+        const indicators = element('span', `rm-product-hover-gallery__indicators rm-product-hover-gallery__indicators--${indicatorStyle}`, {
+            'data-rm-product-hover-indicators': true,
+            'aria-hidden': 'true'
+        });
+        media.forEach((item, index) => {
+            indicators.append(element('span', `rm-product-hover-gallery__indicator${index === 0 ? ' rm-product-hover-gallery__indicator--active' : ''}`, {
+                'data-index': index
+            }));
+        });
+        fragment.append(indicators);
+    }
+
+    viewport.replaceChildren(fragment);
+    container.hidden = media.length === 0;
+    container.dispatchEvent(new CustomEvent('radicalmart:hover-gallery-refresh'));
+};
+
 const setMetaContent = (attribute, name, value) => {
-    if (!value) return;
     let node = document.head.querySelector(`meta[${attribute}="${name}"]`);
+    if (!node && !value) return;
     if (!node) {
         node = document.createElement('meta');
         node.setAttribute(attribute, name);
         document.head.append(node);
     }
-    node.setAttribute('content', value);
+    node.setAttribute('content', String(value || ''));
 };
 
 const updateProductMetadata = (product) => {
@@ -335,14 +546,6 @@ class ProductScope {
             if (event.target.closest('[data-rm-product-scope]') !== this.source) return;
             if (event.detail?.product?.id) this.applyProduct(event.detail.product);
         });
-        if (this.product?.id && this.source.dataset.rmProductPage === 'true') {
-            if (this.source.dataset.updateDocumentTitle !== 'false' && this.product.title) {
-                document.title = this.product.title;
-            }
-            if (this.source.dataset.updateDocumentMetadata !== 'false') {
-                updateProductMetadata(this.product);
-            }
-        }
     }
 
     applyProduct(product) {
@@ -367,32 +570,128 @@ class ProductScope {
 
         const media = product.media?.[0] || {};
         this.nodes('[data-rm-product-image]').forEach((node) => {
+            // Initial markup can use YOOtheme-generated srcsets. A variant can
+            // point to another file, so stale candidates must not override it.
+            node.removeAttribute('srcset');
+            node.removeAttribute('sizes');
+            node.removeAttribute('data-src');
+            node.removeAttribute('data-srcset');
             if (media.src) node.src = media.src;
             else node.removeAttribute('src');
             node.alt = media.alt || product.title || '';
             node.hidden = !media.src;
+        });
+        this.nodes('[data-rm-product-hover-gallery]').forEach((node) => {
+            renderProductHoverGallery(node, product);
         });
 
         this.nodes('[data-rm-product-price]').forEach((node) => {
             const base = node.querySelector('[data-rm-product-price-base]');
             const final = node.querySelector('[data-rm-product-price-final]');
             const discount = node.querySelector('[data-rm-product-discount]');
+            const savings = node.querySelector('[data-rm-product-price-savings]');
+            const savingsValue = node.querySelector('[data-rm-product-price-savings-value]');
             const enabled = Boolean(product.price?.discountEnabled);
+            const unitWrap = node.querySelector('[data-rm-product-price-unit-wrap]');
+            const unitNode = node.querySelector('[data-rm-product-price-unit]');
+            const unit = node.dataset.unitStyle === 'long'
+                ? product.quantity?.unit || product.quantity?.units || ''
+                : product.quantity?.unitShort || product.quantity?.units || '';
             if (base) {
                 base.textContent = product.price?.base || '';
                 base.hidden = !enabled || node.dataset.showBase !== 'true';
             }
             if (final) final.textContent = product.price?.final || '';
             if (discount) {
-                discount.textContent = product.price?.discount || '';
-                discount.hidden = !enabled || node.dataset.showDiscount !== 'true';
+                const discountText = productDiscountText(product.price, node.dataset.discountMode || 'legacy');
+                discount.textContent = discountText;
+                discount.hidden = !enabled || node.dataset.showDiscount !== 'true' || !discountText;
             }
+            if (savingsValue) savingsValue.textContent = product.price?.benefit || '';
+            if (savings) savings.hidden = !enabled
+                || node.dataset.showSavings !== 'true'
+                || !(Number(product.price?.benefitValue) > 0);
+            if (unitNode) unitNode.textContent = unit;
+            if (unitWrap) unitWrap.hidden = node.dataset.showUnit !== 'true' || !unit;
+        });
+        this.nodes('[data-rm-product-base-price]').forEach((node) => {
+            node.textContent = product.price?.base || '';
+        });
+        this.nodes('[data-rm-product-discount-value]').forEach((node) => {
+            node.textContent = product.price?.discount || '';
+            updateOptionalElement(node, Boolean(product.price?.discountEnabled));
+        });
+        this.nodes('[data-rm-product-benefit]').forEach((node) => {
+            node.textContent = product.price?.benefit || '';
+            updateOptionalElement(node, Number(product.price?.benefitValue) > 0);
         });
 
         this.nodes('[data-rm-product-availability]').forEach((node) => {
             node.textContent = product.inStock ? node.dataset.labelIn : node.dataset.labelOut;
             node.classList.toggle('uk-text-success', Boolean(product.inStock));
             node.classList.toggle('uk-text-muted', !product.inStock);
+        });
+
+        this.nodes('[data-rm-product-category]').forEach((node) => {
+            node.textContent = product.category?.title || '';
+            if (node.matches('a') && product.category?.link) node.href = product.category.link;
+            updateOptionalElement(node, Boolean(product.category?.title));
+        });
+        this.nodes('[data-rm-product-manufacturer]').forEach((node) => {
+            const manufacturer = product.manufacturers?.[0];
+            node.textContent = manufacturer?.title || '';
+            if (node.matches('a') && manufacturer?.link) node.href = manufacturer.link;
+            updateOptionalElement(node, Boolean(manufacturer?.title));
+        });
+        this.nodes('[data-rm-product-stock-quantity]').forEach((node) => {
+            const amount = Number(product.quantity?.all) || 0;
+            const available = Boolean(product.quantity?.stockAccounting);
+            node.textContent = available
+                ? `${amount} ${product.quantity?.unitShort || product.quantity?.units || ''}`.trim()
+                : '';
+            updateOptionalElement(node, available);
+        });
+        this.nodes('[data-rm-product-unit-value]').forEach((node) => {
+            const unit = product.quantity?.unitShort || product.quantity?.units || '';
+            node.textContent = unit;
+            updateOptionalElement(node, Boolean(unit));
+        });
+        this.nodes('[data-rm-product-unit]').forEach((node) => renderProductUnit(node, product));
+        this.nodes('[data-rm-product-custom-field]').forEach((node) => renderProductCustomField(node, product));
+        this.nodes('[data-rm-product-stock]').forEach((node) => renderProductStock(node, product));
+        this.nodes('[data-rm-product-badges]').forEach((node) => renderProductBadges(node, product.badges || []));
+        this.nodes('[data-rm-product-rating]').forEach((node) => renderProductRating(node, product.rating || {}));
+        this.nodes('[data-rm-product-bonus]').forEach((node) => renderProductBonus(node, product.bonus || {}));
+        this.nodes('[data-rm-product-select]').forEach((node) => {
+            const input = node.matches('input') ? node : node.querySelector('input[type="checkbox"]');
+            if (!input) return;
+            const container = node.matches('input') ? node.closest('[data-rm-product-select]') || node : node;
+            input.value = String(product.id);
+            input.dataset.productId = String(product.id);
+            input.dataset.productTitle = product.title || '';
+            input.dataset.quantity = String(product.quantity?.min || 1);
+            input.disabled = !product.inStock && container.dataset.disableOutOfStock !== 'false';
+            const label = container.querySelector?.('[data-rm-product-select-label], .rm-product-select__label');
+            if (label) {
+                const baseLabel = container.dataset.baseLabel || '';
+                label.textContent = container.dataset.showTitle === 'true'
+                    ? `${baseLabel} ${product.title || ''}`.trim()
+                    : baseLabel;
+            }
+            if (input.disabled && input.checked) {
+                input.checked = false;
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+            }
+        });
+        this.nodes('[data-rm-product-action]').forEach((node) => {
+            node.dataset.productId = String(product.id);
+            node.setAttribute('aria-label', `${node.dataset.label || ''} ${product.title || ''}`.trim());
+            node.setAttribute('aria-pressed', 'false');
+            node.classList.remove('rm-product-action--active');
+            node.dispatchEvent(new CustomEvent('radicalmart:product-action-refresh'));
+        });
+        this.nodes('[data-rm-quick-view]').forEach((node) => {
+            node.dataset.rmQuickView = String(product.id);
         });
 
         this.nodes('[radicalmart-cart="product"], [data-radicalmart-cart="product"]').forEach((cart) => {
@@ -424,10 +723,361 @@ class ProductScope {
             updateProductMetadata(this.product);
         }
 
-        this.scope.dispatchEvent(new CustomEvent('radicalmart:product-change', {
+        this.source.dispatchEvent(new CustomEvent('radicalmart:product-change', {
             bubbles: true,
             detail: {product: this.product}
         }));
+    }
+}
+
+class ProductBulkActions {
+    constructor(container) {
+        this.container = container;
+        this.rootSelector = container.dataset.selectionRoot || '';
+        this.resolvedRoot = null;
+        this.pending = false;
+        this.handleSelection = this.handleSelection.bind(this);
+    }
+
+    get root() {
+        if (this.resolvedRoot) return this.resolvedRoot;
+        if (this.rootSelector) {
+            try {
+                this.resolvedRoot = this.container.closest(this.rootSelector)
+                    || document.querySelector(this.rootSelector)
+                    || document;
+                return this.resolvedRoot;
+            } catch (error) {
+                this.rootSelector = '';
+            }
+        }
+        this.resolvedRoot = this.container.closest('[data-rm-selection-scope], .rm-grid, .uk-section') || document;
+        return this.resolvedRoot;
+    }
+
+    selected() {
+        return Array.from(this.root.querySelectorAll('[data-rm-product-select] input[type="checkbox"]:checked'));
+    }
+
+    init() {
+        if (this.container.dataset.rmBulkActionsReady) return;
+        this.container.dataset.rmBulkActionsReady = 'true';
+        this.root.addEventListener('change', this.handleSelection);
+        this.container.addEventListener('click', (event) => {
+            const action = event.target.closest('[data-rm-bulk-action]')?.dataset.rmBulkAction;
+            if (!action) return;
+            event.preventDefault();
+            if (action === 'clear') {
+                this.selected().forEach((input) => {
+                    input.checked = false;
+                    input.dispatchEvent(new Event('change', {bubbles: true}));
+                });
+            } else if (action === 'cart') {
+                this.addToCart();
+            }
+        });
+        this.update();
+    }
+
+    handleSelection(event) {
+        if (event.target.matches('[data-rm-product-select] input[type="checkbox"]')) this.update();
+    }
+
+    update() {
+        const selected = this.selected();
+        this.container.querySelectorAll('[data-rm-selection-count]').forEach((node) => {
+            node.textContent = String(selected.length);
+        });
+        this.container.querySelectorAll('[data-rm-bulk-action="cart"], [data-rm-bulk-action="clear"]')
+            .forEach((button) => { button.disabled = this.pending || selected.length === 0; });
+    }
+
+    setStatus(message) {
+        const status = this.container.querySelector('[data-rm-bulk-status]');
+        if (status) status.textContent = message;
+    }
+
+    addToCart() {
+        const selected = this.selected();
+        const cart = typeof window.RadicalMartCart === 'function' ? window.RadicalMartCart() : null;
+        if (!selected.length || this.pending) return;
+        if (!cart?.addProduct) {
+            this.setStatus(translate('PLG_YTDYNAMICS_BULK_CART_UNAVAILABLE', 'Cart is unavailable.'));
+            return;
+        }
+
+        // A free Builder composition can render the same product more than
+        // once. RadicalMart de-duplicates concurrent adds by its cart hash, so
+        // make the bulk action explicitly one add per product instead of
+        // reporting success for skipped duplicate controls.
+        const inputsByProduct = new Map();
+        selected.forEach((input) => {
+            const productId = Number(input.dataset.productId || input.value);
+            if (productId && !inputsByProduct.has(productId)) inputsByProduct.set(productId, input);
+        });
+        const productIds = Array.from(inputsByProduct.keys());
+        const waiting = new Set(productIds);
+        const failures = new Set();
+        this.pending = true;
+        this.update();
+        this.setStatus(translate('PLG_YTDYNAMICS_BULK_ADDING', 'Adding selected products…'));
+
+        let timeout;
+        const finish = () => {
+            document.removeEventListener('onRadicalMartCartAfterAddProduct', handleResult);
+            window.clearTimeout(timeout);
+            this.pending = false;
+            this.update();
+            if (failures.size) {
+                this.setStatus(translate('PLG_YTDYNAMICS_BULK_ADD_FAILED', 'Some products could not be added to the cart.'));
+                this.container.dispatchEvent(new CustomEvent('radicalmart:bulk-add-error', {
+                    bubbles: true,
+                    detail: {productIds, failedProductIds: Array.from(failures)}
+                }));
+                return;
+            }
+            this.setStatus(translate('PLG_YTDYNAMICS_BULK_ADDED', 'Selected products were added to the cart.'));
+            this.container.dispatchEvent(new CustomEvent('radicalmart:bulk-add', {
+                bubbles: true,
+                detail: {productIds}
+            }));
+        };
+        const handleResult = (event) => {
+            const productId = Number(event.detail?.entry?.product_id);
+            if (!waiting.has(productId)) return;
+            waiting.delete(productId);
+            if (event.detail?.error) failures.add(productId);
+            if (!waiting.size) finish();
+        };
+        document.addEventListener('onRadicalMartCartAfterAddProduct', handleResult);
+        timeout = window.setTimeout(() => {
+            waiting.forEach((productId) => failures.add(productId));
+            waiting.clear();
+            finish();
+        }, 30000);
+
+        Array.from(inputsByProduct.entries()).forEach(([productId, input], index) => {
+            const quantity = Math.max(0.0001, Number(input.dataset.quantity) || 1);
+            cart.addProduct(productId, quantity, {}, index === productIds.length - 1);
+        });
+    }
+}
+
+class ProductHoverGallery {
+    constructor(container) {
+        this.container = container;
+        this.activeIndex = 0;
+        this.touch = null;
+        this.suppressClick = false;
+        this.show = this.show.bind(this);
+    }
+
+    images() {
+        return Array.from(this.container.querySelectorAll('[data-rm-product-hover-image]'));
+    }
+
+    show(index) {
+        const images = this.images();
+        if (!images.length) return;
+        const next = Math.max(0, Math.min(images.length - 1, Number(index) || 0));
+        this.activeIndex = next;
+        images.forEach((image, imageIndex) => {
+            const active = imageIndex === next;
+            image.classList.toggle('rm-product-hover-gallery__image--active', active);
+            image.setAttribute('aria-hidden', active ? 'false' : 'true');
+        });
+        this.container.querySelectorAll('.rm-product-hover-gallery__indicator').forEach((indicator, indicatorIndex) => {
+            indicator.classList.toggle('rm-product-hover-gallery__indicator--active', indicatorIndex === next);
+        });
+    }
+
+    init() {
+        if (this.container.dataset.rmProductHoverGalleryReady) return;
+        this.container.dataset.rmProductHoverGalleryReady = 'true';
+        const viewport = this.container.querySelector('.rm-product-hover-gallery__viewport');
+        if (!viewport) return;
+        const pointerSurface = viewport.closest('.rm-product-card__main') || viewport;
+
+        pointerSurface.addEventListener('pointermove', (event) => {
+            if (event.pointerType === 'touch') return;
+            const images = this.images();
+            if (images.length < 2) return;
+            const bounds = viewport.getBoundingClientRect();
+            if (!bounds.width) return;
+            const inside = event.clientX >= bounds.left && event.clientX <= bounds.right
+                && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+            if (!inside) {
+                if (this.container.dataset.resetOnLeave !== 'false' && this.activeIndex !== 0) this.show(0);
+                return;
+            }
+            const progress = Math.max(0, Math.min(.999999, (event.clientX - bounds.left) / bounds.width));
+            this.show(Math.floor(progress * images.length));
+        });
+        pointerSurface.addEventListener('pointerleave', (event) => {
+            if (event.pointerType === 'touch') return;
+            if (this.container.dataset.resetOnLeave !== 'false') this.show(0);
+        });
+        viewport.addEventListener('pointerdown', (event) => {
+            if (event.pointerType !== 'touch') return;
+            this.touch = {
+                id: event.pointerId,
+                x: event.clientX,
+                y: event.clientY,
+                time: performance.now()
+            };
+        });
+        viewport.addEventListener('pointerup', (event) => {
+            if (!this.touch || event.pointerId !== this.touch.id) return;
+            const deltaX = event.clientX - this.touch.x;
+            const deltaY = event.clientY - this.touch.y;
+            const elapsed = performance.now() - this.touch.time;
+            this.touch = null;
+            if (elapsed > 750 || Math.abs(deltaX) < 36 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+
+            const images = this.images();
+            if (images.length < 2) return;
+            this.suppressClick = true;
+            this.show(deltaX < 0
+                ? (this.activeIndex + 1) % images.length
+                : (this.activeIndex - 1 + images.length) % images.length);
+            window.setTimeout(() => { this.suppressClick = false; }, 350);
+        });
+        viewport.addEventListener('pointercancel', () => {
+            this.touch = null;
+        });
+        viewport.addEventListener('click', (event) => {
+            if (!this.suppressClick) return;
+            event.preventDefault();
+            event.stopPropagation();
+        }, true);
+        viewport.addEventListener('keydown', (event) => {
+            if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+            const images = this.images();
+            if (images.length < 2) return;
+            event.preventDefault();
+            if (event.key === 'Home') this.show(0);
+            else if (event.key === 'End') this.show(images.length - 1);
+            else if (event.key === 'ArrowLeft') this.show((this.activeIndex - 1 + images.length) % images.length);
+            else this.show((this.activeIndex + 1) % images.length);
+        });
+        this.container.addEventListener('radicalmart:hover-gallery-refresh', () => this.show(0));
+        this.show(0);
+    }
+}
+
+class ProductOptionalAction {
+    constructor(button) {
+        this.button = button;
+        this.type = button.dataset.rmProductAction;
+        this.retryCount = 0;
+        this.retryTimer = null;
+        this.refresh = this.refresh.bind(this);
+    }
+
+    provider() {
+        const source = this.type === 'favorite' ? window.RadicalMartFavorites : window.RadicalMartCompare;
+        if (typeof source === 'function') {
+            try { return source(); } catch (error) { return null; }
+        }
+        return source || null;
+    }
+
+    supported(provider) {
+        return Boolean(provider && (typeof provider.toggleProduct === 'function' || typeof provider.toggle === 'function'));
+    }
+
+    isBuilderPreview() {
+        try {
+            const frameName = window.frameElement?.getAttribute('name') || '';
+            return window.parent !== window && /^preview(?:-|$)/.test(frameName);
+        } catch (error) {
+            return false;
+        }
+    }
+
+    setAvailability(supported) {
+        const previewFallback = !supported && this.isBuilderPreview();
+        this.button.hidden = !supported && !previewFallback;
+        this.button.disabled = previewFallback;
+        this.button.classList.toggle('rm-product-action--unavailable', previewFallback);
+        if (previewFallback) this.button.setAttribute('aria-disabled', 'true');
+        else this.button.removeAttribute('aria-disabled');
+    }
+
+    active(provider, productId) {
+        for (const method of ['hasProduct', 'contains', 'isActive', 'has']) {
+            if (typeof provider?.[method] !== 'function') continue;
+            try {
+                const value = provider[method](productId);
+                return value && typeof value.then === 'function' ? null : Boolean(value);
+            } catch (error) { return null; }
+        }
+        if (Array.isArray(provider?.products)) {
+            return provider.products.some((item) => Number(item?.id ?? item) === productId);
+        }
+        return null;
+    }
+
+    setActive(active) {
+        const enabled = Boolean(active);
+        this.button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+        this.button.classList.toggle('rm-product-action--active', enabled);
+    }
+
+    refresh() {
+        const provider = this.provider();
+        const supported = this.supported(provider);
+        this.setAvailability(supported);
+        if (!supported) return false;
+        const active = this.active(provider, Number(this.button.dataset.productId));
+        if (active !== null) this.setActive(active);
+        return true;
+    }
+
+    retryProvider() {
+        if (this.refresh() || this.retryCount >= 20) return;
+        this.retryCount += 1;
+        this.retryTimer = window.setTimeout(() => this.retryProvider(), 250);
+    }
+
+    init() {
+        if (this.button.dataset.rmProductActionReady) return;
+        this.button.dataset.rmProductActionReady = 'true';
+        this.setActive(false);
+        this.button.addEventListener('radicalmart:product-action-refresh', this.refresh);
+        document.addEventListener('radicalmart:provider-ready', this.refresh);
+        document.addEventListener(`radicalmart:${this.type}-ready`, this.refresh);
+        if (this.type === 'favorite') document.addEventListener('radicalmart:favorites-ready', this.refresh);
+        window.addEventListener('load', this.refresh, {once: true});
+        this.retryProvider();
+
+        this.button.addEventListener('click', (event) => {
+            event.preventDefault();
+            const id = Number(this.button.dataset.productId);
+            if (!id) return;
+            const api = this.provider();
+            if (!this.supported(api)) {
+                this.refresh();
+                return;
+            }
+            const previous = this.button.getAttribute('aria-pressed') === 'true';
+            this.setActive(!previous);
+            let result;
+            try {
+                result = typeof api.toggleProduct === 'function' ? api.toggleProduct(id) : api.toggle(id);
+            } catch (error) {
+                this.setActive(previous);
+                return;
+            }
+            Promise.resolve(result).then(() => {
+                const active = this.active(api, id);
+                if (active !== null) this.setActive(active);
+            }).catch(() => this.setActive(previous));
+            this.button.dispatchEvent(new CustomEvent(`radicalmart:${this.type}-toggle`, {
+                bubbles: true,
+                detail: {productId: id, active: !previous}
+            }));
+        });
     }
 }
 
@@ -449,6 +1099,45 @@ class ProductCardDropdown {
 
         owner.classList.add('rm-product-card--hover');
         owner.dataset.rmHoverBreakpoint = this.element.dataset.hoverBreakpoint || 'm';
+        const visibleFocusable = Array.from(owner.querySelectorAll('a[href], button, input, select, textarea, [tabindex]'))
+            .some((node) => {
+                if (this.element.contains(node) || node.hasAttribute('disabled') || node.getAttribute('tabindex') === '-1') return false;
+                if (node.closest('[hidden], [inert], [aria-hidden="true"]')) return false;
+                const style = window.getComputedStyle(node);
+                return style.display !== 'none' && style.visibility !== 'hidden' && node.getClientRects().length > 0;
+            });
+        if (!visibleFocusable && !owner.matches('a[href], button, input, select, textarea, [tabindex]')) {
+            owner.tabIndex = 0;
+        }
+    }
+}
+
+class ProductCardPosition {
+    constructor(element) {
+        this.element = element;
+    }
+
+    init() {
+        if (this.element.dataset.rmProductCardPositionReady) return;
+        this.element.dataset.rmProductCardPositionReady = 'true';
+
+        const owner = this.element.closest('.rm-product-card, [data-rm-product-scope]');
+        if (!owner || owner === this.element) return;
+        owner.classList.add('rm-product-card--positioned');
+
+        if (!['interaction', 'focus'].includes(this.element.dataset.visibilityMode)) return;
+        const visibleFocusable = Array.from(owner.querySelectorAll('a[href], button, input, select, textarea, [tabindex]'))
+            .some((node) => {
+                const position = node.closest('[data-rm-product-card-position]');
+                if (position && position.dataset.visibilityMode !== 'always') return false;
+                if (node.hasAttribute('disabled') || node.getAttribute('tabindex') === '-1') return false;
+                if (node.closest('[hidden], [inert], [aria-hidden="true"]')) return false;
+                const style = window.getComputedStyle(node);
+                return style.display !== 'none' && style.visibility !== 'hidden' && node.getClientRects().length > 0;
+            });
+        if (!visibleFocusable && !owner.matches('a[href], button, input, select, textarea, [tabindex]')) {
+            owner.tabIndex = 0;
+        }
     }
 }
 
@@ -813,6 +1502,16 @@ class QuickView {
 		}
 		await loadAssets(assets, 'style');
 		const fragment = document.createRange().createContextualFragment(html);
+		// A Quick View is an isolated product surface. Its variant controls may
+		// re-render the modal, but must never replace the listing URL or the
+		// listing document's SEO metadata.
+		fragment.querySelectorAll('[data-rm-variants]').forEach((selector) => {
+			selector.dataset.updateUrl = 'none';
+		});
+		fragment.querySelectorAll('[data-rm-product-page]').forEach((scope) => {
+			scope.dataset.updateDocumentTitle = 'false';
+			scope.dataset.updateDocumentMetadata = 'false';
+		});
 		body.replaceChildren(fragment);
 		this.builderContext = context;
 		await loadAssets(assets, 'script');
@@ -1085,7 +1784,7 @@ const showCartFeedback = (event) => {
         if (!button) return;
 
         prepareCartButton(button);
-        button.textContent = cart.dataset.rmCartSuccess || 'Product added to cart';
+        button.textContent = cart.dataset.rmCartSuccess || labels.cartAdded;
         button.classList.add('rm-buy__button--success');
         button.removeAttribute('aria-busy');
         button.setAttribute('aria-live', 'polite');
@@ -1113,8 +1812,16 @@ const init = (root = document) => {
     root.querySelectorAll?.('[data-rm-product-scope]').forEach((scope) => new ProductScope(scope).init());
     if (root.matches?.('[data-rm-product-card-dropdown]')) new ProductCardDropdown(root).init();
     root.querySelectorAll?.('[data-rm-product-card-dropdown]').forEach((dropdown) => new ProductCardDropdown(dropdown).init());
+    if (root.matches?.('[data-rm-product-card-position]')) new ProductCardPosition(root).init();
+    root.querySelectorAll?.('[data-rm-product-card-position]').forEach((position) => new ProductCardPosition(position).init());
+    if (root.matches?.('[data-rm-product-hover-gallery]')) new ProductHoverGallery(root).init();
+    root.querySelectorAll?.('[data-rm-product-hover-gallery]').forEach((gallery) => new ProductHoverGallery(gallery).init());
     if (root.matches?.('[data-rm-variants]')) new VariantPicker(root).init();
     root.querySelectorAll?.('[data-rm-variants]').forEach((container) => new VariantPicker(container).init());
+    if (root.matches?.('[data-rm-bulk-actions]')) new ProductBulkActions(root).init();
+    root.querySelectorAll?.('[data-rm-bulk-actions]').forEach((container) => new ProductBulkActions(container).init());
+    if (root.matches?.('[data-rm-product-action]')) new ProductOptionalAction(root).init();
+    root.querySelectorAll?.('[data-rm-product-action]').forEach((button) => new ProductOptionalAction(button).init());
 };
 
 document.addEventListener('click', (event) => {

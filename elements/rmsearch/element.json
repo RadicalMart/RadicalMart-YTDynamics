@@ -1,8 +1,8 @@
 {
     "name": "rmsearch",
     "title": "RM Search",
-    "group": "RadicalMart",
-    "icon": "${url:images/icon.svg}",
+    "group": "RadicalMart — Catalog",
+    "icon": "${url:images/iconPicker.svg}",
     "iconSmall": "${url:images/iconSmall.svg}",
     "element": true,
     "width": 500,

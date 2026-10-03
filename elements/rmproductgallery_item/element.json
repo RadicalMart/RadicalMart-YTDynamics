@@ -1,0 +1,83 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductgallery_item",
+  "title": "Item",
+  "width": 500,
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "image": "${builder.image}",
+    "video": {
+      "label": "Video",
+      "type": "video",
+      "source": true,
+      "show": "!image"
+    },
+    "poster": {
+      "label": "Video Poster",
+      "type": "image",
+      "source": true,
+      "show": "video"
+    },
+    "image_alt": {
+      "label": "Media Alt",
+      "source": true,
+      "enable": "image || video"
+    },
+    "image_fit": {
+      "label": "Image Fit",
+      "description": "Override the gallery image fit for this item.",
+      "type": "select",
+      "options": {"Inherit": "", "Contain": "contain", "Cover": "cover"},
+      "source": true
+    },
+    "image_position": {
+      "label": "Image Position",
+      "description": "Override the gallery image position for this item.",
+      "type": "select",
+      "options": {"Inherit": "", "Center": "center", "Top Left": "top-left", "Top Center": "top-center", "Top Right": "top-right", "Center Left": "center-left", "Center Right": "center-right", "Bottom Left": "bottom-left", "Bottom Center": "bottom-center", "Bottom Right": "bottom-right"},
+      "source": true
+    },
+    "background_color": {
+      "label": "Background Color",
+      "description": "Override the gallery background for this item.",
+      "type": "color",
+      "source": true
+    },
+    "mix_blend_mode": {
+      "label": "Image Blend Mode",
+      "description": "Override the gallery blend mode for this item.",
+      "type": "select",
+      "options": {"Inherit": "", "Normal": "normal", "Multiply": "multiply", "Screen": "screen", "Overlay": "overlay", "Darken": "darken", "Lighten": "lighten", "Color Dodge": "color-dodge", "Color Burn": "color-burn", "Hard Light": "hard-light", "Soft Light": "soft-light", "Difference": "difference", "Exclusion": "exclusion", "Hue": "hue", "Saturation": "saturation", "Color": "color", "Luminosity": "luminosity"},
+      "source": true
+    },
+    "name": "${builder.nameItem}",
+    "status": "${builder.statusItem}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS for this gallery item.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-item", ".rm-product-gallery__link", ".rm-product-gallery__media", ".rm-product-gallery__play"]}
+    }
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["image", "video", "poster", "image_alt"]},
+        {"title": "Settings", "fields": [
+          {"label": "Media", "type": "group", "fields": ["image_fit", "image_position", "background_color", "mix_blend_mode"]}
+        ]},
+        "${builder.advancedItem}"
+      ]
+    }
+  }
+}

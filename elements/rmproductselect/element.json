@@ -1,0 +1,7 @@
+{
+  "@import": "./element.php", "name": "rmproductselect", "title": "RM Product Bulk Select", "group": "RadicalMart — Catalog", "icon": "${url:images/iconPicker.svg}", "iconSmall": "${url:images/iconSmall.svg}", "element": true, "width": 500,
+  "defaults": {"label": "", "show_title": false, "disable_out_of_stock": true}, "templates": {"render": "./templates/template.php"},
+  "fields": {"product_id": {"label": "Product ID", "type": "number", "source": true}, "label": {"label": "Label", "type": "text", "source": true}, "show_title": {"type": "checkbox", "text": "Append the current product title"}, "disable_out_of_stock": {"type": "checkbox", "text": "Disable selection for unavailable products"},
+  "margin_top": "${builder.margin_top}", "margin_bottom": "${builder.margin_bottom}", "visibility": "${builder.visibility}", "name": "${builder.name}", "status": "${builder.status}", "source": "${builder.source}", "id": "${builder.id}", "class": "${builder.cls}", "attributes": "${builder.attrs}", "css": {"label": "CSS", "type": "editor", "editor": "code", "mode": "css", "attrs": {"hints": [".el-element", ".rm-product-select", ".rm-product-select__input", ".rm-product-select__label"]}}, "transform": "${builder.transform}"},
+  "fieldset": {"default": {"type": "tabs", "fields": [{"title": "Settings", "fields": [{"label": "Selection", "type": "group", "fields": ["product_id", "label", "show_title", "disable_out_of_stock"]}, {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "visibility"]}]}, "${builder.advanced}"]}}
+}

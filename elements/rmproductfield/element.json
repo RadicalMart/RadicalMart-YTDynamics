@@ -2,33 +2,108 @@
   "@import": "./element.php",
   "name": "rmproductfield",
   "title": "RM Product Field",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Product Data",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "width": 500,
   "defaults": {
+    "field_source": "system",
     "field": "title",
+    "custom_field": "",
+    "custom_value_mode": "formatted",
+    "show_custom_label": false,
+    "custom_label_separator": ": ",
+    "empty_text": "",
+    "before_value": "",
+    "after_value": "",
+    "affix_gap": "none",
     "title_element": "h3",
     "title_style": "h3",
     "text_style": "",
+    "text_weight": "",
+    "text_color": "",
+    "max_lines": 0,
+    "min_lines": 0,
+    "min_lines_breakpoint": "",
     "link_product": true,
     "show_base_price": true,
     "show_discount": false,
+    "show_unit": false,
+    "unit_style": "short",
+    "unit_separator": "/",
     "in_stock_label": "",
     "out_of_stock_label": "",
     "image_loading": "lazy",
     "image_fit": "contain",
     "image_ratio": "",
-    "image_height": ""
+    "image_height": "",
+    "image_resize_width": 800,
+    "image_resize_height": 0
   },
   "templates": {"render": "./templates/template.php"},
   "fields": {
+    "field_source": {
+      "label": "Field source",
+      "type": "select",
+      "options": {"System product data": "system", "RadicalMart field": "custom"}
+    },
     "field": {
       "label": "Product field",
       "description": "The value comes from the nearest RM Product or RM Product Card and updates when another variant is selected.",
       "type": "select",
-      "options": {"Title": "title", "Image": "image", "Price": "price", "Availability": "availability", "Code": "code", "Short description": "description", "Full description": "full_description"}
+      "options": {"Title": "title", "Image": "image", "Price": "price", "Base price": "base_price", "Discount": "discount", "Savings": "benefit", "Availability": "availability", "Stock quantity": "stock_quantity", "Unit": "unit", "Code": "code", "Category": "category", "Manufacturer": "manufacturer", "Short description": "description", "Full description": "full_description"},
+      "show": "field_source == 'system'"
+    },
+    "custom_field": {
+      "label": "RadicalMart field",
+      "description": "Published RadicalMart fields are loaded dynamically. New fields appear here without changing this element.",
+      "type": "select",
+      "options": [{"evaluate": "yootheme.builder.radicalmart_product_fields"}],
+      "show": "field_source == 'custom'"
+    },
+    "custom_value_mode": {
+      "label": "Custom field value",
+      "type": "select",
+      "options": {"Formatted value": "formatted", "Plain text": "text"},
+      "show": "field_source == 'custom'"
+    },
+    "show_custom_label": {
+      "type": "checkbox",
+      "text": "Show the field label",
+      "show": "field_source == 'custom'"
+    },
+    "custom_label_separator": {
+      "label": "Label separator",
+      "type": "text",
+      "show": "field_source == 'custom' && show_custom_label"
+    },
+    "empty_text": {
+      "label": "Empty value fallback",
+      "description": "Leave empty to hide this field when the selected product has no value.",
+      "type": "text",
+      "source": true,
+      "show": "field_source == 'custom'"
+    },
+    "before_value": {
+      "label": "Before value",
+      "description": "Optional text rendered before the value. Dynamic content is supported.",
+      "type": "text",
+      "source": true,
+      "show": "field_source == 'custom' || field != 'image'"
+    },
+    "after_value": {
+      "label": "After value",
+      "description": "Optional text rendered after the value. Dynamic content is supported.",
+      "type": "text",
+      "source": true,
+      "show": "field_source == 'custom' || field != 'image'"
+    },
+    "affix_gap": {
+      "label": "Before / after gap",
+      "type": "select",
+      "options": {"None": "none", "Text space": "space", "Small": "small"},
+      "show": "before_value || after_value"
     },
     "product_id": {
       "label": "Product ID",
@@ -40,29 +115,67 @@
       "label": "HTML element",
       "type": "select",
       "options": {"H1": "h1", "H2": "h2", "H3": "h3", "H4": "h4", "H5": "h5", "H6": "h6", "Div": "div"},
-      "show": "field == 'title'"
+      "show": "field_source == 'system' && field == 'title'"
     },
     "title_style": {
       "label": "Title style",
       "type": "select",
       "options": {"None": "", "H1": "h1", "H2": "h2", "H3": "h3", "H4": "h4", "H5": "h5", "H6": "h6"},
-      "show": "field == 'title'"
+      "show": "field_source == 'system' && field == 'title'"
     },
     "text_style": {
       "label": "Text style",
       "type": "select",
       "options": {"Default": "", "Lead": "lead", "Meta": "meta", "Small": "small", "Large": "large", "Bold": "bold"},
-      "show": "field != 'title' && field != 'image'"
+      "show": "field_source == 'custom' || (field != 'title' && field != 'image')"
     },
-    "link_product": {"type": "checkbox", "text": "Link to the selected product", "show": "field == 'title' || field == 'image'"},
-    "show_base_price": {"type": "checkbox", "text": "Show crossed-out base price for discounts", "show": "field == 'price'"},
-    "show_discount": {"type": "checkbox", "text": "Show discount value", "show": "field == 'price'"},
-    "in_stock_label": {"label": "In-stock label", "description": "Leave empty to use the site translation.", "type": "text", "source": true, "show": "field == 'availability'"},
-    "out_of_stock_label": {"label": "Out-of-stock label", "description": "Leave empty to use the site translation.", "type": "text", "source": true, "show": "field == 'availability'"},
-    "image_loading": {"label": "Loading", "type": "select", "options": {"Lazy": "lazy", "Eager": "eager"}, "show": "field == 'image'"},
-    "image_fit": {"label": "Image fit", "type": "select", "options": {"Contain": "contain", "Cover": "cover"}, "show": "field == 'image'"},
-    "image_ratio": {"label": "Image ratio", "description": "Responsive aspect ratio. A custom height below overrides the ratio.", "type": "select", "options": {"Original": "", "Square 1:1": "1/1", "Landscape 4:3": "4/3", "Landscape 3:2": "3/2", "Widescreen 16:9": "16/9"}, "show": "field == 'image'"},
-    "image_height": {"label": "Image height", "description": "Optional CSS length, for example 320px, 40vh or 100%.", "type": "text", "show": "field == 'image'"},
+    "text_weight": {
+      "label": "Text weight",
+      "type": "select",
+      "options": {"Inherit": "", "Light": "light", "Normal": "normal", "Bold": "bold", "Lighter": "lighter", "Bolder": "bolder"},
+      "show": "field_source == 'custom' || field != 'image'"
+    },
+    "text_color": {
+      "label": "Text color",
+      "type": "select",
+      "options": {"Inherit": "", "Muted": "muted", "Emphasis": "emphasis", "Primary": "primary", "Secondary": "secondary", "Success": "success", "Warning": "warning", "Danger": "danger"},
+      "show": "field_source == 'custom' || field != 'image'"
+    },
+    "max_lines": {
+      "label": "Maximum lines",
+      "description": "Optionally truncate long titles or descriptions after a fixed number of lines.",
+      "type": "select",
+      "options": {"No limit": 0, "1 line": 1, "2 lines": 2, "3 lines": 3, "4 lines": 4, "5 lines": 5, "6 lines": 6},
+      "show": "field_source == 'custom' || field == 'title' || field == 'description' || field == 'full_description'"
+    },
+    "min_lines": {
+      "label": "Reserved lines",
+      "description": "Reserve a consistent text height even when the value uses fewer lines. Useful for aligned card rows.",
+      "type": "select",
+      "options": {"Natural": 0, "1 line": 1, "2 lines": 2, "3 lines": 3, "4 lines": 4, "5 lines": 5, "6 lines": 6},
+      "show": "field_source == 'custom' || field == 'title' || field == 'description' || field == 'full_description'"
+    },
+    "min_lines_breakpoint": {
+      "label": "Reserve lines from",
+      "description": "Apply the reserved height only from this viewport width. On narrower screens the text keeps its natural height.",
+      "type": "select",
+      "options": {"All widths": "", "Small (640px)": "s", "Medium (960px)": "m", "Large (1200px)": "l", "XL (1600px)": "xl"},
+      "show": "(field_source == 'custom' || field == 'title' || field == 'description' || field == 'full_description') && min_lines != 0"
+    },
+    "link_product": {"type": "checkbox", "text": "Link to the related page", "show": "field_source == 'system' && (field == 'title' || field == 'image' || field == 'category' || field == 'manufacturer')"},
+    "show_base_price": {"type": "checkbox", "text": "Show crossed-out base price for discounts", "show": "field_source == 'system' && field == 'price'"},
+    "show_discount": {"type": "checkbox", "text": "Show discount value", "show": "field_source == 'system' && field == 'price'"},
+    "show_unit": {"type": "checkbox", "text": "Append the product unit to the price", "show": "field_source == 'system' && field == 'price'"},
+    "unit_style": {"label": "Price unit label", "type": "select", "options": {"Short": "short", "Long": "long"}, "show": "field_source == 'system' && field == 'price' && show_unit"},
+    "unit_separator": {"label": "Price / unit separator", "description": "For example /, · or a single space.", "type": "text", "show": "field_source == 'system' && field == 'price' && show_unit"},
+    "in_stock_label": {"label": "In-stock label", "description": "Leave empty to use the site translation.", "type": "text", "source": true, "show": "field_source == 'system' && field == 'availability'"},
+    "out_of_stock_label": {"label": "Out-of-stock label", "description": "Leave empty to use the site translation.", "type": "text", "source": true, "show": "field_source == 'system' && field == 'availability'"},
+    "image_loading": {"label": "Loading", "type": "select", "options": {"Lazy": "lazy", "Eager": "eager"}, "show": "field_source == 'system' && field == 'image'"},
+    "image_fit": {"label": "Image fit", "type": "select", "options": {"Contain": "contain", "Cover": "cover"}, "show": "field_source == 'system' && field == 'image'"},
+    "image_ratio": {"label": "Image ratio", "description": "Responsive aspect ratio. A custom height below overrides the ratio.", "type": "select", "options": {"Original": "", "Square 1:1": "1/1", "Landscape 4:3": "4/3", "Landscape 3:2": "3/2", "Widescreen 16:9": "16/9"}, "show": "field_source == 'system' && field == 'image'"},
+    "image_height": {"label": "Image height", "description": "Optional CSS length, for example 320px, 40vh or 100%.", "type": "text", "show": "field_source == 'system' && field == 'image'"},
+    "image_resize_width": {"label": "Generated image width", "description": "Pixel width used by the YOOtheme thumbnail and responsive image pipeline. Use 0 for the original file.", "type": "number", "attrs": {"min": 0, "max": 2400, "step": 50}, "show": "field_source == 'system' && field == 'image'"},
+    "image_resize_height": {"label": "Generated image height", "description": "Optional crop height in pixels. Use 0 to preserve the source aspect ratio.", "type": "number", "attrs": {"min": 0, "max": 2400, "step": 50}, "show": "field_source == 'system' && field == 'image'"},
     "margin_top": "${builder.margin_top}",
     "margin_bottom": "${builder.margin_bottom}",
     "maxwidth": "${builder.maxwidth}",
@@ -96,7 +209,7 @@
       "type": "tabs",
       "fields": [
         {"title": "Settings", "fields": [
-          {"label": "Content", "type": "group", "fields": ["field", "product_id", "title_element", "title_style", "text_style", "link_product", "show_base_price", "show_discount", "in_stock_label", "out_of_stock_label", "image_loading", "image_fit", "image_ratio", "image_height"]},
+          {"label": "Content", "type": "group", "fields": ["field_source", "field", "custom_field", "custom_value_mode", "show_custom_label", "custom_label_separator", "empty_text", "product_id", "before_value", "after_value", "affix_gap", "title_element", "title_style", "text_style", "text_weight", "text_color", "max_lines", "min_lines", "min_lines_breakpoint", "link_product", "show_base_price", "show_discount", "show_unit", "unit_style", "unit_separator", "in_stock_label", "out_of_stock_label", "image_loading", "image_fit", "image_ratio", "image_height", "image_resize_width", "image_resize_height"]},
           {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
         ]},
         "${builder.advanced}"

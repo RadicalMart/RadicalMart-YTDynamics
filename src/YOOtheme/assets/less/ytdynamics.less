@@ -20,6 +20,15 @@
 @ytdynamics-emphasis-color:                     @global-emphasis-color;
 @ytdynamics-muted-color:                        @global-muted-color;
 @ytdynamics-inverse-color:                      @global-inverse-color;
+@ytdynamics-primary-color:                      @global-link-color;
+@ytdynamics-surface-color:                      @global-color;
+@ytdynamics-surface-muted-color:                @global-muted-color;
+@ytdynamics-surface-primary-color:              @global-link-color;
+@ytdynamics-surface-border:                     @global-border;
+@ytdynamics-muted-surface-color:                @global-color;
+@ytdynamics-success-color:                      @global-inverse-color;
+@ytdynamics-inverse-muted-color:                @inverse-global-muted-color;
+@ytdynamics-inverse-border:                     @inverse-global-border;
 
 @ytdynamics-background:                         @global-background;
 @ytdynamics-muted-background:                   @global-muted-background;
@@ -67,6 +76,7 @@
 @ytdynamics-medium-font-size:                   @global-medium-font-size;
 @ytdynamics-line-height:                        @global-line-height;
 @ytdynamics-primary-font-weight:                @global-primary-font-weight;
+@ytdynamics-font-weight:                        @base-body-font-weight;
 @ytdynamics-meta-text-transform:                 @text-meta-text-transform;
 @ytdynamics-meta-letter-spacing:                 @text-meta-letter-spacing;
 @ytdynamics-transition-duration:                @transition-duration;
@@ -87,6 +97,15 @@
     --ytdynamics-emphasis-color: @ytdynamics-emphasis-color;
     --ytdynamics-muted-color: @ytdynamics-muted-color;
     --ytdynamics-inverse-color: @ytdynamics-inverse-color;
+    --ytdynamics-primary-color: @ytdynamics-primary-color;
+    --ytdynamics-surface-color: @ytdynamics-surface-color;
+    --ytdynamics-surface-muted-color: @ytdynamics-surface-muted-color;
+    --ytdynamics-surface-primary-color: @ytdynamics-surface-primary-color;
+    --ytdynamics-surface-border: @ytdynamics-surface-border;
+    --ytdynamics-muted-surface-color: @ytdynamics-muted-surface-color;
+    --ytdynamics-success-color: @ytdynamics-success-color;
+    --ytdynamics-inverse-muted-color: @ytdynamics-inverse-muted-color;
+    --ytdynamics-inverse-border: @ytdynamics-inverse-border;
 
     --ytdynamics-background: @ytdynamics-background;
     --ytdynamics-muted-background: @ytdynamics-muted-background;
@@ -125,6 +144,7 @@
     --ytdynamics-medium-font-size: @ytdynamics-medium-font-size;
     --ytdynamics-line-height: @ytdynamics-line-height;
     --ytdynamics-primary-font-weight: @ytdynamics-primary-font-weight;
+    --ytdynamics-font-weight: @ytdynamics-font-weight;
     --ytdynamics-meta-text-transform: @ytdynamics-meta-text-transform;
     --ytdynamics-meta-letter-spacing: @ytdynamics-meta-letter-spacing;
     --ytdynamics-transition-duration: @ytdynamics-transition-duration;
@@ -139,4 +159,24 @@
     --ytdynamics-breakpoint-medium: @breakpoint-medium;
     --ytdynamics-breakpoint-large: @breakpoint-large;
     --ytdynamics-breakpoint-xlarge: @breakpoint-xlarge;
+}
+
+// UIkit implements inverse components through either .uk-light or .uk-dark,
+// depending on @inverse-global-color-mode. Mirror the same conditional hooks
+// instead of assuming a particular preset color mode.
+.ytdynamics-inverse-tokens() {
+    --ytdynamics-color: @inverse-global-color;
+    --ytdynamics-emphasis-color: @inverse-global-emphasis-color;
+    --ytdynamics-muted-color: @ytdynamics-inverse-muted-color;
+    --ytdynamics-primary-color: @inverse-global-color;
+    --ytdynamics-border: @ytdynamics-inverse-border;
+    --ytdynamics-scroll-shadow-color: fade(@global-inverse-color, 18%);
+}
+
+.uk-light when (@inverse-global-color-mode = light) {
+    .ytdynamics-inverse-tokens();
+}
+
+.uk-dark when (@inverse-global-color-mode = dark) {
+    .ytdynamics-inverse-tokens();
 }

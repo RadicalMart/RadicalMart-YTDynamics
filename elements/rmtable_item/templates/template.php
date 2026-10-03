@@ -34,6 +34,8 @@ $row = $this->el('tr', [
 		'rm-table__row--mobile-shadow-' . $cardShadow => $cardShadow,
 	],
 	'data-section' => $rowType,
+	'data-rm-table-static-inverse' => in_array($background, ['primary', 'secondary'], true) ? 'true' : 'false',
+	'data-rm-table-mobile-style' => $cardStyle ?: 'inherit',
 	'aria-label' => trim((string) ($props['row_aria_label'] ?? '')) ?: false,
 ]);
 ?>

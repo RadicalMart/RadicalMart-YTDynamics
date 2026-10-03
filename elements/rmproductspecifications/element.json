@@ -2,8 +2,8 @@
   "@import": "./element.php",
   "name": "rmproductspecifications",
   "title": "RM Product Specifications",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Product Data",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "container": false,
@@ -12,9 +12,15 @@
     "layout": "description-list",
     "show_fieldset_titles": true,
     "show_variant_fields": true,
+    "selected_fields": [],
+    "field_limit": 0,
     "divider": true,
     "striped": false,
-    "columns": "2"
+    "table_responsive": "scroll",
+    "table_stack_breakpoint": "s",
+    "columns_small": "1",
+    "columns_medium": "2",
+    "columns_large": "2"
   },
   "templates": {"render": "./templates/template.php"},
   "fields": {
@@ -22,9 +28,27 @@
     "layout": {"label": "Layout", "type": "select", "options": {"Description list": "description-list", "Table": "table", "Grid": "grid"}},
     "show_fieldset_titles": {"type": "checkbox", "text": "Show fieldset titles"},
     "show_variant_fields": {"type": "checkbox", "text": "Include fields used for variants"},
+    "selected_fields": {
+      "label": "Product fields",
+      "description": "Select the characteristics to display. Leave empty to use every available product field.",
+      "type": "select",
+      "default": [],
+      "options": [{"evaluate": "yootheme.builder.radicalmart_product_fields"}],
+      "attrs": {"multiple": true, "class": "uk-height-small"}
+    },
+    "field_limit": {
+      "label": "Maximum fields",
+      "description": "Limit the number of characteristics in compact cards. Use 0 to show every selected field.",
+      "type": "range",
+      "attrs": {"min": 0, "max": 24, "step": 1}
+    },
     "divider": {"type": "checkbox", "text": "Show dividers between values"},
     "striped": {"type": "checkbox", "text": "Use striped table rows", "show": "layout == 'table'"},
-    "columns": {"label": "Grid columns", "type": "select", "options": {"1": "1", "2": "2", "3": "3", "4": "4"}, "show": "layout == 'grid'"},
+    "table_responsive": {"label": "Mobile table", "type": "select", "options": {"Horizontal scroll": "scroll", "Stack label and value": "stack"}, "show": "layout == 'table'"},
+    "table_stack_breakpoint": {"label": "Stack below", "type": "select", "options": {"Small (640px)": "s", "Medium (960px)": "m"}, "show": "layout == 'table' && table_responsive == 'stack'"},
+    "columns_small": {"label": "Grid columns (Small)", "type": "select", "options": {"1": "1", "2": "2", "3": "3", "4": "4"}, "show": "layout == 'grid'"},
+    "columns_medium": {"label": "Grid columns (Medium)", "type": "select", "options": {"1": "1", "2": "2", "3": "3", "4": "4"}, "show": "layout == 'grid'"},
+    "columns_large": {"label": "Grid columns (Large)", "type": "select", "options": {"1": "1", "2": "2", "3": "3", "4": "4"}, "show": "layout == 'grid'"},
     "margin_top": "${builder.margin_top}",
     "margin_bottom": "${builder.margin_bottom}",
     "maxwidth": "${builder.maxwidth}",
@@ -51,8 +75,8 @@
       "type": "tabs",
       "fields": [
         {"title": "Settings", "fields": [
-          {"label": "Content", "type": "group", "fields": ["product_id", "show_fieldset_titles", "show_variant_fields"]},
-          {"label": "Layout", "type": "group", "fields": ["layout", "divider", "striped", "columns"]},
+          {"label": "Content", "type": "group", "fields": ["product_id", "selected_fields", "field_limit", "show_fieldset_titles", "show_variant_fields"]},
+          {"label": "Layout", "type": "group", "fields": ["layout", "divider", "striped", "table_responsive", "table_stack_breakpoint", "columns_small", "columns_medium", "columns_large"]},
           {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
         ]},
         "${builder.advanced}"

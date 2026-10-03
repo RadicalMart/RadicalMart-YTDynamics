@@ -2,8 +2,8 @@
   "@import": "./element.php",
   "name": "rmproductcard",
   "title": "RM Product Card",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Product Card",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "container": true,
@@ -15,7 +15,7 @@
         "children": [
           {"type": "rmproductfield", "props": {"field": "image"}},
           {"type": "rmproductfield", "props": {"field": "title", "title_element": "h3", "title_style": "h4", "margin_top": "small"}},
-          {"type": "rmproductfield", "props": {"field": "price", "text_style": "large", "margin_top": "small"}},
+          {"type": "rmproductprice", "props": {"show_unit": true, "show_base_price": true, "show_discount": true, "discount_mode": "percent", "margin_top": "small"}},
           {"type": "rmproductfield", "props": {"field": "availability", "margin_top": "small"}}
         ]
       },
@@ -30,12 +30,12 @@
       }
     ]
   },
-  "defaults": {"panel_style": "", "panel_padding": "default", "panel_hover": false},
+  "defaults": {"panel_style": "", "panel_padding": "default", "panel_hover": false, "height_mode": "natural"},
   "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
   "fields": {
     "content": {
       "label": "Product card structure",
-      "description": "Use RM Product Card Main for permanent content and RM Product Card Dropdown for content revealed on hover. Add RM Variants wherever the controls should appear.",
+      "description": "Use Main for permanent content, Position for strict 3 × 3 overlay slots, and Dropdown for a panel below the card. Add any Builder elements inside these areas.",
       "type": "builder-fragment"
     },
     "product_id": {
@@ -52,6 +52,12 @@
     },
     "panel_padding": {"label": "Card padding", "type": "select", "options": {"Small": "small", "Default": "default", "Large": "large"}, "show": "panel_style"},
     "panel_hover": {"type": "checkbox", "text": "Use UIkit card hover effect", "show": "panel_style"},
+    "height_mode": {
+      "label": "Card height",
+      "description": "Keep the natural card height or fill the height provided by RM Grid or another parent container.",
+      "type": "select",
+      "options": {"Natural": "natural", "Fill parent": "fill"}
+    },
     "margin_top": "${builder.margin_top}",
     "margin_bottom": "${builder.margin_bottom}",
     "maxwidth": "${builder.maxwidth}",
@@ -76,7 +82,7 @@
       "type": "editor",
       "editor": "code",
       "mode": "css",
-      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-card", ".rm-product-card__main", ".rm-product-card__dropdown", ".rm-product-field", ".rmvariants", ".rm-buy"]}
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-card", ".rm-product-card__main", ".rm-product-card__position", ".rm-product-card__position-content", ".rm-product-card__dropdown", ".rm-product-field", ".rmvariants", ".rm-buy"]}
     },
     "transform": "${builder.transform}"
   },
@@ -87,7 +93,7 @@
         {"title": "Content", "fields": ["content"]},
         {"title": "Settings", "fields": [
           {"label": "Product", "type": "group", "fields": ["product_id"]},
-          {"label": "Card", "type": "group", "fields": ["panel_style", "panel_padding", "panel_hover"]},
+          {"label": "Card", "type": "group", "fields": ["panel_style", "panel_padding", "panel_hover", "height_mode"]},
           {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
         ]},
         "${builder.advanced}"

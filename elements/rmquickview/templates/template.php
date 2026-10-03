@@ -5,8 +5,13 @@ namespace YOOtheme;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Plugin\System\YTDynamics\Service\ProductPresentation;
 
-$productId = (int) ($props['product_id'] ?? 0);
+$product = ProductPresentation::resolve(
+	isset($rmProduct) && is_array($rmProduct) ? $rmProduct : null,
+	(int) ($props['product_id'] ?? 0)
+);
+$productId = (int) ($product['id'] ?? 0);
 $templateId = trim((string) ($props['quickview_template'] ?? ''));
 $contentMode = ($props['content_mode'] ?? 'automatic') === 'builder' && $templateId !== ''
 	? 'builder' : 'automatic';
@@ -30,9 +35,12 @@ $assets->useScript('com_radicalmart.site.trigger');
 foreach ([
 	'PLG_YTDYNAMICS_QUICK_VIEW',
 	'PLG_YTDYNAMICS_ERROR_LOAD_PRODUCT',
+	'PLG_YTDYNAMICS_ERROR_EMPTY_PRODUCT',
+	'PLG_YTDYNAMICS_ERROR_EMPTY_QUICK_VIEW',
 	'PLG_YTDYNAMICS_NO_IMAGE',
 	'PLG_YTDYNAMICS_DETAILS',
 	'PLG_YTDYNAMICS_QUANTITY',
+	'PLG_YTDYNAMICS_CART_ADDED',
 	'JLIB_HTML_BEHAVIOR_CLOSE',
 	'COM_RADICALMART_IN_STOCK',
 	'COM_RADICALMART_NOT_IN_STOCK',

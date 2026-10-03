@@ -1,0 +1,66 @@
+{
+  "@import": "./element.php",
+  "name": "rmcatalogmenu_item",
+  "title": "Item",
+  "width": 500,
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "content": {
+      "label": "Child items",
+      "description": "Add another menu level. Child items open as a separate panel with a Back button.",
+      "type": "content-items",
+      "item": "rmcatalogmenu_item"
+    },
+    "title": {
+      "label": "Title",
+      "type": "text",
+      "source": true
+    },
+    "link": "${builder.link}",
+    "category_id": {
+      "label": "RadicalMart category ID",
+      "description": "Optional. Fills a missing title, link and item count from the category.",
+      "type": "number",
+      "source": true
+    },
+    "item_count": {
+      "label": "Item count",
+      "description": "Optional manual or dynamic count. The category total is used when empty.",
+      "type": "number",
+      "source": true
+    },
+    "current": {
+      "type": "checkbox",
+      "text": "Mark this item as current"
+    },
+    "name": "${builder.nameItem}",
+    "status": "${builder.statusItem}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS for this menu item.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-item", ".rm-catalog-menu__link", ".rm-catalog-menu__forward"]}
+    }
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["title", "link", "category_id", "item_count", "content"]},
+        {"title": "Settings", "fields": [
+          {"label": "State", "type": "group", "fields": ["current"]}
+        ]},
+        "${builder.advancedItem}"
+      ]
+    }
+  }
+}

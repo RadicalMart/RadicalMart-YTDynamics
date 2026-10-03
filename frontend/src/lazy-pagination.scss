@@ -1,0 +1,44 @@
+.rm-lazy-pagination {
+  min-height: 56px;
+
+  &__button {
+    min-width: var(--rm-lazy-button-min-width, 220px);
+    min-height: var(--rm-lazy-button-height, 56px);
+    border-radius: 10px;
+  }
+
+  &__spinner {
+    display: none;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+    margin-right: 9px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    vertical-align: -3px;
+    animation: rm-lazy-pagination-spin .65s linear infinite;
+  }
+
+  &.is-loading &__spinner {
+    display: inline-block;
+  }
+
+  &.is-complete &__button {
+    opacity: .65;
+  }
+
+  &__status {
+    margin-top: 8px;
+    color: #d33;
+    font-size: .875rem;
+  }
+
+  &__pages {
+    margin-top: 16px;
+  }
+}
+
+@keyframes rm-lazy-pagination-spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,142 @@
+{
+  "@import": "./element.php",
+  "name": "rmfilter",
+  "title": "RM Filter",
+  "group": "RadicalMart — Catalog",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "width": 500,
+  "defaults": {
+    "presentation": "responsive",
+    "desktop_breakpoint": 960,
+    "dropdown_width": 320,
+    "dropdown_max_height": 420,
+    "auto_submit": false,
+    "auto_submit_delay": 250,
+    "show_submit": true,
+    "close_on_change": false,
+    "show_active_count": true,
+    "mobile_initial_open": "first"
+  },
+  "templates": {
+    "render": "./templates/template.php"
+  },
+  "fields": {
+    "module": {
+      "type": "select-item",
+      "label": "Filter module",
+      "route": "joomla/modules",
+      "description": "Select an existing RadicalMart Filter module. Its native fields and filtering logic are preserved."
+    },
+    "presentation": {
+      "label": "Presentation",
+      "type": "select",
+      "options": {
+        "Responsive (dropdown / accordion)": "responsive",
+        "Desktop dropdowns": "dropdown",
+        "Mobile accordion": "accordion"
+      }
+    },
+    "desktop_breakpoint": {
+      "label": "Desktop breakpoint",
+      "type": "range",
+      "attrs": {"min": 640, "max": 1440, "step": 10},
+      "show": "presentation == 'responsive'"
+    },
+    "dropdown_width": {
+      "label": "Dropdown width",
+      "type": "range",
+      "attrs": {"min": 220, "max": 640, "step": 10},
+      "show": "presentation != 'accordion'"
+    },
+    "dropdown_max_height": {
+      "label": "Dropdown max height",
+      "type": "range",
+      "attrs": {"min": 180, "max": 720, "step": 10},
+      "show": "presentation != 'accordion'"
+    },
+    "auto_submit": {
+      "label": "Behaviour",
+      "type": "checkbox",
+      "text": "Apply after a field changes"
+    },
+    "auto_submit_delay": {
+      "label": "Apply delay",
+      "type": "range",
+      "attrs": {"min": 0, "max": 1500, "step": 50},
+      "show": "auto_submit"
+    },
+    "close_on_change": {
+      "type": "checkbox",
+      "text": "Close desktop dropdown after selecting",
+      "show": "presentation != 'accordion'"
+    },
+    "show_submit": {
+      "type": "checkbox",
+      "text": "Show Apply button"
+    },
+    "show_active_count": {
+      "type": "checkbox",
+      "text": "Show selected value count"
+    },
+    "mobile_initial_open": {
+      "label": "Mobile initial state",
+      "type": "select",
+      "options": {
+        "First filter": "first",
+        "Selected filters, otherwise first": "active",
+        "All collapsed": "none",
+        "Keep module state": "module"
+      },
+      "show": "presentation != 'dropdown'"
+    },
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this filter element.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-filter", ".rm-filter__module", ".accordion-item", ".accordion-button", ".accordion-body", ".rm-filter__count"]}
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["module"]},
+        {"title": "Settings", "fields": [
+          {"label": "Layout", "type": "group", "fields": ["presentation", "desktop_breakpoint", "dropdown_width", "dropdown_max_height"]},
+          {"label": "Behaviour", "type": "group", "fields": ["auto_submit", "auto_submit_delay", "close_on_change", "show_submit", "show_active_count", "mobile_initial_open"]},
+          {"label": "General", "type": "group", "fields": ["position", "position_left", "position_right", "position_top", "position_bottom", "position_z_index", "margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

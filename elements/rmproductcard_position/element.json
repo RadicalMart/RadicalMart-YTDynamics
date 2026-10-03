@@ -1,0 +1,172 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductcard_position",
+  "title": "RM Product Card Position",
+  "group": "RadicalMart — Product Card",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {"type": "text", "props": {"content": "Add product badges, actions or any Builder elements here."}}
+    ]
+  },
+  "defaults": {
+    "position": "top-right",
+    "span": "cell",
+    "direction": "column",
+    "gap": "small",
+    "inset": "small",
+    "visibility_mode": "always",
+    "animation": "fade",
+    "position_breakpoint": "all",
+    "fallback_display": "inline",
+    "z_index": 10
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "content": {
+      "label": "Position content",
+      "description": "Add any YOOtheme or RadicalMart elements. They share the current product and stay inside one strict card-grid position.",
+      "type": "builder-fragment"
+    },
+    "position": {
+      "label": "Position",
+      "description": "A fixed 3 × 3 grid, following the UIkit position naming model.",
+      "type": "select",
+      "options": {
+        "Top left": "top-left",
+        "Top center": "top-center",
+        "Top right": "top-right",
+        "Center left": "center-left",
+        "Center": "center",
+        "Center right": "center-right",
+        "Bottom left": "bottom-left",
+        "Bottom center": "bottom-center",
+        "Bottom right": "bottom-right"
+      }
+    },
+    "span": {
+      "label": "Grid span",
+      "description": "Keep the content in one cell, stretch its area across the selected row, or cover the whole card.",
+      "type": "select",
+      "options": {
+        "Single cell": "cell",
+        "Full row": "row",
+        "Whole card": "cover"
+      }
+    },
+    "direction": {
+      "label": "Items direction",
+      "type": "select",
+      "options": {
+        "Vertical": "column",
+        "Horizontal": "row"
+      }
+    },
+    "gap": {
+      "label": "Items gap",
+      "type": "select",
+      "options": {
+        "None": "none",
+        "Small": "small",
+        "Default": "default",
+        "Large": "large"
+      }
+    },
+    "inset": {
+      "label": "Position inset",
+      "description": "The distance from the card edges, similar to UIkit position-small and position-medium.",
+      "type": "select",
+      "options": {
+        "None": "none",
+        "Small": "small",
+        "Default": "default",
+        "Large": "large"
+      }
+    },
+    "z_index": {
+      "label": "Layer",
+      "description": "Higher values appear above lower positioned areas.",
+      "type": "range",
+      "attrs": {"min": 1, "max": 50, "step": 1}
+    },
+    "visibility_mode": {
+      "label": "Show",
+      "type": "select",
+      "options": {
+        "Always": "always",
+        "On card hover or keyboard focus": "interaction",
+        "On keyboard focus": "focus"
+      }
+    },
+    "animation": {
+      "label": "Reveal animation",
+      "type": "select",
+      "options": {
+        "Fade": "fade",
+        "Slide up": "slide-up",
+        "Slide down": "slide-down",
+        "Scale": "scale"
+      },
+      "show": "visibility_mode != 'always'"
+    },
+    "position_breakpoint": {
+      "label": "Position from",
+      "description": "Below this width the fallback setting is used instead of an overlay position.",
+      "type": "select",
+      "options": {
+        "All widths": "all",
+        "Small (640px)": "s",
+        "Medium (960px)": "m",
+        "Large (1200px)": "l",
+        "X-Large (1600px)": "xl"
+      }
+    },
+    "fallback_display": {
+      "label": "Touch and narrow screens",
+      "description": "Show the content in normal card flow or hide it where precise overlay positioning is unavailable.",
+      "type": "select",
+      "options": {
+        "Show inline": "inline",
+        "Hide": "hidden"
+      }
+    },
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS for this positioned area.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {
+        "debounce": 500,
+        "hints": [".el-element", ".rm-product-card__position", ".rm-product-card__position-content"]
+      }
+    }
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["content"]},
+        {"title": "Settings", "fields": [
+          {"label": "Grid position", "type": "group", "fields": ["position", "span", "inset", "z_index"]},
+          {"label": "Content layout", "type": "group", "fields": ["direction", "gap"]},
+          {"label": "Visibility", "type": "group", "fields": ["visibility_mode", "animation", "position_breakpoint", "fallback_display"]}
+        ]},
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

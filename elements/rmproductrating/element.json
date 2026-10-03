@@ -1,0 +1,11 @@
+{
+  "@import": "./element.php", "name": "rmproductrating", "title": "RM Product Rating", "group": "RadicalMart — Product Data", "icon": "${url:images/iconPicker.svg}", "iconSmall": "${url:images/iconSmall.svg}", "element": true, "width": 500,
+  "defaults": {"show_value": true, "show_count": true, "show_empty": false, "size": 18, "color": ""}, "templates": {"render": "./templates/template.php"},
+  "fields": {
+    "product_id": {"label": "Product ID", "type": "number", "source": true}, "show_value": {"type": "checkbox", "text": "Show numeric rating"}, "show_count": {"type": "checkbox", "text": "Show review count"}, "show_empty": {"type": "checkbox", "text": "Show an empty rating when no review provider supplies data"},
+    "size": {"label": "Star size", "type": "range", "attrs": {"min": 12, "max": 48, "step": 1}}, "color": {"label": "Active color", "description": "Leave empty to inherit the YOOtheme/UIkit primary color.", "type": "color"},
+    "margin_top": "${builder.margin_top}", "margin_bottom": "${builder.margin_bottom}", "visibility": "${builder.visibility}", "name": "${builder.name}", "status": "${builder.status}", "source": "${builder.source}", "id": "${builder.id}", "class": "${builder.cls}", "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-rating", ".rm-product-rating__stars", ".rm-product-rating__value", ".rm-product-rating__count"]}}, "transform": "${builder.transform}"
+  },
+  "fieldset": {"default": {"type": "tabs", "fields": [{"title": "Settings", "fields": [{"label": "Rating", "type": "group", "fields": ["product_id", "show_value", "show_count", "show_empty", "size", "color"]}, {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "visibility"]}]}, "${builder.advanced}"]}}
+}

@@ -11,6 +11,10 @@ const entry = {
         import: './src/product-interactions.es6',
         filename: 'product-interactions.js',
     },
+    "catalog-navigation": {
+        import: './src/catalog-navigation.es6',
+        filename: 'catalog-navigation.js',
+    },
     "table": {
         import: './src/table.es6',
         filename: 'table.js',
@@ -18,6 +22,10 @@ const entry = {
     "toolbar": {
         import: './src/toolbar.es6',
         filename: 'toolbar.js',
+    },
+    "lazy-pagination": {
+        import: './src/lazy-pagination.es6',
+        filename: 'lazy-pagination.js',
     },
 };
 

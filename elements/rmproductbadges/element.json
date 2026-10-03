@@ -1,0 +1,27 @@
+{
+  "@import": "./element.php",
+  "name": "rmproductbadges",
+  "title": "RM Product Badges",
+  "group": "RadicalMart — Product Data",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "width": 500,
+  "defaults": {"direction": "horizontal", "show_icons": true, "show_titles": false, "link_badges": true, "label_style": "", "size": 40, "limit": 0},
+  "templates": {"render": "./templates/template.php"},
+  "fields": {
+    "product_id": {"label": "Product ID", "description": "Optional outside an RM Product context.", "type": "number", "source": true},
+    "direction": {"label": "Direction", "type": "select", "options": {"Horizontal": "horizontal", "Vertical": "vertical"}},
+    "show_icons": {"type": "checkbox", "text": "Show badge icons"},
+    "show_titles": {"type": "checkbox", "text": "Show badge titles"},
+    "link_badges": {"type": "checkbox", "text": "Link badges to their RadicalMart category"},
+    "label_style": {"label": "Text badge style", "type": "select", "options": {"Default": "", "Success": "success", "Warning": "warning", "Danger": "danger"}},
+    "size": {"label": "Icon size", "description": "Pixels.", "type": "range", "attrs": {"min": 16, "max": 96, "step": 1}, "show": "show_icons"},
+    "limit": {"label": "Maximum badges", "description": "0 shows all badges.", "type": "number"},
+    "margin_top": "${builder.margin_top}", "margin_bottom": "${builder.margin_bottom}", "visibility": "${builder.visibility}",
+    "name": "${builder.name}", "status": "${builder.status}", "source": "${builder.source}", "id": "${builder.id}", "class": "${builder.cls}", "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "description": "Custom CSS is scoped to this element.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-badges", ".rm-product-badges__list", ".rm-product-badges__item", ".rm-product-badges__icon", ".rm-product-badges__label"]}},
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {"default": {"type": "tabs", "fields": [{"title": "Settings", "fields": [{"label": "Badges", "type": "group", "fields": ["product_id", "direction", "show_icons", "show_titles", "link_badges", "label_style", "size", "limit"]}, {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "visibility"]}]}, "${builder.advanced}"]}}
+}

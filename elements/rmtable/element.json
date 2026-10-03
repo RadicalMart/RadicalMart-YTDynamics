@@ -2,8 +2,8 @@
   "@import": "./element.php",
   "name": "rmtable",
   "title": "RM Table",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Layout & UI",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "container": true,
@@ -67,7 +67,11 @@
     "mode": {
       "label": "Display mode",
       "type": "select",
-      "options": {"Always": "default", "RadicalMart table layout": "radicalmart_table"}
+      "options": {
+        "Always": "default",
+        "RadicalMart Price": "radicalmart_price",
+        "RadicalMart Table (legacy alias)": "radicalmart_table"
+      }
     },
     "caption": {
       "label": "Caption",
@@ -157,8 +161,8 @@
     },
     "scroll_shadow": {
       "type": "checkbox",
-      "text": "Show scroll edge shadows",
-      "enable": "responsive_mode == 'scroll'"
+      "text": "Show horizontal scroll edge shadows",
+      "show": "responsive_mode == 'scroll' || table_max_height || table_min_width"
     },
     "scroll_label": {
       "label": "Scrollable region label",

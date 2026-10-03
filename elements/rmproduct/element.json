@@ -2,8 +2,8 @@
   "@import": "./element.php",
   "name": "rmproduct",
   "title": "RM Product",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Product Data",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "container": true,
@@ -18,7 +18,7 @@
             "type": "column",
             "props": {"width_medium": "1-2"},
             "children": [
-              {"type": "rmslideshow", "props": {"product_media": true, "gallery_orientation": "horizontal", "gallery_mobile_orientation": "horizontal", "nav": "thumbnav", "thumbnav_position": "bottom", "thumbnav_orientation": "horizontal", "lightbox": true}}
+              {"type": "rmproductgallery", "props": {"columns_s": 2, "columns_m": 2, "columns_l": 2, "columns_xl": 2, "column_gap": 4, "row_gap": 4, "initial_items": 4, "show_more": true, "image_ratio": "3/4", "image_fit": "cover", "image_loading": "eager", "mobile_layout": "scroll", "mobile_item_width": 78, "lightbox": true}}
             ]
           },
           {
@@ -28,7 +28,7 @@
               {"type": "rmproductfield", "props": {"field": "title", "title_element": "h1", "title_style": "h1", "link_product": false}},
               {"type": "rmproductfield", "props": {"field": "code", "text_style": "meta", "margin_top": "small"}},
               {"type": "rmproductfield", "props": {"field": "description", "text_style": "lead", "margin_top": "small"}},
-              {"type": "rmproductfield", "props": {"field": "price", "text_style": "large", "margin_top": "default"}},
+              {"type": "rmproductprice", "props": {"show_unit": true, "unit_style": "long", "show_base_price": true, "show_discount": true, "discount_mode": "percent", "margin_top": "default"}},
               {"type": "rmproductfield", "props": {"field": "availability", "margin_top": "small"}},
               {"type": "rmvariantselector", "props": {"style": "buttons", "action": "ajax", "update_url": "replace", "margin_top": "default"}},
               {"type": "rmbuy", "props": {"show_count": true, "button_style": "primary", "margin_top": "default"}}
@@ -79,7 +79,7 @@
       "type": "editor",
       "editor": "code",
       "mode": "css",
-      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product", ".rm-product-field", ".rmslideshow", ".rmvariants", ".rm-product-specifications", ".rm-buy"]}
+      "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product", ".rm-product-field", ".rm-product-gallery", ".rmvariants", ".rm-product-specifications", ".rm-buy"]}
     },
     "transform": "${builder.transform}"
   },

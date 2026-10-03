@@ -1,4 +1,5 @@
 .rm-product-card {
+  position: relative;
   min-width: 0;
 
   &__main,
@@ -14,9 +15,17 @@
   }
 
   &__dropdown {
+    // A dropdown may live inside an inverse card/section while painting its
+    // own normal opaque surface. Reset all descendant-facing tokens together
+    // so muted text, links and dividers keep the matching normal palette.
+    --ytdynamics-color: var(--ytdynamics-surface-color, #666);
+    --ytdynamics-emphasis-color: var(--ytdynamics-surface-color, #222);
+    --ytdynamics-muted-color: var(--ytdynamics-surface-muted-color, #999);
+    --ytdynamics-primary-color: var(--ytdynamics-surface-primary-color, #1e87f0);
+    --ytdynamics-border: var(--ytdynamics-surface-border, #e5e5e5);
     --rm-product-card-dropdown-padding: var(--ytdynamics-gutter, 30px);
     --rm-product-card-dropdown-background: var(--ytdynamics-background, #fff);
-    --rm-product-card-dropdown-color: inherit;
+    --rm-product-card-dropdown-color: var(--ytdynamics-surface-color, #666);
 
     box-sizing: border-box;
     padding: var(--rm-product-card-dropdown-padding);
@@ -32,32 +41,570 @@
     &--padding-large { --rm-product-card-dropdown-padding: var(--ytdynamics-medium-gutter, 40px); }
 
     &--surface-primary {
+      --ytdynamics-color: var(--ytdynamics-inverse-color, #fff);
+      --ytdynamics-emphasis-color: var(--ytdynamics-inverse-color, #fff);
+      --ytdynamics-muted-color: var(--ytdynamics-inverse-muted-color, rgb(255 255 255 / 60%));
+      --ytdynamics-primary-color: var(--ytdynamics-inverse-color, #fff);
+      --ytdynamics-border: var(--ytdynamics-inverse-border, rgb(255 255 255 / 20%));
       --rm-product-card-dropdown-background: var(--ytdynamics-primary-background, #1e87f0);
       --rm-product-card-dropdown-color: var(--ytdynamics-inverse-color, #fff);
     }
 
     &--surface-secondary {
+      --ytdynamics-color: var(--ytdynamics-inverse-color, #fff);
+      --ytdynamics-emphasis-color: var(--ytdynamics-inverse-color, #fff);
+      --ytdynamics-muted-color: var(--ytdynamics-inverse-muted-color, rgb(255 255 255 / 60%));
+      --ytdynamics-primary-color: var(--ytdynamics-inverse-color, #fff);
+      --ytdynamics-border: var(--ytdynamics-inverse-border, rgb(255 255 255 / 20%));
       --rm-product-card-dropdown-background: var(--ytdynamics-secondary-background, #222);
       --rm-product-card-dropdown-color: var(--ytdynamics-inverse-color, #fff);
     }
   }
 }
 
+.rm-product-card__main {
+  &--height-fill {
+    min-height: 0;
+  }
+
+  &--align-center { justify-content: center; }
+  &--align-bottom { justify-content: flex-end; }
+  &--align-between { justify-content: space-between; }
+
+  &--gap-small { gap: var(--ytdynamics-small-margin, 10px); }
+  &--gap-default { gap: var(--ytdynamics-margin, 20px); }
+  &--gap-large { gap: var(--ytdynamics-medium-margin, 40px); }
+}
+
+// Positioned card areas use a real 3 × 3 overlay grid. The full-size outer
+// layer ignores pointer events, while its content restores them, so empty
+// cells never block links or controls in the permanent card content.
+.rm-product-card__position {
+  position: static;
+  min-width: 0;
+
+  &--fallback-hidden {
+    display: none;
+  }
+
+  &-content {
+    --rm-card-position-inset: 0px;
+    --rm-card-position-gap: 0px;
+    --rm-card-position-hidden-transform: none;
+
+    display: flex;
+    box-sizing: border-box;
+    min-width: 0;
+    gap: var(--rm-card-position-gap);
+
+    &--row { flex-direction: row; }
+    &--column { flex-direction: column; }
+    &--gap-small { --rm-card-position-gap: var(--ytdynamics-small-margin, 10px); }
+    &--gap-default { --rm-card-position-gap: var(--ytdynamics-margin, 20px); }
+    &--gap-large { --rm-card-position-gap: var(--ytdynamics-medium-margin, 40px); }
+    &--inset-small { --rm-card-position-inset: var(--ytdynamics-small-margin, 10px); }
+    &--inset-default { --rm-card-position-inset: var(--ytdynamics-margin, 20px); }
+    &--inset-large { --rm-card-position-inset: var(--ytdynamics-medium-margin, 40px); }
+
+    // Builder fragments arrive inside a generated one-column UIkit grid.
+    // Flatten only that structural wrapper so every added element becomes an
+    // actual flex item and direction/gap apply to the elements themselves.
+    > .tm-grid-expand.uk-grid,
+    > .tm-grid-expand.uk-grid > .uk-width-1-1 {
+      display: contents;
+    }
+  }
+}
+
+@mixin rm-product-card-position-active($breakpoint) {
+  .rm-product-card__position[data-position-breakpoint="#{$breakpoint}"] {
+    position: absolute;
+    z-index: var(--rm-card-position-z, 10);
+    inset: 0;
+    display: grid;
+    grid-template: repeat(3, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
+    min-width: 0;
+    margin: 0 !important;
+    pointer-events: none;
+    // `position` is also a reserved YOOtheme Builder property. Its transform
+    // adds uk-position-* to the element before this template is rendered.
+    // Keep the saved grid value compatible, but prevent UIkit's translate
+    // utility from moving the full overlay outside its product card.
+    transform: none !important;
+
+    > .rm-product-card__position-content {
+      grid-row: var(--rm-card-position-row);
+      grid-column: var(--rm-card-position-column);
+      align-self: var(--rm-card-position-align);
+      justify-self: var(--rm-card-position-justify);
+      margin: var(--rm-card-position-inset);
+      pointer-events: auto;
+      transition: transform var(--ytdynamics-transition-duration, .2s) ease;
+    }
+
+    &.rm-product-card__position--span-row > .rm-product-card__position-content {
+      grid-column: 1 / -1;
+      justify-self: stretch;
+      justify-content: var(--rm-card-position-justify);
+    }
+
+    &.rm-product-card__position--span-cover > .rm-product-card__position-content {
+      grid-row: 1 / -1;
+      grid-column: 1 / -1;
+      align-self: stretch;
+      justify-self: stretch;
+      align-items: var(--rm-card-position-align);
+      justify-content: var(--rm-card-position-justify);
+    }
+
+    &[data-animation="slide-up"] > .rm-product-card__position-content {
+      --rm-card-position-hidden-transform: translateY(10px);
+    }
+
+    &[data-animation="slide-down"] > .rm-product-card__position-content {
+      --rm-card-position-hidden-transform: translateY(-10px);
+    }
+
+    &[data-animation="scale"] > .rm-product-card__position-content {
+      --rm-card-position-hidden-transform: scale(.96);
+    }
+  }
+
+  .rm-product-card__position[data-position-breakpoint="#{$breakpoint}"][data-visibility-mode="interaction"],
+  .rm-product-card__position[data-position-breakpoint="#{$breakpoint}"][data-visibility-mode="focus"] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity var(--ytdynamics-transition-duration, .2s) ease,
+      visibility 0s linear var(--ytdynamics-transition-duration, .2s);
+
+    > .rm-product-card__position-content {
+      transform: var(--rm-card-position-hidden-transform);
+    }
+  }
+
+  .rm-product-card:hover .rm-product-card__position[data-position-breakpoint="#{$breakpoint}"][data-visibility-mode="interaction"],
+  .rm-product-card:focus-within .rm-product-card__position[data-position-breakpoint="#{$breakpoint}"][data-visibility-mode="interaction"],
+  .rm-product-card:focus-within .rm-product-card__position[data-position-breakpoint="#{$breakpoint}"][data-visibility-mode="focus"] {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+
+    > .rm-product-card__position-content {
+      transform: none;
+    }
+  }
+}
+
+@include rm-product-card-position-active('all');
+
+@media (min-width: 640px) {
+  @include rm-product-card-position-active('s');
+}
+
+@media (min-width: 960px) {
+  @include rm-product-card-position-active('m');
+}
+
+@media (min-width: 1200px) {
+  @include rm-product-card-position-active('l');
+}
+
+@media (min-width: 1600px) {
+  @include rm-product-card-position-active('xl');
+}
+
+// Hover states have no reliable meaning on touch input. Use the explicit
+// narrow/touch fallback instead, even when the selected breakpoint is "all".
+@media (hover: none), (pointer: coarse) {
+  .rm-product-card__position[data-position-breakpoint] {
+    position: static;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    margin: 0;
+    pointer-events: auto;
+    transition: none;
+
+    > .rm-product-card__position-content {
+      margin: 0;
+      transform: none;
+      transition: none;
+    }
+
+    &.rm-product-card__position--fallback-hidden {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-product-card__position,
+  .rm-product-card__position > .rm-product-card__position-content {
+    transition-duration: 0s !important;
+  }
+}
+
+.rm-product-hover-gallery {
+  --rm-product-hover-background: transparent;
+  --rm-product-hover-blend-mode: normal;
+  min-width: 0;
+
+  &__viewport {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    width: 100%;
+    min-width: 0;
+    color: inherit;
+    background-color: var(--rm-product-hover-background);
+    touch-action: pan-y pinch-zoom;
+    user-select: none;
+  }
+
+  &__image {
+    grid-area: 1 / 1;
+    align-self: stretch;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    object-fit: var(--rm-product-hover-fit, contain);
+    object-position: var(--rm-product-hover-position, center);
+    mix-blend-mode: var(--rm-product-hover-blend-mode);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity var(--ytdynamics-transition-duration, .2s) ease,
+      visibility 0s linear var(--ytdynamics-transition-duration, .2s);
+
+    &--active {
+      z-index: 1;
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+  }
+
+  &[data-transition="none"] &__image {
+    transition: none;
+  }
+
+  &__indicators {
+    position: absolute;
+    z-index: 2;
+    right: var(--ytdynamics-small-margin, 10px);
+    bottom: calc(var(--ytdynamics-small-margin, 10px) / 2);
+    left: var(--ytdynamics-small-margin, 10px);
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    pointer-events: none;
+  }
+
+  &__indicator {
+    display: block;
+    width: 18px;
+    height: 3px;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 22%);
+    transition: width var(--ytdynamics-transition-duration, .2s) ease,
+      background-color var(--ytdynamics-transition-duration, .2s) ease;
+
+    &--active {
+      width: 26px;
+      background: currentColor;
+    }
+  }
+
+  &__indicators--dots &__indicator {
+    width: 5px;
+    height: 5px;
+
+    &--active {
+      width: 14px;
+    }
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .rm-product-hover-gallery__indicators {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-product-hover-gallery__image,
+  .rm-product-hover-gallery__indicator {
+    transition: none !important;
+  }
+}
+
+.food-market-filter-desktop {
+  position: sticky;
+  top: calc(var(--ytdynamics-navbar-height, 80px) + var(--ytdynamics-margin, 20px));
+}
+
+.food-market-categories .uk-button-group,
+.food-market-categories > div {
+  flex-wrap: wrap;
+  gap: calc(var(--ytdynamics-small-margin, 10px) / 2);
+}
+
 .rm-product-field {
   min-width: 0;
 
+  &--affixed {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  &--affix-gap-space {
+    gap: .25em;
+  }
+
+  &--affix-gap-small {
+    gap: calc(var(--ytdynamics-small-margin, 10px) / 2);
+  }
+
+  &__before,
+  &__after,
+  &__custom-label,
+  &__custom-value,
+  &__price-unit {
+    min-width: 0;
+  }
+
   &__image {
     display: block;
+    width: 100%;
     max-width: 100%;
   }
 
   &__price {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
     line-height: var(--ytdynamics-line-height, 1.5);
   }
 
   &__availability {
     transition: color .2s ease;
   }
+}
+
+.rm-product-price {
+  --rm-product-price-gap: 0;
+
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--rm-product-price-gap);
+  min-width: 0;
+  max-width: 100%;
+  line-height: var(--ytdynamics-line-height, 1.5);
+
+  &--wrap {
+    flex-wrap: wrap;
+  }
+
+  &--stack {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  &--gap-small { --rm-product-price-gap: calc(var(--ytdynamics-small-margin, 10px) / 2); }
+  &--gap-default { --rm-product-price-gap: var(--ytdynamics-small-margin, 10px); }
+  &--gap-large { --rm-product-price-gap: var(--ytdynamics-margin, 20px); }
+
+  &__final-group,
+  &__unit {
+    display: inline-flex;
+    align-items: baseline;
+  }
+
+  &__final-group,
+  &__base,
+  &__discount {
+    white-space: nowrap;
+  }
+
+  &__savings {
+    min-width: 0;
+  }
+}
+
+.rm-product-field[class*="rm-product-field--clamp-"] > .rm-product-field__title,
+.rm-product-field[class*="rm-product-field--clamp-"] > .rm-product-field__description,
+.rm-product-field[class*="rm-product-field--clamp-"] > .rm-product-field__full-description,
+.rm-product-field[class*="rm-product-field--clamp-"] > .rm-product-field__custom-value {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+@for $lines from 1 through 6 {
+  .rm-product-field--clamp-#{$lines} > .rm-product-field__title,
+  .rm-product-field--clamp-#{$lines} > .rm-product-field__description,
+  .rm-product-field--clamp-#{$lines} > .rm-product-field__full-description,
+  .rm-product-field--clamp-#{$lines} > .rm-product-field__custom-value {
+    -webkit-line-clamp: $lines;
+  }
+
+  .rm-product-field--min-lines-#{$lines} > .rm-product-field__title,
+  .rm-product-field--min-lines-#{$lines} > .rm-product-field__description,
+  .rm-product-field--min-lines-#{$lines} > .rm-product-field__full-description,
+  .rm-product-field--min-lines-#{$lines} > .rm-product-field__custom-value {
+    min-height: calc(#{$lines} * 1lh);
+  }
+}
+
+$rm-card-line-breakpoints: (
+  s: 640px,
+  m: 960px,
+  l: 1200px,
+  xl: 1600px
+);
+
+@each $breakpoint, $width in $rm-card-line-breakpoints {
+  @media (min-width: $width) {
+    @for $lines from 1 through 6 {
+      .rm-product-field--min-lines-#{$breakpoint}-#{$lines} > .rm-product-field__title,
+      .rm-product-field--min-lines-#{$breakpoint}-#{$lines} > .rm-product-field__description,
+      .rm-product-field--min-lines-#{$breakpoint}-#{$lines} > .rm-product-field__full-description,
+      .rm-product-field--min-lines-#{$breakpoint}-#{$lines} > .rm-product-field__custom-value {
+        min-height: calc(#{$lines} * 1lh);
+      }
+    }
+  }
+}
+
+.rm-product-badges {
+  min-width: 0;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--ytdynamics-small-margin, 10px) / 2);
+  }
+
+  &--vertical &__list {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--ytdynamics-small-margin, 10px) / 2);
+    max-width: 100%;
+    text-decoration: none;
+  }
+
+  &__icon {
+    display: block;
+    width: var(--rm-product-badge-size, 40px);
+    height: var(--rm-product-badge-size, 40px);
+    object-fit: contain;
+  }
+}
+
+.rm-product-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--ytdynamics-small-margin, 10px) / 2);
+  min-width: 0;
+
+  &__stars {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    color: var(--ytdynamics-muted-color, #999);
+    font-size: var(--rm-product-rating-size, 18px);
+    letter-spacing: .08em;
+    line-height: 1;
+
+    &::before,
+    &::after {
+      content: "★★★★★";
+    }
+
+    &::after {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--rm-product-rating-percent, 0%);
+      overflow: hidden;
+      color: var(--rm-product-rating-color, var(--ytdynamics-primary-color, currentColor));
+    }
+  }
+
+  &__count,
+  &__value {
+    white-space: nowrap;
+  }
+}
+
+.rm-product-stock {
+  min-width: 0;
+
+  &__line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: calc(var(--ytdynamics-small-margin, 10px) / 2);
+  }
+
+  &__progress {
+    width: 100%;
+    height: 4px;
+    margin-top: calc(var(--ytdynamics-small-margin, 10px) / 2);
+  }
+}
+
+.rm-product-unit {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .25em;
+
+  &__separator,
+  &__label {
+    color: var(--ytdynamics-muted-color, #999);
+  }
+}
+
+.rm-product-select {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--ytdynamics-small-margin, 10px) / 2);
+  cursor: pointer;
+
+  &__input {
+    flex: none;
+  }
+}
+
+.rm-bulk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ytdynamics-small-margin, 10px);
+
+  &__count {
+    color: inherit;
+  }
+
+  &__status {
+    flex-basis: 100%;
+  }
+}
+
+.rm-product-action--active {
+  color: var(--ytdynamics-primary-color, currentColor);
+}
+
+// Favorites and Compare are optional RadicalMart extensions. Keep their
+// controls visible (but inert) in Builder preview so they can still be laid
+// out before the matching extension is installed.
+.rm-product-action--unavailable {
+  cursor: not-allowed;
+  opacity: .55;
 }
 
 .rm-product {
@@ -82,6 +629,10 @@
 
   &__table {
     margin: 0;
+  }
+
+  &__table-wrap {
+    max-width: 100%;
   }
 
   &__table &__label {
@@ -118,18 +669,68 @@
   }
 }
 
+@mixin rm-product-specifications-stack {
+  .rm-product-specifications__table,
+  .rm-product-specifications__table tbody {
+    display: block;
+  }
+
+  .rm-product-specifications__table .rm-product-specifications__item {
+    display: grid;
+    grid-template-columns: minmax(100px, 2fr) minmax(0, 3fr);
+    gap: var(--ytdynamics-small-gutter, 15px);
+    padding-block: var(--ytdynamics-small-margin, 10px);
+  }
+
+  .rm-product-specifications__table .rm-product-specifications__label,
+  .rm-product-specifications__table .rm-product-specifications__value {
+    display: block;
+    box-sizing: border-box;
+    width: auto;
+    min-width: 0;
+    padding: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 639px) {
+  .rm-product-specifications[data-table-responsive="stack"][data-table-stack-breakpoint="s"] {
+    @include rm-product-specifications-stack;
+  }
+}
+
+@media (max-width: 959px) {
+  .rm-product-specifications[data-table-responsive="stack"][data-table-stack-breakpoint="m"] {
+    @include rm-product-specifications-stack;
+  }
+}
+
 .rm-buy .rm-buy__button.rm-buy__button--success {
-  color: var(--ytdynamics-inverse-color, #fff) !important;
-  background-color: var(--ytdynamics-success-background, #32d296) !important;
-  border-color: transparent !important;
+  color: var(--ytdynamics-success-color, #fff);
+  background-color: var(--ytdynamics-success-background, #32d296);
+  border-color: transparent;
 }
 
 .rmvariants {
   position: relative;
   --rm-variant-image-fit: cover;
+  --rm-variant-option-gap: var(--ytdynamics-small-margin, 10px);
+  --rm-variant-option-min-width: 48px;
+  --rm-variant-control-height: var(--ytdynamics-control-height, 40px);
+  --rm-variant-swatch-size: 34px;
 
   &--image-fit-contain {
     --rm-variant-image-fit: contain;
+  }
+
+  &--image-fit-cover &__option--swatch {
+    overflow: hidden;
+  }
+
+  &--image-fit-cover &__option--swatch img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
   }
 
   &__field {
@@ -148,18 +749,38 @@
 
   &__selected {
     opacity: .7;
-    font-weight: 400;
+    font-weight: var(--ytdynamics-font-weight, normal);
   }
 
   &__options {
-    gap: var(--ytdynamics-small-margin, 10px);
+    gap: var(--rm-variant-option-gap);
+  }
+
+  &--gap-medium { --rm-variant-option-gap: var(--ytdynamics-margin, 20px); }
+  &--gap-large { --rm-variant-option-gap: var(--ytdynamics-gutter, 30px); }
+
+  &--layout-equal &__options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--rm-variant-option-min-width)), 1fr));
+  }
+
+  &--layout-stack &__options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   &__option {
-    min-width: 48px;
-    min-height: var(--ytdynamics-control-height, 40px);
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    height: var(--rm-variant-control-height);
+    min-width: var(--rm-variant-option-min-width);
+    min-height: var(--rm-variant-control-height);
     padding: 0 var(--ytdynamics-small-gutter, 15px);
     border-radius: var(--ytdynamics-border-radius, 4px);
+    line-height: normal;
+    white-space: nowrap;
     transition: opacity var(--ytdynamics-transition-duration, .2s) ease,
       box-shadow var(--ytdynamics-transition-duration, .2s) ease,
       transform var(--ytdynamics-transition-duration, .2s) ease;
@@ -180,15 +801,14 @@
     }
 
     &--swatch {
-      width: 48px;
-      min-width: 48px;
+      width: max(var(--rm-variant-option-min-width), calc(var(--rm-variant-swatch-size) + var(--ytdynamics-small-margin, 10px)));
     }
 
     img,
     .rmvariants__color {
       display: block;
-      width: 34px;
-      height: 34px;
+      width: var(--rm-variant-swatch-size);
+      height: var(--rm-variant-swatch-size);
       border-radius: var(--ytdynamics-border-radius, 4px);
     }
 
@@ -201,8 +821,14 @@
     background: var(--rm-swatch, transparent);
   }
 
-  &__select {
-    max-width: 360px;
+  &--shape-rounded &__option { border-radius: calc(var(--ytdynamics-border-radius, 4px) * 2); }
+  &--shape-pill &__option { border-radius: 999px; }
+  &--shape-circle &__option {
+    width: max(var(--rm-variant-option-min-width), var(--rm-variant-control-height));
+    min-width: max(var(--rm-variant-option-min-width), var(--rm-variant-control-height));
+    padding-inline: 0;
+    border-radius: 50%;
+    aspect-ratio: 1;
   }
 
   &__status {
@@ -229,12 +855,26 @@
 // load order or on a particular YOOtheme style.
 .rmvariants .rmvariants__option--swatch {
   display: inline-flex;
-  flex: 0 0 48px;
+  flex: 0 0 max(var(--rm-variant-option-min-width), calc(var(--rm-variant-swatch-size) + var(--ytdynamics-small-margin, 10px)));
   align-items: center;
   justify-content: center;
-  width: 48px;
-  min-width: 48px;
+  width: max(var(--rm-variant-option-min-width), calc(var(--rm-variant-swatch-size) + var(--ytdynamics-small-margin, 10px)));
+  min-width: var(--rm-variant-option-min-width);
   padding: 0;
+}
+
+.rmvariants--layout-equal .rmvariants__option,
+.rmvariants--layout-stack .rmvariants__option,
+.rmvariants--layout-equal .rmvariants__option--swatch,
+.rmvariants--layout-stack .rmvariants__option--swatch {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.rmvariants--shape-circle .rmvariants__option,
+.rmvariants--shape-circle .rmvariants__option--swatch {
+  width: max(var(--rm-variant-option-min-width), var(--rm-variant-control-height));
+  border-radius: 50%;
 }
 
 @keyframes rm-product-card-dropdown-reveal {
@@ -256,9 +896,16 @@
     transition: border-radius var(--ytdynamics-transition-duration, .2s) ease,
       box-shadow var(--ytdynamics-transition-duration, .2s) ease;
 
-    &:hover,
-    &:focus-within {
+    &:hover {
       z-index: 30;
+      box-shadow: var(--ytdynamics-medium-box-shadow, 0 5px 15px rgba(0, 0, 0, .08));
+    }
+
+    // A variant control keeps the current card open through :focus-within.
+    // Give that card a higher layer than a later card which happens to become
+    // hovered after the document or the grid repositions under the pointer.
+    &:focus-within {
+      z-index: 32;
       box-shadow: var(--ytdynamics-medium-box-shadow, 0 5px 15px rgba(0, 0, 0, .08));
     }
 
@@ -287,6 +934,73 @@
   }
 }
 
+// The UIkit grid cell is the actual stacking context. Raising only the inner
+// card lets a later cell paint over its reveal panel, so raise the host too.
+.rm-dynamic-product-grid__cell {
+  position: relative;
+}
+
+.rm-dynamic-product-grid__cell:has(.rm-product-card--hover:hover),
+.rm-dynamic-product-grid__cell:has(.rm-product-card--hover:focus-within) {
+  z-index: 40;
+}
+
+// List mode is a real horizontal product row, not a one-column tile stretched
+// to the full catalogue width. The Builder remains free to add or remove atoms.
+.rm-dynamic-product-grid--list .rm-product-card__main {
+  display: grid;
+  grid-template-columns: minmax(220px, 32%) minmax(0, 1fr);
+  align-content: start;
+  column-gap: var(--ytdynamics-gutter, 30px);
+}
+
+.rm-dynamic-product-grid--list .rm-product-card__main > * {
+  grid-column: 2;
+}
+
+.rm-dynamic-product-grid--list .rm-product-card__main > .rm-product-field--image {
+  grid-column: 1;
+  grid-row: 1 / span 20;
+  margin-top: 0 !important;
+}
+
+.rm-dynamic-product-grid--list .rm-product-field__image {
+  max-height: 360px;
+}
+
+@media (max-width: 639.98px) {
+  .rm-dynamic-product-grid--list .rm-product-card__main {
+    display: block;
+  }
+
+  .food-market-search .uk-search-large .uk-search-input {
+    height: 54px;
+    padding-right: 52px;
+    font-size: var(--ytdynamics-font-size, 16px);
+  }
+
+  .food-market-categories {
+	margin-right: 0;
+	overflow: visible;
+  }
+
+  .food-market-categories .uk-button-group,
+  .food-market-categories > div {
+	flex-wrap: wrap;
+	width: 100%;
+	padding-right: 0;
+  }
+
+  .food-market-categories > div > .el-item {
+	flex: 1 1 calc(50% - var(--ytdynamics-small-margin, 10px));
+	min-width: 0;
+  }
+
+  .food-market-categories .uk-button {
+	width: 100%;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) and (min-width: 640px) {
   @include rm-product-card-hover('s');
 }
@@ -301,6 +1015,39 @@
 
 @media (hover: hover) and (pointer: fine) and (min-width: 1600px) {
   @include rm-product-card-hover('xl');
+}
+
+// Hover-only content has an explicit touch/narrow fallback. This keeps the
+// element composable: a separate RM Quick View or RM Offcanvas trigger can be
+// used on mobile without rendering a second expanded card inside the grid.
+@media (hover: none), (pointer: coarse) {
+  .rm-product-card__dropdown--fallback-hidden {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639.98px) {
+  .rm-product-card--hover[data-rm-hover-breakpoint="s"] .rm-product-card__dropdown--fallback-hidden {
+    display: none !important;
+  }
+}
+
+@media (max-width: 959.98px) {
+  .rm-product-card--hover[data-rm-hover-breakpoint="m"] .rm-product-card__dropdown--fallback-hidden {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .rm-product-card--hover[data-rm-hover-breakpoint="l"] .rm-product-card__dropdown--fallback-hidden {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1599.98px) {
+  .rm-product-card--hover[data-rm-hover-breakpoint="xl"] .rm-product-card__dropdown--fallback-hidden {
+    display: none !important;
+  }
 }
 
 .rmquickview {
@@ -382,7 +1129,7 @@
 
   &__price s {
     font-size: var(--ytdynamics-small-font-size, .875rem);
-    font-weight: 400;
+    font-weight: var(--ytdynamics-font-weight, normal);
   }
 
   &__variants {
@@ -440,8 +1187,8 @@
     }
 
     &__option {
-      min-width: 44px;
-      min-height: var(--ytdynamics-control-height, 40px);
+      min-width: var(--rm-variant-option-min-width);
+      min-height: var(--rm-variant-control-height);
       padding: 0 var(--ytdynamics-small-margin, 10px);
     }
 

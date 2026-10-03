@@ -7,7 +7,7 @@ use Joomla\Plugin\System\YTDynamics\YOOtheme\Builder\Element\ElementConfig;
 $config = ElementConfig::fromJson(__DIR__);
 $config['title'] = 'RM Slideshow';
 $config['defaults'] = ($config['defaults'] ?? []) + [
-	'product_media' => false,
+	'sync_product_media' => false,
 	'gallery_orientation' => 'vertical',
 	'gallery_mobile_orientation' => 'inherit',
 	'gallery_height' => 600,
@@ -21,6 +21,7 @@ $config['defaults'] = ($config['defaults'] ?? []) + [
 	'thumbnav_orientation' => 'auto',
 	'thumbnav_mobile_orientation' => 'inherit',
 	'thumbnav_position' => '',
+	'thumbnav_mobile_position' => 'auto',
 	'thumbnav_size' => 100,
 	'nav_arrows' => true,
 	'slidenav' => 'default',
@@ -28,6 +29,8 @@ $config['defaults'] = ($config['defaults'] ?? []) + [
 	'image_fit' => 'contain',
 	'image_position' => 'center',
 	'image_loading' => 'lazy',
+	'background_color' => '',
+	'mix_blend_mode' => 'normal',
 	'thumbnail_count' => 5,
 	'slide_gap' => 25,
 	'thumbnail_gap' => 15,
@@ -37,18 +40,6 @@ $config['defaults'] = ($config['defaults'] ?? []) + [
 	'lightbox_caption' => true,
 ];
 $config['fields'] = ($config['fields'] ?? []) + [
-	'product_media' => [
-		'label' => 'Content Source',
-		'type' => 'checkbox',
-		'text' => 'Use the current RadicalMart product media',
-	],
-	'product_id' => [
-		'label' => 'Product ID',
-		'description' => 'Optional outside RM Product. The nearest product context is used automatically.',
-		'type' => 'number',
-		'source' => true,
-		'show' => 'product_media',
-	],
 	'gallery_orientation' => [
 		'label' => 'Main Direction',
 		'description' => 'Set the actual movement, drag and autoplay axis of the large slides. This is independent from the navigation direction.',
@@ -101,7 +92,6 @@ $config['fields'] = ($config['fields'] ?? []) + [
 			'Bottom Center' => 'bottom-center',
 			'Bottom Right' => 'bottom-right',
 		],
-		'enable' => "image_fit == 'cover'",
 	],
 	'image_loading' => [
 		'label' => 'Image Loading',
@@ -109,6 +99,34 @@ $config['fields'] = ($config['fields'] ?? []) + [
 		'options' => [
 			'Lazy' => 'lazy',
 			'Eager' => 'eager',
+		],
+	],
+	'background_color' => [
+		'label' => 'Background Color',
+		'description' => 'Set the background behind the main slides and thumbnails. Leave empty to use the theme background.',
+		'type' => 'color',
+	],
+	'mix_blend_mode' => [
+		'label' => 'Image Blend Mode',
+		'description' => 'Blend slideshow images with the selected background color.',
+		'type' => 'select',
+		'options' => [
+			'Normal' => 'normal',
+			'Multiply' => 'multiply',
+			'Screen' => 'screen',
+			'Overlay' => 'overlay',
+			'Darken' => 'darken',
+			'Lighten' => 'lighten',
+			'Color Dodge' => 'color-dodge',
+			'Color Burn' => 'color-burn',
+			'Hard Light' => 'hard-light',
+			'Soft Light' => 'soft-light',
+			'Difference' => 'difference',
+			'Exclusion' => 'exclusion',
+			'Hue' => 'hue',
+			'Saturation' => 'saturation',
+			'Color' => 'color',
+			'Luminosity' => 'luminosity',
 		],
 	],
 	'slideshow_loop' => [
@@ -162,7 +180,7 @@ $config['fields'] = ($config['fields'] ?? []) + [
 			'Vertical' => 'vertical',
 			'Horizontal' => 'horizontal',
 		],
-		'enable' => "nav == 'thumbnav'",
+		'show' => "nav == 'thumbnav'",
 	],
 	'thumbnav_mobile_orientation' => [
 		'label' => 'Mobile Navigation Direction',
@@ -173,7 +191,7 @@ $config['fields'] = ($config['fields'] ?? []) + [
 			'Vertical' => 'vertical',
 			'Horizontal' => 'horizontal',
 		],
-		'enable' => "nav == 'thumbnav'",
+		'show' => "nav == 'thumbnav'",
 	],
 	'thumbnav_position' => [
 		'label' => 'Position',
@@ -186,19 +204,33 @@ $config['fields'] = ($config['fields'] ?? []) + [
 			'Top' => 'top',
 			'Bottom' => 'bottom',
 		],
-		'enable' => "nav == 'thumbnav'",
+		'show' => "nav == 'thumbnav'",
+	],
+	'thumbnav_mobile_position' => [
+		'label' => 'Mobile Position',
+		'description' => 'Auto derives a compatible position from the mobile navigation direction. Inherit keeps the desktop position.',
+		'type' => 'select',
+		'options' => [
+			'Auto' => 'auto',
+			'Inherit' => 'inherit',
+			'Left' => 'left',
+			'Right' => 'right',
+			'Top' => 'top',
+			'Bottom' => 'bottom',
+		],
+		'show' => "nav == 'thumbnav'",
 	],
 	'thumbnav_size' => [
 		'label' => 'Thumbnail Size',
 		'description' => 'Set the width of a vertical thumbnav or height of a horizontal thumbnav.',
 		'type' => 'range',
 		'attrs' => ['min' => 64, 'max' => 160, 'step' => 4],
-		'enable' => "nav == 'thumbnav'",
+		'show' => "nav == 'thumbnav'",
 	],
 	'nav_arrows' => [
 		'type' => 'checkbox',
 		'text' => 'Show thumbnav arrows',
-		'enable' => "nav == 'thumbnav'",
+		'show' => "nav == 'thumbnav'",
 	],
 	'slidenav' => [
 		'label' => 'Slidenav',
@@ -212,12 +244,12 @@ $config['fields'] = ($config['fields'] ?? []) + [
 	'slidenav_hover' => [
 		'type' => 'checkbox',
 		'text' => 'Show on hover only',
-		'enable' => 'slidenav',
+		'show' => 'slidenav',
 	],
 	'slidenav_large' => [
 		'type' => 'checkbox',
 		'text' => 'Larger style',
-		'enable' => 'slidenav',
+		'show' => 'slidenav',
 	],
 	'slidenav_breakpoint' => [
 		'label' => 'Breakpoint',
@@ -230,22 +262,25 @@ $config['fields'] = ($config['fields'] ?? []) + [
 			'Large (Desktop)' => 'l',
 			'X-Large (Large Screens)' => 'xl',
 		],
-		'enable' => 'slidenav',
+		'show' => 'slidenav',
 	],
 	'thumbnail_count' => [
 		'label' => 'Visible Thumbnails',
 		'type' => 'range',
 		'attrs' => ['min' => 2, 'max' => 10, 'step' => 1],
+		'show' => "nav == 'thumbnav'",
 	],
 	'slide_gap' => [
 		'label' => 'Main/Thumbnail Gap',
 		'type' => 'range',
 		'attrs' => ['min' => 0, 'max' => 80, 'step' => 5],
+		'show' => 'nav',
 	],
 	'thumbnail_gap' => [
 		'label' => 'Thumbnail Gap',
 		'type' => 'range',
 		'attrs' => ['min' => 0, 'max' => 40, 'step' => 5],
+		'show' => "nav == 'thumbnav'",
 	],
 	'slideshow_border' => [
 		'label' => 'Border',
@@ -328,6 +363,8 @@ $groups = [
 			'image_fit',
 			'image_position',
 			'image_loading',
+			'background_color',
+			'mix_blend_mode',
 			'slideshow_loop',
 			'slideshow_drag',
 			'slideshow_border',
@@ -354,6 +391,7 @@ $groups = [
 			'thumbnav_orientation',
 			'thumbnav_mobile_orientation',
 			'thumbnav_position',
+			'thumbnav_mobile_position',
 			'thumbnav_size',
 			'thumbnail_count',
 			'nav_arrows',

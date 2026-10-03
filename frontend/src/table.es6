@@ -4,17 +4,16 @@ const readThemeTokens = (frame) => {
     const probe = document.createElement('span');
     probe.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none';
     frame.append(probe);
-	const divider = document.createElement('table');
-	divider.className = 'uk-table uk-table-divider';
-	divider.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;visibility:hidden;pointer-events:none';
-	divider.innerHTML = '<tbody><tr><td></td></tr><tr><td></td></tr></tbody>';
-	frame.append(divider);
 
     const background = getComputedStyle(frame).backgroundColor;
 	const themeBackground = getComputedStyle(document.documentElement)
 		.getPropertyValue('--ytdynamics-background')
 		.trim();
-	const border = getComputedStyle(divider.rows[1].cells[0]).borderTopColor;
+	const theme = getComputedStyle(document.documentElement);
+	const surfaceColor = theme.getPropertyValue('--ytdynamics-surface-color').trim() || theme.color;
+	const mutedSurfaceColor = theme.getPropertyValue('--ytdynamics-surface-muted-color').trim() || surfaceColor;
+	const surfaceBorder = theme.getPropertyValue('--ytdynamics-surface-border').trim();
+	const borderWidth = theme.getPropertyValue('--ytdynamics-border-width').trim();
     const readBackground = (className) => {
         probe.className = className;
         return getComputedStyle(probe).backgroundColor;
@@ -24,12 +23,14 @@ const readThemeTokens = (frame) => {
 			? (themeBackground || '#fff')
 			: background,
         '--rm-table-muted-background': readBackground('uk-background-muted'),
+        '--rm-table-color': surfaceColor,
+        '--rm-table-muted-color': mutedSurfaceColor,
         '--rm-table-primary-background': readBackground('uk-background-primary'),
         '--rm-table-secondary-background': readBackground('uk-background-secondary'),
-		'--rm-table-border': border
+		'--rm-table-border': surfaceBorder,
+		'--rm-table-border-width': borderWidth
     };
     probe.remove();
-	divider.remove();
 
     Object.entries(tokens).forEach(([name, value]) => {
         if (value && value !== 'rgba(0, 0, 0, 0)') frame.style.setProperty(name, value);
@@ -51,6 +52,27 @@ const initTable = (wrapper) => {
     let frameRequest = 0;
 	let resizeObserver = null;
 	readThemeTokens(frame);
+
+	const updateInverseSurfaces = (forceCardsActive = null) => {
+		if (!table) return;
+
+		const cardsActive = forceCardsActive ?? (table.classList.contains('rm-table--cards')
+			&& getComputedStyle(table).display === 'block');
+		const defaultCardInverse = table.classList.contains('rm-table--card-primary')
+			|| table.classList.contains('rm-table--card-secondary');
+
+		table.querySelectorAll('tbody > .rm-table__row').forEach((row) => {
+			const staticInverse = row.dataset.rmTableStaticInverse === 'true';
+			const mobileStyle = row.dataset.rmTableMobileStyle || 'inherit';
+			const mobileInverse = ['primary', 'secondary'].includes(mobileStyle);
+			const mobileNormal = ['default', 'muted'].includes(mobileStyle);
+			const inverse = cardsActive
+				? (mobileNormal ? false : (mobileInverse || defaultCardInverse))
+				: staticInverse;
+
+			row.classList.toggle('uk-light', inverse);
+		});
+	};
 
     const update = () => {
         frameRequest = 0;
@@ -79,6 +101,7 @@ const initTable = (wrapper) => {
         wrapper.classList.toggle('rm-table-wrapper--sticky-conflict', stickyConflict);
 		if (canScrollX || canScrollY) wrapper.setAttribute('tabindex', '0');
 		else wrapper.removeAttribute('tabindex');
+		updateInverseSurfaces();
     };
 
     const scheduleUpdate = () => {
@@ -104,6 +127,7 @@ const initTable = (wrapper) => {
 		wrapper.removeEventListener('scroll', scheduleUpdate);
 		resizeObserver?.disconnect();
 		if (!resizeObserver) window.removeEventListener('resize', scheduleUpdate);
+		updateInverseSurfaces(false);
 		delete wrapper.dataset.rmTableReady;
 		delete wrapper.rmTableCleanup;
 	};
@@ -112,17 +136,17 @@ const initTable = (wrapper) => {
 };
 
 const destroyTables = (root) => {
-	const wrappers = root.matches?.('[data-rm-table-scroll]') ? [root] : [];
-	root.querySelectorAll?.('[data-rm-table-scroll]').forEach((wrapper) => wrappers.push(wrapper));
+	const wrappers = root.matches?.('[data-rm-table]') ? [root] : [];
+	root.querySelectorAll?.('[data-rm-table]').forEach((wrapper) => wrappers.push(wrapper));
 	wrappers.forEach((wrapper) => wrapper.rmTableCleanup?.());
 };
 
 const initTables = (root = document) => {
-    if (root.matches?.('[data-rm-table-scroll]')) {
+    if (root.matches?.('[data-rm-table]')) {
         initTable(root);
     }
 
-    root.querySelectorAll?.('[data-rm-table-scroll]').forEach(initTable);
+    root.querySelectorAll?.('[data-rm-table]').forEach(initTable);
 };
 
 const observeTables = () => {

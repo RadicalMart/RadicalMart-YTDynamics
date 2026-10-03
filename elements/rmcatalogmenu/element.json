@@ -1,0 +1,89 @@
+{
+  "@import": "./element.php",
+  "name": "rmcatalogmenu",
+  "title": "RM Catalog Menu",
+  "group": "RadicalMart — Catalog",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "container": true,
+  "width": 500,
+  "placeholder": {
+    "children": [
+      {"type": "rmcatalogmenu_item", "props": {"title": "Одежда"}},
+      {"type": "rmcatalogmenu_item", "props": {"title": "Обувь"}},
+      {"type": "rmcatalogmenu_item", "props": {"title": "Еда и напитки"}}
+    ]
+  },
+  "defaults": {
+    "source_mode": "categories",
+    "root_category": 1,
+    "title": "Каталог",
+    "show_root_link": true,
+    "show_item_count": false,
+    "max_depth": 0,
+    "panel_min_height": 520,
+    "highlight_current": true,
+    "open_current_branch": false
+  },
+  "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
+  "fields": {
+    "content": {
+      "label": "Menu items",
+      "description": "Build an unlimited nested menu. Every item can contain more RM Catalog Menu Item elements.",
+      "type": "content-items",
+      "item": "rmcatalogmenu_item",
+      "show": "source_mode == 'items'"
+    },
+    "source_mode": {
+      "label": "Menu source",
+      "type": "select",
+      "options": {"RadicalMart category tree": "categories", "Builder items": "items"}
+    },
+    "root_category": {"label": "Root category ID", "type": "number", "description": "Use 1 for the complete RadicalMart category tree.", "show": "source_mode == 'categories'"},
+    "title": {"label": "Menu title", "type": "text", "source": true},
+    "root_link": {"label": "Root link", "type": "link", "show": "source_mode == 'items'"},
+    "show_root_link": {"label": "Root", "type": "checkbox", "text": "Link menu title to the root category"},
+    "show_item_count": {"type": "checkbox", "text": "Show category item totals"},
+    "max_depth": {"label": "Maximum depth", "type": "range", "description": "0 displays every nested level.", "attrs": {"min": 0, "max": 8, "step": 1}},
+    "panel_min_height": {"label": "Minimum panel height", "type": "range", "attrs": {"min": 0, "max": 1200, "step": 20}},
+    "highlight_current": {"label": "Current category", "type": "checkbox", "text": "Highlight current category"},
+    "open_current_branch": {"type": "checkbox", "text": "Open the current category branch initially"},
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "description": "Custom CSS is scoped to this menu element.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-catalog-menu", ".rm-catalog-menu__panel", ".rm-catalog-menu__header", ".rm-catalog-menu__item", ".rm-catalog-menu__link", ".rm-catalog-menu__forward", ".rm-catalog-menu__back"]}},
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {"type": "tabs", "fields": [
+      {"title": "Content", "fields": ["source_mode", "root_category", "title", "root_link", "content"]},
+      {"title": "Settings", "fields": [
+        {"label": "Navigation", "type": "group", "fields": ["show_root_link", "show_item_count", "max_depth", "panel_min_height", "highlight_current", "open_current_branch"]},
+        {"label": "General", "type": "group", "fields": ["position", "position_left", "position_right", "position_top", "position_bottom", "position_z_index", "margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
+      ]},
+      "${builder.advanced}"
+    ]}
+  }
+}

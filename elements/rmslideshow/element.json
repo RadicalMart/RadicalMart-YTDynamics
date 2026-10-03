@@ -2,12 +2,19 @@
   "@import": "./element.php",
   "name": "rmslideshow",
   "title": "RM Slideshow",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Layout & UI",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "container": true,
   "width": 500,
+  "placeholder": {
+    "children": [
+      {"type": "rmslideshow_item"},
+      {"type": "rmslideshow_item"},
+      {"type": "rmslideshow_item"}
+    ]
+  },
   "templates": {
     "render": "./templates/template.php",
     "content": "./templates/content.php"
@@ -17,7 +24,14 @@
       "label": "Items",
       "type": "content-items",
       "item": "rmslideshow_item",
-      "show": "!product_media"
+      "media": [
+        {"type": "image", "item": {"image": "src", "image_alt": "alt"}}
+      ]
+    },
+    "sync_product_media": {
+      "type": "checkbox",
+      "text": "Refresh items when a RadicalMart variant changes",
+      "description": "Enable this when the items use the current product Media collection. Leave disabled for a static slideshow."
     },
     "panel_style": {
       "label": "Style",
@@ -151,8 +165,6 @@
         {
           "title": "Content",
           "fields": [
-            "product_media",
-            "product_id",
             "content"
           ]
         },
@@ -164,6 +176,7 @@
               "type": "group",
               "divider": true,
               "fields": [
+                "sync_product_media",
                 "panel_style",
                 "panel_padding"
               ]

@@ -1,0 +1,113 @@
+{
+  "@import": "./element.php",
+  "name": "rmordering",
+  "title": "RM Ordering",
+  "group": "RadicalMart — Catalog",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "width": 500,
+  "defaults": {
+    "ordering_width": "medium"
+  },
+  "templates": {
+    "render": "./templates/template.php"
+  },
+  "fields": {
+    "ordering_width": {
+      "label": "Control width",
+      "type": "select",
+      "options": {
+        "Auto": "",
+        "Small": "small",
+        "Medium": "medium",
+        "Large": "large",
+        "Full width": "full"
+      }
+    },
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this ordering element.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {
+        "debounce": 500,
+        "hints": [
+          ".el-element",
+          ".rm-toolbar__ordering-control",
+          ".rm-toolbar__ordering-toggle",
+          ".rm-toolbar__ordering-menu",
+          ".rm-toolbar__ordering-option"
+        ]
+      }
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {
+          "title": "Settings",
+          "fields": [
+            {
+              "label": "Ordering",
+              "type": "group",
+              "fields": ["ordering_width"]
+            },
+            {
+              "label": "General",
+              "type": "group",
+              "fields": [
+                "position",
+                "position_left",
+                "position_right",
+                "position_top",
+                "position_bottom",
+                "position_z_index",
+                "margin_top",
+                "margin_bottom",
+                "maxwidth",
+                "maxwidth_breakpoint",
+                "block_align",
+                "block_align_breakpoint",
+                "block_align_fallback",
+                "text_align",
+                "text_align_breakpoint",
+                "text_align_fallback",
+                "animation",
+                "visibility"
+              ]
+            }
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

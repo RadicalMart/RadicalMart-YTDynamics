@@ -1,0 +1,42 @@
+.rm-lazy-pagination {
+  min-height: 56px;
+}
+.rm-lazy-pagination__button {
+  min-width: var(--rm-lazy-button-min-width, 220px);
+  min-height: var(--rm-lazy-button-height, 56px);
+  border-radius: 10px;
+}
+.rm-lazy-pagination__spinner {
+  display: none;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  margin-right: 9px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -3px;
+  animation: rm-lazy-pagination-spin 0.65s linear infinite;
+}
+.rm-lazy-pagination.is-loading .rm-lazy-pagination__spinner {
+  display: inline-block;
+}
+.rm-lazy-pagination.is-complete .rm-lazy-pagination__button {
+  opacity: 0.65;
+}
+.rm-lazy-pagination__status {
+  margin-top: 8px;
+  color: #d33;
+  font-size: 0.875rem;
+}
+.rm-lazy-pagination__pages {
+  margin-top: 16px;
+}
+
+@keyframes rm-lazy-pagination-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY3NzL2xhenktcGFnaW5hdGlvbi5jc3MiLCJtYXBwaW5ncyI6IkFBQUE7RUFDRTtBQUNGO0FBQ0U7RUFDRTtFQUNBO0VBQ0E7QUFDSjtBQUVFO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7QUFBSjtBQUdFO0VBQ0U7QUFESjtBQUlFO0VBQ0U7QUFGSjtBQUtFO0VBQ0U7RUFDQTtFQUNBO0FBSEo7QUFNRTtFQUNFO0FBSko7O0FBUUE7RUFDRTtJQUFLO0VBSkw7QUFDRixDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcGxnX3N5c3RlbV95dGR5bmFtaWNzL3NyYy9sYXp5LXBhZ2luYXRpb24uc2NzcyJdLCJzb3VyY2VzQ29udGVudCI6WyIucm0tbGF6eS1wYWdpbmF0aW9uIHtcbiAgbWluLWhlaWdodDogNTZweDtcblxuICAmX19idXR0b24ge1xuICAgIG1pbi13aWR0aDogdmFyKC0tcm0tbGF6eS1idXR0b24tbWluLXdpZHRoLCAyMjBweCk7XG4gICAgbWluLWhlaWdodDogdmFyKC0tcm0tbGF6eS1idXR0b24taGVpZ2h0LCA1NnB4KTtcbiAgICBib3JkZXItcmFkaXVzOiAxMHB4O1xuICB9XG5cbiAgJl9fc3Bpbm5lciB7XG4gICAgZGlzcGxheTogbm9uZTtcbiAgICBib3gtc2l6aW5nOiBib3JkZXItYm94O1xuICAgIHdpZHRoOiAxOHB4O1xuICAgIGhlaWdodDogMThweDtcbiAgICBtYXJnaW4tcmlnaHQ6IDlweDtcbiAgICBib3JkZXI6IDJweCBzb2xpZCBjdXJyZW50Q29sb3I7XG4gICAgYm9yZGVyLXJpZ2h0LWNvbG9yOiB0cmFuc3BhcmVudDtcbiAgICBib3JkZXItcmFkaXVzOiA1MCU7XG4gICAgdmVydGljYWwtYWxpZ246IC0zcHg7XG4gICAgYW5pbWF0aW9uOiBybS1sYXp5LXBhZ2luYXRpb24tc3BpbiAuNjVzIGxpbmVhciBpbmZpbml0ZTtcbiAgfVxuXG4gICYuaXMtbG9hZGluZyAmX19zcGlubmVyIHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gIH1cblxuICAmLmlzLWNvbXBsZXRlICZfX2J1dHRvbiB7XG4gICAgb3BhY2l0eTogLjY1O1xuICB9XG5cbiAgJl9fc3RhdHVzIHtcbiAgICBtYXJnaW4tdG9wOiA4cHg7XG4gICAgY29sb3I6ICNkMzM7XG4gICAgZm9udC1zaXplOiAuODc1cmVtO1xuICB9XG5cbiAgJl9fcGFnZXMge1xuICAgIG1hcmdpbi10b3A6IDE2cHg7XG4gIH1cbn1cblxuQGtleWZyYW1lcyBybS1sYXp5LXBhZ2luYXRpb24tc3BpbiB7XG4gIHRvIHsgdHJhbnNmb3JtOiByb3RhdGUoMzYwZGVnKTsgfVxufVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9*/

@@ -2,8 +2,8 @@
   "@import": "./element.php",
   "name": "rmvariantselector",
   "title": "RM Variants",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Product Data",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "container": false,
@@ -17,7 +17,15 @@
     "disable_unavailable": true,
     "update_url": "none",
     "button_style": "default",
-    "image_fit": "cover"
+    "button_size": "custom",
+    "image_fit": "cover",
+    "option_layout": "wrap",
+    "option_gap": "small",
+    "option_min_width": 48,
+    "control_height": 40,
+    "swatch_size": 34,
+    "option_shape": "default",
+    "select_width": "medium"
   },
   "templates": {"render": "./templates/template.php"},
   "fields": {
@@ -26,7 +34,15 @@
     "action": {"label": "Selection action", "type": "select", "options": {"Update without reload": "ajax", "Open product page": "navigate"}},
     "style": {"label": "Control style", "type": "select", "options": {"Buttons and swatches": "buttons", "Select fields": "select"}},
     "button_style": {"label": "Option button style", "type": "select", "options": {"Default": "default", "Primary": "primary", "Secondary": "secondary", "Text": "text"}, "show": "style == 'buttons'"},
+    "button_size": {"label": "Option button size", "description": "Use a theme-sized preset or Custom to set exact button dimensions below.", "type": "select", "options": {"Default": "default", "Small": "small", "Large": "large", "Custom": "custom"}, "show": "style == 'buttons'"},
     "image_fit": {"label": "Image fit", "description": "Choose how variant images fill their option buttons.", "type": "select", "options": {"Cover": "cover", "Contain": "contain"}, "show": "style == 'buttons'"},
+    "option_layout": {"label": "Options layout", "type": "select", "options": {"Wrap to content": "wrap", "Equal columns": "equal", "Stacked": "stack"}, "show": "style == 'buttons'"},
+    "option_gap": {"label": "Options gap", "type": "select", "options": {"Small": "small", "Medium": "medium", "Large": "large"}, "show": "style == 'buttons'"},
+    "option_min_width": {"label": "Minimum option width", "description": "Minimum button width in pixels. Equal columns also use it as their responsive minimum.", "type": "range", "attrs": {"min": 32, "max": 240, "step": 4}, "show": "style == 'buttons' && button_size == 'custom'"},
+    "control_height": {"label": "Control height", "type": "range", "attrs": {"min": 32, "max": 80, "step": 2}, "show": "style == 'buttons' && button_size == 'custom'"},
+    "swatch_size": {"label": "Image / color size", "type": "range", "attrs": {"min": 16, "max": 72, "step": 2}, "show": "style == 'buttons' && button_size == 'custom'"},
+    "option_shape": {"label": "Option shape", "type": "select", "options": {"Theme default": "default", "Rounded": "rounded", "Pill": "pill", "Circle": "circle"}, "show": "style == 'buttons'"},
+    "select_width": {"label": "Select width", "type": "select", "options": {"Small": "small", "Medium": "medium", "Large": "large", "Full width": "full"}, "show": "style == 'select'"},
     "show_labels": {"type": "checkbox", "text": "Show field labels"},
     "show_selected_value": {"type": "checkbox", "text": "Show the selected value beside each label", "show": "show_labels"},
     "disable_unavailable": {"type": "checkbox", "text": "Disable unavailable combinations"},
@@ -58,7 +74,7 @@
       "fields": [
         {"title": "Content", "fields": ["product_id", "variant_fields"]},
         {"title": "Settings", "fields": [
-          {"label": "Variants", "type": "group", "fields": ["action", "style", "button_style", "image_fit", "show_labels", "show_selected_value", "disable_unavailable", "update_url"]},
+          {"label": "Variants", "type": "group", "fields": ["action", "style", "button_style", "button_size", "image_fit", "option_layout", "option_gap", "option_min_width", "control_height", "swatch_size", "option_shape", "select_width", "show_labels", "show_selected_value", "disable_unavailable", "update_url"]},
           {"label": "General", "type": "group", "fields": ["margin_top", "margin_bottom", "maxwidth", "maxwidth_breakpoint", "block_align", "block_align_breakpoint", "block_align_fallback", "text_align", "text_align_breakpoint", "text_align_fallback", "animation", "visibility"]}
         ]},
         "${builder.advanced}"

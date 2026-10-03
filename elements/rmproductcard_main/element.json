@@ -2,22 +2,54 @@
   "@import": "./element.php",
   "name": "rmproductcard_main",
   "title": "RM Product Card Main",
-  "group": "RadicalMart",
-  "icon": "${url:images/icon.svg}",
+  "group": "RadicalMart — Product Card",
+  "icon": "${url:images/iconPicker.svg}",
   "iconSmall": "${url:images/iconSmall.svg}",
   "element": true,
   "container": true,
   "width": 500,
+  "defaults": {
+    "layout": "flow",
+    "height_mode": "natural",
+    "vertical_align": "top",
+    "items_gap": "none"
+  },
   "placeholder": {
     "children": [
       {"type": "rmproductfield", "props": {"field": "image"}},
       {"type": "rmproductfield", "props": {"field": "title", "title_element": "h3", "title_style": "h4", "margin_top": "small"}},
-      {"type": "rmproductfield", "props": {"field": "price", "text_style": "large", "margin_top": "small"}}
+    {"type": "rmproductprice", "props": {"show_unit": true, "show_base_price": true, "show_discount": true, "discount_mode": "percent", "margin_top": "small"}}
     ]
   },
   "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
   "fields": {
     "content": {"label": "Permanent card content", "description": "This Builder area is always visible.", "type": "builder-fragment"},
+    "layout": {
+      "label": "Content layout",
+      "description": "Use normal document flow or a vertical flex stack that supports auto margins and height alignment.",
+      "type": "select",
+      "options": {"Normal flow": "flow", "Vertical stack": "column"}
+    },
+    "height_mode": {
+      "label": "Content height",
+      "description": "Fill the available card height so elements with Margin Top = Auto can be pinned to the bottom.",
+      "type": "select",
+      "options": {"Natural": "natural", "Fill available height": "fill"},
+      "show": "layout == 'column'"
+    },
+    "vertical_align": {
+      "label": "Vertical alignment",
+      "type": "select",
+      "options": {"Top": "top", "Center": "center", "Bottom": "bottom", "Space between": "between"},
+      "show": "layout == 'column' && height_mode == 'fill'"
+    },
+    "items_gap": {
+      "label": "Items gap",
+      "description": "Optional uniform gap. Individual element margins remain available for precise rhythm.",
+      "type": "select",
+      "options": {"None": "none", "Small": "small", "Default": "default", "Large": "large"},
+      "show": "layout == 'column'"
+    },
     "name": "${builder.name}",
     "status": "${builder.status}",
     "source": "${builder.source}",
@@ -26,5 +58,5 @@
     "attributes": "${builder.attrs}",
     "css": {"label": "CSS", "description": "Custom CSS for the permanent card area.", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-element", ".rm-product-card__main"]}}
   },
-  "fieldset": {"default": {"type": "tabs", "fields": [{"title": "Content", "fields": ["content"]}, "${builder.advanced}"]}}
+  "fieldset": {"default": {"type": "tabs", "fields": [{"title": "Content", "fields": ["content"]}, {"title": "Settings", "fields": [{"label": "Layout", "type": "group", "fields": ["layout", "height_mode", "vertical_align", "items_gap"]}]}, "${builder.advanced}"]}}
 }

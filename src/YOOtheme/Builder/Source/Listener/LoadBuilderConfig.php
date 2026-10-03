@@ -51,8 +51,9 @@ class LoadBuilderConfig
 			->createModel('Fields', 'Administrator', ['ignore_request' => true]);
 		$fieldsModel->setState('filter.published', 1);
 		$fieldsModel->setState('list.limit', 0);
+		$productFields = $fieldsModel->getItems();
 		$variantFields = array_values(array_filter(
-			$fieldsModel->getItems(),
+			$productFields,
 			static function ($field): bool {
 				$params = $field->params instanceof Registry ? $field->params : new Registry($field->params ?? []);
 				return (int) $params->get('display_variability', 0) === 1;
@@ -70,6 +71,13 @@ class LoadBuilderConfig
 					'text'  => (string) $field->title,
 				],
 				$variantFields,
+			),
+			'radicalmart_product_fields'             => array_map(
+				static fn($field): array => [
+					'value' => (string) $field->alias,
+					'text'  => (string) $field->title,
+				],
+				$productFields,
 			),
             'radicalmart_categories' => array_map(
                 fn($category) => [

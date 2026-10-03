@@ -1,0 +1,188 @@
+{
+  "@import": "./element.php",
+  "name": "rmlazypagination",
+  "title": "RM Lazy Pagination",
+  "group": "RadicalMart — Catalog",
+  "icon": "${url:images/iconPicker.svg}",
+  "iconSmall": "${url:images/iconSmall.svg}",
+  "element": true,
+  "width": 500,
+  "defaults": {
+    "button_label": "Load more",
+    "loading_label": "Loading…",
+    "complete_label": "All products loaded",
+    "auto_after_click": true,
+    "show_pages": false,
+    "update_url": false,
+    "preload_distance": 500,
+    "target_selector": "[data-rm-product-scope]",
+    "button_style": "default",
+    "button_size": "large",
+    "button_min_width": 220,
+    "button_height": 56,
+    "button_fullwidth": false,
+    "text_align": "center"
+  },
+  "templates": {
+    "render": "./templates/template.php"
+  },
+  "fields": {
+    "button_label": {
+      "label": "Button label",
+      "type": "text"
+    },
+    "loading_label": {
+      "label": "Loading label",
+      "type": "text"
+    },
+    "complete_label": {
+      "label": "Complete label",
+      "type": "text"
+    },
+    "auto_after_click": {
+      "label": "Automatic loading",
+      "type": "checkbox",
+      "text": "Continue loading on scroll after the first click"
+    },
+    "show_pages": {
+      "label": "Numeric pagination",
+      "type": "checkbox",
+      "text": "Show regular page links below the button"
+    },
+    "update_url": {
+      "label": "Browser URL",
+      "type": "checkbox",
+      "text": "Update the browser URL to the latest loaded page"
+    },
+    "preload_distance": {
+      "label": "Preload distance",
+      "description": "Start loading this many pixels before the control enters the viewport.",
+      "type": "range",
+      "attrs": {"min": 0, "max": 1600, "step": 50},
+      "show": "auto_after_click"
+    },
+    "target_selector": {
+      "label": "Product marker selector",
+      "description": "Advanced: selector used to find product cards on the current and next pages.",
+      "type": "text"
+    },
+    "button_style": {
+      "label": "Button style",
+      "type": "select",
+      "options": {
+        "Default": "default",
+        "Primary": "primary",
+        "Secondary": "secondary",
+        "Danger": "danger",
+        "Text": "text",
+        "Link": "link"
+      }
+    },
+    "button_size": {
+      "label": "Button size",
+      "type": "select",
+      "options": {"Default": "", "Small": "small", "Large": "large"}
+    },
+    "button_min_width": {
+      "label": "Minimum button width",
+      "type": "range",
+      "attrs": {"min": 80, "max": 800, "step": 4}
+    },
+    "button_height": {
+      "label": "Button height",
+      "type": "range",
+      "attrs": {"min": 32, "max": 120, "step": 2}
+    },
+    "button_fullwidth": {
+      "type": "checkbox",
+      "text": "Full width button"
+    },
+    "position": "${builder.position}",
+    "position_left": "${builder.position_left}",
+    "position_right": "${builder.position_right}",
+    "position_top": "${builder.position_top}",
+    "position_bottom": "${builder.position_bottom}",
+    "position_z_index": "${builder.position_z_index}",
+    "margin_top": "${builder.margin_top}",
+    "margin_bottom": "${builder.margin_bottom}",
+    "maxwidth": "${builder.maxwidth}",
+    "maxwidth_breakpoint": "${builder.maxwidth_breakpoint}",
+    "block_align": "${builder.block_align}",
+    "block_align_breakpoint": "${builder.block_align_breakpoint}",
+    "block_align_fallback": "${builder.block_align_fallback}",
+    "text_align": "${builder.text_align}",
+    "text_align_breakpoint": "${builder.text_align_breakpoint}",
+    "text_align_fallback": "${builder.text_align_fallback}",
+    "animation": "${builder.animation}",
+    "visibility": "${builder.visibility}",
+    "name": "${builder.name}",
+    "status": "${builder.status}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS is scoped to this lazy pagination element.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {
+        "debounce": 500,
+        "hints": [".el-element", ".rm-lazy-pagination", ".rm-lazy-pagination__button", ".rm-lazy-pagination__spinner"]
+      }
+    },
+    "transform": "${builder.transform}"
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {
+          "title": "Content",
+          "fields": ["button_label", "loading_label", "complete_label"]
+        },
+        {
+          "title": "Settings",
+          "fields": [
+            {
+              "label": "Loading",
+              "type": "group",
+              "fields": ["auto_after_click", "preload_distance", "show_pages", "update_url", "target_selector"]
+            },
+            {
+              "label": "Button",
+              "type": "group",
+              "fields": ["button_style", "button_size", "button_min_width", "button_height", "button_fullwidth"]
+            },
+            {
+              "label": "General",
+              "type": "group",
+              "fields": [
+                "position",
+                "position_left",
+                "position_right",
+                "position_top",
+                "position_bottom",
+                "position_z_index",
+                "margin_top",
+                "margin_bottom",
+                "maxwidth",
+                "maxwidth_breakpoint",
+                "block_align",
+                "block_align_breakpoint",
+                "block_align_fallback",
+                "text_align",
+                "text_align_breakpoint",
+                "text_align_fallback",
+                "animation",
+                "visibility"
+              ]
+            }
+          ]
+        },
+        "${builder.advanced}"
+      ]
+    }
+  }
+}

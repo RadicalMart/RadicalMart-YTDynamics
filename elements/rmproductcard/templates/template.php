@@ -40,11 +40,17 @@ $panelStyle = in_array(($props['panel_style'] ?? ''), ['', 'card-default', 'card
 	? ($props['panel_style'] ?? '') : '';
 $panelPadding = in_array(($props['panel_padding'] ?? 'default'), ['small', 'default', 'large'], true)
 	? ($props['panel_padding'] ?? 'default') : 'default';
+$heightMode = ($props['height_mode'] ?? 'natural') === 'fill' ? 'fill' : 'natural';
 $props['panel_style'] = $panelStyle;
 $props['panel_padding'] = $panelPadding;
 
 $content = trim($builder->render($children, ['rmProduct' => $product]));
-$json = json_encode($product, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+$productState = $product;
+// RM Variant Selector owns the variant graph and serialises it once. Product
+// Scope only needs the current product presentation for subsequent AJAX
+// patches; embedding the graph here as well doubles catalogue HTML size.
+unset($productState['variants']);
+$json = json_encode($productState, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 	| JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 $el = $this->el('div', [
 	'class' => [
@@ -52,6 +58,7 @@ $el = $this->el('div', [
 		'uk-card uk-{panel_style: card-.*} [uk-card-{!panel_padding: |default}]',
 		'uk-card-body {@panel_style: card-.*} {@panel_padding}',
 		'uk-card-hover' => !empty($props['panel_hover']) && $panelStyle !== '',
+		'uk-height-1-1 uk-flex uk-flex-column' => $heightMode === 'fill',
 	],
 	'data-rm-product-scope' => true,
 	'data-rm-product-id' => (int) $product['id'],

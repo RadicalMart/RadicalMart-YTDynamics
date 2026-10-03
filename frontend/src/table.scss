@@ -1,9 +1,12 @@
 .rm-table-frame {
   --rm-table-background: var(--ytdynamics-background, #fff);
   --rm-table-muted-background: var(--ytdynamics-muted-background, #f8f8f8);
+  --rm-table-color: var(--ytdynamics-surface-color, #666);
+  --rm-table-muted-color: var(--ytdynamics-surface-muted-color, #999);
   --rm-table-primary-background: var(--ytdynamics-primary-background, #1e87f0);
   --rm-table-secondary-background: var(--ytdynamics-secondary-background, #222);
-  --rm-table-border: var(--ytdynamics-border, #e5e5e5);
+  --rm-table-border: var(--ytdynamics-surface-border, #e5e5e5);
+  --rm-table-border-width: var(--ytdynamics-border-width, 1px);
   --rm-table-inverse-color: var(--ytdynamics-inverse-color, #fff);
   --rm-table-label-width: 36%;
   --rm-table-card-gap: var(--ytdynamics-margin, 20px);
@@ -19,7 +22,7 @@
 }
 
 .rm-table-frame--border {
-  border: 1px solid var(--rm-table-border);
+  border: var(--rm-table-border-width) solid var(--rm-table-border);
 }
 
 .rm-table-frame--scroll-shadow::before,
@@ -99,10 +102,12 @@
 }
 
 .rm-table__head.uk-background-default > tr > th {
+  color: var(--rm-table-color);
   background-color: var(--rm-table-background);
 }
 
 .rm-table__head.uk-background-muted > tr > th {
+  color: var(--rm-table-muted-color);
   background-color: var(--rm-table-muted-background);
 }
 
@@ -145,15 +150,16 @@
 
 .rm-table__row--divider-top > .rm-table__cell,
 .rm-table__row--divider-both > .rm-table__cell {
-  border-top: 1px solid var(--rm-table-border);
+  border-top: var(--rm-table-border-width) solid var(--rm-table-border);
 }
 
 .rm-table__row--divider-bottom > .rm-table__cell,
 .rm-table__row--divider-both > .rm-table__cell {
-  border-bottom: 1px solid var(--rm-table-border);
+  border-bottom: var(--rm-table-border-width) solid var(--rm-table-border);
 }
 
 .rm-table__row.uk-background-muted > .rm-table__cell {
+  color: var(--rm-table-muted-color);
   background-color: var(--rm-table-muted-background);
 }
 
@@ -189,6 +195,7 @@
   position: sticky;
   top: var(--rm-table-sticky-offset, 0);
   z-index: 3;
+  color: var(--rm-table-color);
   background-color: var(--rm-table-background);
 }
 
@@ -199,6 +206,7 @@
 }
 
 .rm-table-wrapper--sticky-muted thead th {
+  color: var(--rm-table-muted-color);
   background-color: var(--rm-table-muted-background);
 }
 
@@ -216,29 +224,30 @@
 .rm-table-wrapper--sticky-last:not(.rm-table-wrapper--sticky-conflict) tr > :last-child {
   position: sticky;
   z-index: 2;
+  color: var(--rm-table-color);
   background-color: var(--rm-table-background);
 }
 
 .rm-table-wrapper--sticky-first:not(.rm-table-wrapper--sticky-conflict) tr > :first-child {
   left: 0;
-  box-shadow: 1px 0 0 var(--rm-table-border);
+  box-shadow: var(--rm-table-border-width) 0 0 var(--rm-table-border);
 }
 
 .rm-table-wrapper--sticky-last:not(.rm-table-wrapper--sticky-conflict) tr > :last-child {
   right: 0;
-  box-shadow: -1px 0 0 var(--rm-table-border);
+  box-shadow: calc(0px - var(--rm-table-border-width)) 0 0 var(--rm-table-border);
 }
 
 [dir='rtl'] .rm-table-wrapper--sticky-first:not(.rm-table-wrapper--sticky-conflict) tr > :first-child {
   right: 0;
   left: auto;
-  box-shadow: -1px 0 0 var(--rm-table-border);
+  box-shadow: calc(0px - var(--rm-table-border-width)) 0 0 var(--rm-table-border);
 }
 
 [dir='rtl'] .rm-table-wrapper--sticky-last:not(.rm-table-wrapper--sticky-conflict) tr > :last-child {
   right: auto;
   left: 0;
-  box-shadow: 1px 0 0 var(--rm-table-border);
+  box-shadow: var(--rm-table-border-width) 0 0 var(--rm-table-border);
 }
 
 .rm-table-wrapper--sticky-header.rm-table-wrapper--sticky-first:not(.rm-table-wrapper--sticky-conflict) thead th:first-child,
@@ -347,25 +356,25 @@
     }
 
     &.rm-table--label-muted tr > .rm-table__cell::before {
-      color: var(--ytdynamics-muted-color, #999);
+      color: var(--rm-table-muted-color);
     }
 
     &.rm-table--label-meta tr > .rm-table__cell::before {
-      color: var(--ytdynamics-muted-color, #999);
+      color: var(--rm-table-muted-color);
       font-size: var(--ytdynamics-small-font-size, 0.875rem);
-      font-weight: normal;
+      font-weight: var(--ytdynamics-font-weight, normal);
       text-transform: var(--ytdynamics-meta-text-transform, none);
       letter-spacing: var(--ytdynamics-meta-letter-spacing, normal);
     }
 
     &.rm-table--label-default tr > .rm-table__cell::before {
       color: inherit;
-      font-weight: normal;
+      font-weight: var(--ytdynamics-font-weight, normal);
     }
 
     &.rm-table--label-bold tr > .rm-table__cell::before {
       color: inherit;
-      font-weight: 700;
+      font-weight: var(--ytdynamics-primary-font-weight, 600);
     }
 
     tr > .rm-table__cell:not([data-label]),
@@ -427,7 +436,7 @@
   .rm-table--breakpoint-#{$breakpoint}.rm-table--stack tbody > tr,
   .rm-table--breakpoint-#{$breakpoint}.rm-table--stack tfoot > tr {
     padding: var(--rm-table-stack-padding);
-    border-bottom: 1px solid var(--rm-table-border);
+    border-bottom: var(--rm-table-border-width) solid var(--rm-table-border);
   }
 
   .rm-table--breakpoint-#{$breakpoint}.rm-table--stack tbody > tr + tr,
@@ -445,12 +454,14 @@
   .rm-table--breakpoint-#{$breakpoint}.rm-table--cards tfoot > tr {
     container: rm-table-card / inline-size;
     padding: var(--rm-table-card-padding);
-    border: 1px solid var(--rm-table-border);
+    border: var(--rm-table-border-width) solid var(--rm-table-border);
     border-radius: var(--ytdynamics-border-radius, 4px);
+    color: var(--rm-table-color);
     background: var(--rm-table-background);
   }
 
   .rm-table--breakpoint-#{$breakpoint}.rm-table--cards.rm-table--card-muted tbody > tr {
+    color: var(--rm-table-muted-color);
     background: var(--rm-table-muted-background);
   }
 
@@ -467,12 +478,12 @@
   }
 
   .rm-table--breakpoint-#{$breakpoint}.rm-table--cards tbody > .rm-table__row--mobile-default {
-    color: inherit;
+    color: var(--rm-table-color);
     background: var(--rm-table-background);
   }
 
   .rm-table--breakpoint-#{$breakpoint}.rm-table--cards tbody > .rm-table__row--mobile-muted {
-    color: inherit;
+    color: var(--rm-table-muted-color);
     background: var(--rm-table-muted-background);
   }
 
