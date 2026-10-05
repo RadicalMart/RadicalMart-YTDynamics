@@ -34,7 +34,7 @@
     "image_fit": "cover",
     "image_position": "center",
     "image_loading": "lazy",
-    "background_color": "#f7f7fb",
+    "background_color": "",
     "mix_blend_mode": "normal",
     "border": "rounded",
     "box_shadow": "",

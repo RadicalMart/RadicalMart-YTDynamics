@@ -2,6 +2,7 @@ import EmblaCarousel from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 import './gallery.scss';
+import {observeDynamicContent} from './runtime.es6';
 import {
     addThumbButtonsClickHandlers,
     addToggleThumbButtonsActive,
@@ -384,20 +385,7 @@ const observeGalleries = () => {
         });
     });
 
-    new MutationObserver((records) => {
-        records.forEach(({addedNodes, removedNodes}) => {
-            addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    initGalleries(node);
-                }
-            });
-            removedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    destroyGalleries(node);
-                }
-            });
-        });
-    }).observe(document.documentElement, {childList: true, subtree: true});
+    observeDynamicContent(initGalleries, destroyGalleries);
 };
 
 if (document.readyState === 'loading') {

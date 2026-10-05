@@ -31,7 +31,36 @@
               {"type": "rmproductprice", "props": {"show_unit": true, "unit_style": "long", "show_base_price": true, "show_discount": true, "discount_mode": "percent", "margin_top": "default"}},
               {"type": "rmproductfield", "props": {"field": "availability", "margin_top": "small"}},
               {"type": "rmvariantselector", "props": {"style": "buttons", "action": "ajax", "update_url": "replace", "margin_top": "default"}},
-              {"type": "rmbuy", "props": {"show_count": true, "button_style": "primary", "margin_top": "default"}}
+              {"type": "rmbuy", "props": {"show_count": true, "button_style": "primary", "margin_top": "default"}},
+              {
+                "type": "rmoneclick",
+                "props": {
+                  "radicalform_target": "oneclick",
+                  "subject": "Заказ в 1 клик: {product_name}",
+                  "display_mode": "modal",
+                  "trigger_display": "button",
+                  "button_label": "Купить в 1 клик",
+                  "button_style": "default",
+                  "button_size": "large",
+                  "button_icon": "bolt",
+                  "button_fullwidth": true,
+                  "modal_title": "Купить в 1 клик",
+                  "modal_size": "small",
+                  "modal_center": true,
+                  "submit_label": "Отправить заказ",
+                  "submit_style": "primary",
+                  "submit_size": "large",
+                  "submit_icon": "check",
+                  "submit_fullwidth": true,
+                  "margin_top": "small"
+                },
+                "children": [
+                  {"type": "rmoneclick_item", "props": {"label": "Имя", "field_name": "name", "field_type": "text", "placeholder": "Ваше имя", "autocomplete": "name", "width": "half"}},
+                  {"type": "rmoneclick_item", "props": {"label": "Телефон", "field_name": "phone", "field_type": "tel", "placeholder": "+7 999 000-00-00", "autocomplete": "tel", "required": true, "width": "half", "error_text": "Укажите номер телефона"}},
+                  {"type": "rmoneclick_item", "props": {"label": "Количество", "field_name": "quantity", "field_type": "number", "value_source": "product_quantity", "required": true, "width": "third"}},
+                  {"type": "rmoneclick_item", "props": {"label": "Комментарий", "field_name": "comment", "field_type": "textarea", "placeholder": "Комментарий к заказу", "rows": 2, "width": "two-thirds"}}
+                ]
+              }
             ]
           }
         ]

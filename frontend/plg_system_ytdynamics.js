@@ -27,6 +27,10 @@ const entry = {
         import: './src/lazy-pagination.es6',
         filename: 'lazy-pagination.js',
     },
+    "floating-navigation": {
+        import: './src/floating-navigation.es6',
+        filename: 'floating-navigation.js',
+    },
 };
 
 const webpackConfig = require('./webpack.config.js');

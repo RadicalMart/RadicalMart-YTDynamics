@@ -1,4 +1,5 @@
 import './product-interactions.scss';
+import {observeDynamicContent} from './runtime.es6';
 
 const text = (value) => document.createTextNode(value || '');
 const clone = (value) => {
@@ -348,6 +349,147 @@ const renderProductUnit = (container, product = {}) => {
     if (unitNode) unitNode.textContent = unit || '';
     if (priceNode) priceNode.textContent = product.price?.final || '';
     updateOptionalElement(container, Boolean(unit));
+};
+
+const oneClickProductValue = (source, product = {}) => {
+    if (source === 'product_id') return String(product.id || '');
+    if (source === 'product_title') return String(product.title || '');
+    if (source === 'product_code') return String(product.code || '');
+    if (source === 'product_url') return String(product.link || '');
+    if (source === 'product_price') return String(product.price?.final || '');
+    if (source === 'product_quantity') return String(product.quantity?.min ?? 1);
+    return '';
+};
+
+const renderOneClickOrder = (container, product = {}) => {
+    container.dataset.rmOneclickProductId = String(product.id || '');
+    container.dataset.rmOneclickProductName = String(product.title || '');
+
+    container.querySelectorAll('[data-rm-oneclick-source]').forEach((field) => {
+        const source = field.dataset.rmOneclickSource || '';
+        const nextValue = oneClickProductValue(source, product);
+
+        if ('value' in field) field.value = nextValue;
+        if (source !== 'product_quantity' || !field.matches('input[type="number"]')) return;
+
+        const min = Number(product.quantity?.min) || 1;
+        const step = Number(product.quantity?.step) || 1;
+        const max = Number(product.quantity?.max) || 0;
+        field.min = String(min);
+        field.step = String(step);
+        if (max > 0) field.max = String(max);
+        else field.removeAttribute('max');
+        field.value = String(min);
+    });
+
+    container.querySelectorAll('[data-rm-oneclick-subject-template]').forEach((field) => {
+        const replacements = {
+            product_id: String(product.id || ''),
+            product_name: String(product.title || ''),
+            product_code: String(product.code || ''),
+            product_url: String(product.link || ''),
+            product_price: String(product.price?.final || '')
+        };
+        let value = field.dataset.rmOneclickSubjectTemplate || '';
+        Object.entries(replacements).forEach(([key, replacement]) => {
+            value = value.split(`{${key}}`).join(replacement);
+        });
+        field.value = value;
+    });
+
+    const title = container.querySelector('[data-rm-oneclick-summary-title]');
+    if (title) title.textContent = product.title || '';
+
+    const image = container.querySelector('[data-rm-oneclick-summary-image]');
+    const media = container.querySelector('[data-rm-oneclick-summary-media]');
+    const imageSource = product.media?.[0]?.src || '';
+    if (image) {
+        if (imageSource) image.src = imageSource;
+        else image.removeAttribute('src');
+        image.alt = product.title || '';
+    }
+    if (media) media.hidden = !imageSource;
+
+    const price = container.querySelector('[data-rm-oneclick-summary-price]');
+    if (price) price.textContent = product.price?.final || '';
+    const unit = container.querySelector('[data-rm-oneclick-summary-unit]');
+    const unitText = product.quantity?.unitShort || product.quantity?.units || '';
+    if (unit) {
+        unit.textContent = unitText ? `/${unitText}` : '';
+        unit.hidden = !unitText;
+    }
+
+    const bonus = container.querySelector('[data-rm-oneclick-summary-bonus]');
+    const bonusWrap = container.querySelector('[data-rm-oneclick-summary-bonus-wrap]');
+    const bonusText = String(product.bonus?.text || '');
+    if (bonus) bonus.textContent = bonusText;
+    if (bonusWrap) bonusWrap.hidden = !bonusText;
+
+    const stock = container.querySelector('[data-rm-oneclick-summary-stock]');
+    if (stock) {
+        const inStock = Boolean(product.inStock);
+        const stockLabel = stock.querySelector('[data-rm-oneclick-summary-stock-label]');
+        const stockInIcon = stock.querySelector('[data-rm-oneclick-summary-stock-in]');
+        const stockOutIcon = stock.querySelector('[data-rm-oneclick-summary-stock-out]');
+        stock.classList.toggle('uk-text-success', inStock);
+        stock.classList.toggle('uk-text-muted', !inStock);
+        if (stockLabel) stockLabel.textContent = inStock ? stock.dataset.labelIn : stock.dataset.labelOut;
+        if (stockInIcon) stockInIcon.hidden = !inStock;
+        if (stockOutIcon) stockOutIcon.hidden = inStock;
+    }
+
+    const disabled = container.dataset.disableOutOfStock === 'true' && !product.inStock;
+    container.querySelectorAll('.rf-button-send, [data-rm-oneclick-trigger]').forEach((button) => {
+        button.disabled = disabled;
+        if (disabled) button.setAttribute('aria-disabled', 'true');
+        else button.removeAttribute('aria-disabled');
+    });
+};
+
+const oneClickFieldValues = (form, name) => Array.from(form.elements)
+    .filter((control) => control.name === name && !control.disabled)
+    .flatMap((control) => {
+        if ((control.type === 'checkbox' || control.type === 'radio') && !control.checked) return [];
+        if (control instanceof HTMLSelectElement && control.multiple) {
+            return Array.from(control.selectedOptions).map((option) => option.value);
+        }
+        return [String(control.value || '')];
+    });
+
+const syncOneClickConditionalFields = (order) => {
+    const form = order.querySelector('form');
+    if (!form) return;
+
+    order.querySelectorAll('[data-rm-oneclick-condition-field]').forEach((field) => {
+        const sourceName = field.dataset.rmOneclickConditionField || '';
+        const expectedValue = field.dataset.rmOneclickConditionValue || '';
+        const visible = oneClickFieldValues(form, sourceName).includes(expectedValue);
+
+        field.hidden = !visible;
+        field.setAttribute('aria-hidden', visible ? 'false' : 'true');
+        field.querySelectorAll('input, select, textarea').forEach((control) => {
+            control.disabled = !visible;
+            const required = control.dataset.rmOneclickRequired === 'true';
+            control.required = visible && required;
+            control.classList.toggle('required', visible && required);
+            if (!visible) {
+                control.removeAttribute('aria-invalid');
+                control.classList.remove('is-invalid', 'uk-form-danger');
+            }
+        });
+    });
+};
+
+const initOneClickConditionalFields = (order) => {
+    if (order.dataset.rmOneclickConditionsReady === 'true') return;
+    order.dataset.rmOneclickConditionsReady = 'true';
+    const form = order.querySelector('form');
+    if (!form) return;
+
+    const sync = () => syncOneClickConditionalFields(order);
+    form.addEventListener('change', sync);
+    form.addEventListener('input', sync);
+    sync();
 };
 
 const renderProductSpecifications = (container, sourceFieldsets = []) => {
@@ -707,6 +849,10 @@ class ProductScope {
             }
             cart.querySelectorAll('[radicalmart-cart="add"], [data-radicalmart-cart="add"]')
                 .forEach((button) => { button.disabled = !product.inStock; });
+        });
+
+        this.nodes('[data-rm-oneclick-order]').forEach((node) => {
+            renderOneClickOrder(node, product);
         });
 
         this.nodes('[data-rm-product-specifications]').forEach((node) => {
@@ -1517,6 +1663,10 @@ class QuickView {
 		await loadAssets(assets, 'script');
 		if (typeof window.RadicalMartCart === 'function') ensureRadicalMartDisplay();
         if (window.UIkit?.update) window.UIkit.update(body);
+		if (body.querySelector('[data-rm-oneclick-order]')
+			&& typeof window.RadicalForm?.RadicalFormClass?.init === 'function') {
+			window.RadicalForm.RadicalFormClass.init(body);
+		}
         if (typeof window.RadicalMartCart === 'function') {
             const cart = window.RadicalMartCart();
             if (typeof cart?.loadActions === 'function') cart.loadActions(body);
@@ -1808,6 +1958,8 @@ const resetPendingCartButtons = () => {
 };
 
 const init = (root = document) => {
+	if (root.matches?.('[data-rm-oneclick-order]')) initOneClickConditionalFields(root);
+	root.querySelectorAll?.('[data-rm-oneclick-order]').forEach((order) => initOneClickConditionalFields(order));
     if (root.matches?.('[data-rm-product-scope]')) new ProductScope(root).init();
     root.querySelectorAll?.('[data-rm-product-scope]').forEach((scope) => new ProductScope(scope).init());
     if (root.matches?.('[data-rm-product-card-dropdown]')) new ProductCardDropdown(root).init();
@@ -1850,6 +2002,4 @@ document.addEventListener('onRadicalMartCartAfterAddProduct', showCartFeedback);
 document.addEventListener('onRadicalMartCartError', resetPendingCartButtons);
 
 document.addEventListener('DOMContentLoaded', () => init());
-new MutationObserver((mutations) => mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
-    if (node.nodeType === Node.ELEMENT_NODE) init(node);
-}))).observe(document.documentElement, {childList: true, subtree: true});
+observeDynamicContent(init);

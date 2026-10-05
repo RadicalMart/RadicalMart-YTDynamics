@@ -1,0 +1,43 @@
+{
+  "@import": "./element.php",
+  "name": "rmhelpmenu_item",
+  "title": "Contact Link",
+  "width": 500,
+  "defaults": {
+    "show_tooltip": true,
+    "button_size": 0,
+    "icon_size": 24,
+    "button_shape": "circle"
+  },
+  "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
+  "fields": {
+    "title": {"label": "Accessible label", "type": "text", "source": true},
+    "tooltip": {"label": "Tooltip text", "description": "Leave empty to use the accessible label.", "type": "text", "source": true},
+    "show_tooltip": {"type": "checkbox", "text": "Show a tooltip for this contact"},
+    "link": "${builder.link}",
+    "icon": {"label": "Icon", "type": "icon"},
+    "background_color": {"label": "Button background", "description": "Leave empty to inherit the help menu default.", "type": "color"},
+    "hover_background_color": {"label": "Hover background", "description": "Leave empty to use the button background.", "type": "color"},
+    "icon_color": {"label": "Icon color", "description": "Leave empty to inherit the help menu default.", "type": "color"},
+    "label_background_color": {"label": "Label background", "description": "Used when labels are enabled in the parent menu.", "type": "color"},
+    "label_color": {"label": "Label color", "type": "color"},
+    "button_size": {"label": "Button size", "description": "0 inherits the size from the parent help menu.", "type": "range", "attrs": {"min": 0, "max": 100, "step": 1}},
+    "icon_size": {"label": "Icon size", "type": "range", "attrs": {"min": 14, "max": 52, "step": 1}},
+    "button_shape": {"label": "Button shape", "type": "select", "options": {"Circle": "circle", "Rounded": "rounded", "Square": "square"}},
+    "name": "${builder.nameItem}",
+    "status": "${builder.statusItem}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-item", ".rm-help-menu__link", ".rm-help-menu__item-icon", ".rm-help-menu__label"]}}
+  },
+  "fieldset": {"default": {"type": "tabs", "fields": [
+    {"title": "Content", "fields": ["title", "tooltip", "link", "icon"]},
+    {"title": "Settings", "fields": [
+      {"label": "Button", "type": "group", "fields": ["background_color", "hover_background_color", "icon_color", "button_size", "icon_size", "button_shape"]},
+      {"label": "Label and tooltip", "type": "group", "fields": ["show_tooltip", "label_background_color", "label_color"]}
+    ]},
+    "${builder.advancedItem}"
+  ]}}
+}

@@ -63,8 +63,6 @@ $root = $this->el('div', [
 		'rm-product-gallery--mobile-' . $mobileLayout,
 		'rm-product-gallery--ratio-auto' => $ratio === '',
 		'rm-product-gallery--hide-scrollbar' => $mobileLayout === 'scroll' && empty($props['mobile_scrollbar']),
-		'rm-product-gallery--border-' . $border => $border !== '',
-		'rm-product-gallery--shadow-' . $shadow => $shadow !== '',
 	],
 	'data-rm-product-gallery-grid' => true,
 	'data-sync-product-media' => !empty($props['sync_product_media']) ? 'true' : 'false',
@@ -89,6 +87,8 @@ $buttonClass = trim('rm-product-gallery__more-button uk-button uk-button-' . $bu
 				'index' => $index,
 				'total' => count($children),
 				'hidden' => $hasOverflow && $index >= $initialItems,
+				'gallery_border' => $border,
+				'gallery_shadow' => $shadow,
 			]) ?>
 		<?php endforeach; ?>
 		<?php if ($showMore) : ?>

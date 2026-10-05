@@ -52,7 +52,7 @@
       "label": "Product field",
       "description": "The value comes from the nearest RM Product or RM Product Card and updates when another variant is selected.",
       "type": "select",
-      "options": {"Title": "title", "Image": "image", "Price": "price", "Base price": "base_price", "Discount": "discount", "Savings": "benefit", "Availability": "availability", "Stock quantity": "stock_quantity", "Unit": "unit", "Code": "code", "Category": "category", "Manufacturer": "manufacturer", "Short description": "description", "Full description": "full_description"},
+      "options": {"Title": "title", "Image": "image", "Availability": "availability", "Stock quantity": "stock_quantity", "Code": "code", "Category": "category", "Manufacturer": "manufacturer", "Short description": "description", "Full description": "full_description"},
       "show": "field_source == 'system'"
     },
     "custom_field": {

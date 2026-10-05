@@ -1,4 +1,5 @@
 import './toolbar.scss';
+import {observeDynamicContent} from './runtime.es6';
 
 const COOKIE_TTL = 7 * 24 * 60 * 60 * 1000;
 const LAYOUTS = new Set(['tile', 'compact', 'list', 'price']);
@@ -109,24 +110,11 @@ const syncNativeSwitcher = () => {
     window.setProductsListTemplate = syncedSwitcher;
 };
 
-const closeOrdering = (toolbar) => {
-    const control = toolbar.querySelector('.rm-toolbar__ordering-control');
-    control?.classList.remove('is-open');
-    control?.querySelector('.rm-toolbar__ordering-toggle')?.setAttribute('aria-expanded', 'false');
-};
-
 const selectOrdering = (toolbar, value) => {
     const select = toolbar.querySelector('.rm-toolbar__select');
     if (!select || !Array.from(select.options).some((option) => option.value === value)) return;
 
     select.value = value;
-    toolbar.querySelector('.rm-toolbar__ordering-value').textContent = select.selectedOptions[0]?.textContent.trim() || '';
-    toolbar.querySelectorAll('[data-rm-ordering]').forEach((option) => {
-        const active = option.dataset.rmOrdering === value;
-        option.classList.toggle('is-active', active);
-        option.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
-    closeOrdering(toolbar);
     setCookie(toolbar.dataset.orderingCookie, value, toolbar.dataset.cookiePath);
     const url = new URL(window.location.href);
     url.searchParams.delete('start');
@@ -143,22 +131,6 @@ const initControl = (control) => {
     if (orderingSelect) sortBuilderCollections(orderingSelect.value || 'ordering ASC');
 
     control.addEventListener('click', (event) => {
-		const orderingToggle = event.target.closest('.rm-toolbar__ordering-toggle');
-		if (orderingToggle && control.contains(orderingToggle)) {
-			const orderingControl = orderingToggle.closest('.rm-toolbar__ordering-control');
-			const open = !orderingControl.classList.contains('is-open');
-			document.querySelectorAll(CONTROL_SELECTOR).forEach(closeOrdering);
-			orderingControl.classList.toggle('is-open', open);
-			orderingToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-			return;
-		}
-
-		const orderingOption = event.target.closest('[data-rm-ordering]');
-		if (orderingOption && control.contains(orderingOption)) {
-			selectOrdering(control, orderingOption.dataset.rmOrdering);
-			return;
-		}
-
         const button = event.target.closest('[data-rm-layout]');
         if (!button || !control.contains(button)) {
             return;
@@ -187,21 +159,10 @@ const initControls = (root = document) => {
 const start = () => {
     initControls();
     syncNativeSwitcher();
-    document.addEventListener('click', (event) => {
-        document.querySelectorAll(CONTROL_SELECTOR).forEach((control) => {
-            if (!control.contains(event.target)) closeOrdering(control);
-        });
+    observeDynamicContent((node) => {
+        initControls(node);
+        syncNativeSwitcher();
     });
-    document.addEventListener('keydown', (event) => {
-        if (event.key !== 'Escape') return;
-        document.querySelectorAll(CONTROL_SELECTOR).forEach(closeOrdering);
-    });
-    new MutationObserver((records) => records.forEach(({addedNodes}) => addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-            initControls(node);
-            syncNativeSwitcher();
-        }
-    }))).observe(document.documentElement, {childList: true, subtree: true});
 };
 
 if (document.readyState === 'loading') {

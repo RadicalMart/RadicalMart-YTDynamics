@@ -1,0 +1,38 @@
+{
+  "@import": "./element.php",
+  "name": "rmbottomnav_item",
+  "title": "Navigation Item",
+  "width": 500,
+  "defaults": {
+    "auto_active": true,
+    "active": false
+  },
+  "templates": {"render": "./templates/template.php", "content": "./templates/content.php"},
+  "fields": {
+    "title": {"label": "Label", "type": "text", "source": true},
+    "link": "${builder.link}",
+    "icon": {"label": "Icon", "type": "icon"},
+    "badge": {"label": "Badge", "description": "Optional short text or dynamic counter.", "type": "text", "source": true},
+    "auto_active": {"type": "checkbox", "text": "Detect this item as active from its URL"},
+    "active": {"type": "checkbox", "text": "Set this item active manually"},
+    "color": {"label": "Item color", "description": "Leave empty to inherit the navigation color.", "type": "color"},
+    "background_color": {"label": "Item background", "type": "color"},
+    "active_color": {"label": "Active color", "description": "Leave empty to inherit the navigation active color.", "type": "color"},
+    "active_background_color": {"label": "Active background", "description": "Leave empty to generate a subtle background from the active color.", "type": "color"},
+    "name": "${builder.nameItem}",
+    "status": "${builder.statusItem}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {"label": "CSS", "type": "editor", "editor": "code", "mode": "css", "attrs": {"debounce": 500, "hints": [".el-item", ".rm-bottom-navigation__link", ".rm-bottom-navigation__icon", ".rm-bottom-navigation__label", ".rm-bottom-navigation__badge"]}}
+  },
+  "fieldset": {"default": {"type": "tabs", "fields": [
+    {"title": "Content", "fields": ["title", "link", "icon", "badge"]},
+    {"title": "Settings", "fields": [
+      {"label": "Active state", "type": "group", "fields": ["auto_active", "active"]},
+      {"label": "Appearance", "type": "group", "fields": ["color", "background_color", "active_color", "active_background_color"]}
+    ]},
+    "${builder.advancedItem}"
+  ]}}
+}

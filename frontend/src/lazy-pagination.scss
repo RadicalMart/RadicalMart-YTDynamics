@@ -30,7 +30,7 @@
 
   &__status {
     margin-top: 8px;
-    color: #d33;
+    color: var(--ytdynamics-danger-background, #d33);
     font-size: .875rem;
   }
 

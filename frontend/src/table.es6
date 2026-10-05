@@ -1,4 +1,5 @@
 import './table.scss';
+import {observeDynamicContent} from './runtime.es6';
 
 const readThemeTokens = (frame) => {
     const probe = document.createElement('span');
@@ -152,18 +153,7 @@ const initTables = (root = document) => {
 const observeTables = () => {
     initTables();
 
-    new MutationObserver((records) => {
-		records.forEach(({addedNodes, removedNodes}) => {
-			addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    initTables(node);
-                }
-			});
-			removedNodes.forEach((node) => {
-				if (node.nodeType === Node.ELEMENT_NODE) destroyTables(node);
-			});
-		});
-    }).observe(document.documentElement, {childList: true, subtree: true});
+	observeDynamicContent(initTables, destroyTables);
 };
 
 if (document.readyState === 'loading') {

@@ -17,8 +17,8 @@
     margin-left: 8px;
     padding: 0 6px;
     border-radius: 999px;
-    background: var(--rm-filter-accent, #82b440);
-    color: #fff;
+    background: var(--rm-filter-accent, var(--ytdynamics-primary-background));
+    color: var(--ytdynamics-inverse-color);
     font-size: 11px;
     line-height: 20px;
     text-align: center;
@@ -28,9 +28,9 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     overflow: visible;
-    border: 1px solid rgba(25, 27, 34, .18);
+    border: var(--ytdynamics-border-width, 1px) solid var(--ytdynamics-component-border-strong);
     border-radius: 12px;
-    background: #fff;
+    background: var(--ytdynamics-control-background);
 
     .input-group {
       display: grid;
@@ -42,7 +42,7 @@
       border: 0;
 
       + .input-group {
-        border-left: 1px solid rgba(25, 27, 34, .1);
+        border-left: var(--ytdynamics-border-width, 1px) solid var(--ytdynamics-component-border);
       }
     }
 
@@ -50,7 +50,7 @@
       padding: 0 7px 0 0;
       border: 0;
       background: transparent;
-      color: #92949b;
+      color: var(--ytdynamics-muted-color);
       font-size: 12px;
       line-height: 1;
       text-transform: lowercase;
@@ -64,12 +64,12 @@
       outline: 0;
       background: transparent;
       box-shadow: none;
-      color: #32343b;
+      color: var(--ytdynamics-color);
       font-size: 20px;
       line-height: 32px;
 
       &::placeholder {
-        color: #6f7178;
+        color: var(--ytdynamics-muted-color);
         opacity: 1;
       }
     }
@@ -78,7 +78,7 @@
     > .uk-text-right {
       grid-column: 1 / -1;
       padding: 9px 14px 11px;
-      border-top: 1px solid rgba(25, 27, 34, .08);
+      border-top: var(--ytdynamics-border-width, 1px) solid var(--ytdynamics-component-border);
     }
   }
 
@@ -95,13 +95,13 @@
     right: 0;
     left: 0;
     height: 2px;
-    background: #d5d6da;
+    background: var(--ytdynamics-filter-track);
 
     span {
       position: absolute;
       top: 0;
       bottom: 0;
-      background: #24262d;
+      background: var(--ytdynamics-filter-thumb);
     }
   }
 
@@ -129,10 +129,10 @@
       width: 22px;
       height: 22px;
       margin-top: -10px;
-      border: 3px solid #24262d;
+      border: 3px solid var(--ytdynamics-filter-thumb);
       border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 1px 2px rgba(25, 27, 34, .12);
+      background: var(--ytdynamics-control-background);
+      box-shadow: var(--ytdynamics-small-box-shadow);
       cursor: grab;
       pointer-events: auto;
       appearance: none;
@@ -146,16 +146,16 @@
     &::-moz-range-thumb {
       width: 16px;
       height: 16px;
-      border: 3px solid #24262d;
+      border: 3px solid var(--ytdynamics-filter-thumb);
       border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 1px 2px rgba(25, 27, 34, .12);
+      background: var(--ytdynamics-control-background);
+      box-shadow: var(--ytdynamics-small-box-shadow);
       cursor: grab;
       pointer-events: auto;
     }
 
     &:focus-visible::-webkit-slider-thumb {
-      outline: 3px solid color-mix(in srgb, var(--rm-filter-accent, #82b440) 32%, transparent);
+      outline: 3px solid color-mix(in srgb, var(--rm-filter-accent, var(--ytdynamics-primary-background)) 32%, transparent);
       outline-offset: 2px;
     }
   }
@@ -185,26 +185,26 @@
     width: auto;
     min-width: 128px;
     overflow: visible;
-    border: 1px solid rgba(25, 27, 34, .12) !important;
+    border: var(--ytdynamics-border-width, 1px) solid var(--ytdynamics-component-border) !important;
     border-radius: 10px !important;
-    background: #fff;
+    background: var(--ytdynamics-control-background);
 
     &,
     &:nth-child(n+2) {
       margin: 0 !important;
       padding: 0 !important;
-      border-top-color: rgba(25, 27, 34, .12) !important;
+      border-top-color: var(--ytdynamics-component-border) !important;
     }
 
     &.is-open {
       z-index: 50;
-      border-color: rgba(25, 27, 34, .2) !important;
-      box-shadow: 0 10px 35px rgba(25, 27, 34, .08);
+      border-color: var(--ytdynamics-component-border-strong) !important;
+      box-shadow: var(--ytdynamics-component-shadow-small);
     }
 
     &.is-filtered > .accordion-header .accordion-button,
     &.is-filtered > .uk-accordion-title {
-      border-color: var(--rm-filter-accent, #82b440);
+      border-color: var(--rm-filter-accent, var(--ytdynamics-primary-background));
     }
   }
 
@@ -256,20 +256,28 @@
   .uk-accordion-content,
   .uk-accordion-default > .uk-open > .uk-accordion-content {
     position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
+    // UIkit Drop writes page-relative top/left coordinates inline. The filter
+    // panels intentionally remain inside their relatively positioned item, so
+    // those coordinates would be added to the item's offset a second time.
+    // Keep UIkit responsible for state, accessibility and outside-click
+    // handling, while the panel geometry stays anchored to its own button.
+    top: calc(100% + 8px) !important;
+    right: auto !important;
+    left: var(--rm-filter-drop-shift, 0px) !important;
     display: none !important;
     width: min(var(--rm-filter-dropdown-width), calc(100vw - 40px));
     max-height: var(--rm-filter-dropdown-max-height);
+    margin: 0 !important;
     overflow: auto;
-    border: 1px solid rgba(25, 27, 34, .08);
+    border: var(--ytdynamics-border-width, 1px) solid var(--ytdynamics-component-border);
     border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 18px 55px rgba(25, 27, 34, .15);
+    background: var(--ytdynamics-control-background);
+    box-shadow: var(--ytdynamics-component-shadow);
   }
 
   .accordion-item.is-open > .accordion-collapse,
-  .uk-accordion-default > li.is-open > .uk-accordion-content {
+  .uk-accordion-default > li.is-open > .uk-accordion-content,
+  .uk-accordion-content.uk-open {
     display: block !important;
   }
 
@@ -301,7 +309,7 @@
   .accordion-item,
   .uk-accordion-default > li {
     border: 0 !important;
-    border-bottom: 1px solid rgba(25, 27, 34, .1) !important;
+    border-bottom: var(--ytdynamics-border-width, 1px) solid var(--ytdynamics-component-border) !important;
     background: transparent;
   }
 
@@ -331,11 +339,11 @@
 }
 
 .rm-catalog-menu {
-  --rm-catalog-menu-accent: #11a8e2;
+  --rm-catalog-menu-accent: var(--ytdynamics-primary-background);
   position: relative;
   overflow: hidden;
   min-height: var(--rm-catalog-menu-min-height, 0);
-  color: #25262d;
+  color: var(--ytdynamics-color);
 }
 
 .rm-catalog-menu__viewport {
@@ -358,7 +366,7 @@
   align-items: center;
   min-height: 64px;
   padding: 0 0 16px;
-  border-bottom: 1px solid rgba(25, 27, 34, .1);
+  border-bottom: var(--ytdynamics-border-width, 1px) solid var(--ytdynamics-component-border);
   gap: 12px;
 }
 
@@ -404,7 +412,7 @@
   &:hover,
   &:focus-within,
   &.is-current {
-    background: #f3f4f7;
+    background: var(--ytdynamics-control-muted-background);
   }
 
   &.is-current {
@@ -426,7 +434,7 @@
   gap: 12px;
 
   small {
-    color: #858790;
+    color: var(--ytdynamics-muted-color);
     font-size: 12px;
   }
 }

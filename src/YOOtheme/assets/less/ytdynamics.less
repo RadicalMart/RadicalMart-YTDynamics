@@ -50,6 +50,19 @@
 @ytdynamics-medium-box-shadow:                  @global-medium-box-shadow;
 @ytdynamics-large-box-shadow:                   @global-large-box-shadow;
 @ytdynamics-xlarge-box-shadow:                  @global-xlarge-box-shadow;
+@ytdynamics-component-border:                   fade(@global-emphasis-color, 12%);
+@ytdynamics-component-border-strong:            fade(@global-emphasis-color, 20%);
+@ytdynamics-component-shadow:                   0 18px 55px fade(@global-emphasis-color, 15%);
+@ytdynamics-component-shadow-small:             0 10px 35px fade(@global-emphasis-color, 8%);
+@ytdynamics-navigation-shadow:                  0 -8px 28px fade(@global-emphasis-color, 12%);
+@ytdynamics-floating-trigger-shadow:            0 10px 28px fade(@global-emphasis-color, 22%);
+@ytdynamics-floating-item-shadow:               0 9px 26px fade(@global-emphasis-color, 20%);
+@ytdynamics-floating-item-hover-shadow:         0 12px 32px fade(@global-emphasis-color, 26%);
+@ytdynamics-floating-label-shadow:              0 7px 22px fade(@global-emphasis-color, 14%);
+@ytdynamics-control-background:                 @global-background;
+@ytdynamics-control-muted-background:           @global-muted-background;
+@ytdynamics-filter-track:                       @global-border;
+@ytdynamics-filter-thumb:                       @global-emphasis-color;
 
 // All RM elements: spacing and controls
 // --------------------------------------------------------------------------
@@ -124,6 +137,19 @@
     --ytdynamics-medium-box-shadow: @ytdynamics-medium-box-shadow;
     --ytdynamics-large-box-shadow: @ytdynamics-large-box-shadow;
     --ytdynamics-xlarge-box-shadow: @ytdynamics-xlarge-box-shadow;
+    --ytdynamics-component-border: @ytdynamics-component-border;
+    --ytdynamics-component-border-strong: @ytdynamics-component-border-strong;
+    --ytdynamics-component-shadow: @ytdynamics-component-shadow;
+    --ytdynamics-component-shadow-small: @ytdynamics-component-shadow-small;
+    --ytdynamics-navigation-shadow: @ytdynamics-navigation-shadow;
+    --ytdynamics-floating-trigger-shadow: @ytdynamics-floating-trigger-shadow;
+    --ytdynamics-floating-item-shadow: @ytdynamics-floating-item-shadow;
+    --ytdynamics-floating-item-hover-shadow: @ytdynamics-floating-item-hover-shadow;
+    --ytdynamics-floating-label-shadow: @ytdynamics-floating-label-shadow;
+    --ytdynamics-control-background: @ytdynamics-control-background;
+    --ytdynamics-control-muted-background: @ytdynamics-control-muted-background;
+    --ytdynamics-filter-track: @ytdynamics-filter-track;
+    --ytdynamics-filter-thumb: @ytdynamics-filter-thumb;
 
     --ytdynamics-small-margin: @ytdynamics-small-margin;
     --ytdynamics-margin: @ytdynamics-margin;
@@ -179,4 +205,66 @@
 
 .uk-dark when (@inverse-global-color-mode = dark) {
     .ytdynamics-inverse-tokens();
+}
+
+// Responsive component rules live in the theme component so custom UIkit
+// breakpoints remain the single source of truth.
+@media (max-width: (@breakpoint-medium - 1px)) {
+    .rm-floating--mobile { display: block; }
+
+    .rm-toolbar__ordering,
+    .rm-toolbar__ordering-control,
+    .rm-ordering { width: 100%; }
+}
+
+@media (min-width: @breakpoint-medium) {
+    .rm-floating--mobile { display: none !important; }
+    .rm-product-gallery__items {
+        grid-template-columns: repeat(var(--rm-product-gallery-columns-m), minmax(0, 1fr));
+    }
+}
+
+@media (min-width: @breakpoint-large) {
+    .rm-floating--tablet { display: none !important; }
+    .rm-product-gallery__items {
+        grid-template-columns: repeat(var(--rm-product-gallery-columns-l), minmax(0, 1fr));
+    }
+}
+
+@media (min-width: @breakpoint-xlarge) {
+    .rm-product-gallery__items {
+        grid-template-columns: repeat(var(--rm-product-gallery-columns-xl), minmax(0, 1fr));
+    }
+}
+
+@media (max-width: (@breakpoint-small - 1px)) {
+    .rm-product-gallery__items {
+        column-gap: var(--rm-product-gallery-mobile-column-gap);
+        row-gap: var(--rm-product-gallery-mobile-row-gap);
+    }
+    .rm-product-gallery--mobile-grid .rm-product-gallery__items {
+        grid-template-columns: repeat(var(--rm-product-gallery-mobile-columns), minmax(0, 1fr));
+    }
+    .rm-product-gallery--mobile-stack .rm-product-gallery__items {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .rm-product-gallery--mobile-scroll .rm-product-gallery__items {
+        display: flex;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scroll-snap-type: inline mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+    .rm-product-gallery--mobile-scroll .rm-product-gallery__item {
+        flex: 0 0 var(--rm-product-gallery-mobile-width);
+        scroll-snap-align: start;
+    }
+    .rm-product-gallery--mobile-scroll .rm-product-gallery__more {
+        flex: 0 0 min(140px, 42vw);
+        align-items: center;
+        padding: var(--ytdynamics-small-margin, 10px);
+        scroll-snap-align: end;
+    }
+    .rm-product-gallery--hide-scrollbar .rm-product-gallery__items { scrollbar-width: none; }
+    .rm-product-gallery--hide-scrollbar .rm-product-gallery__items::-webkit-scrollbar { display: none; }
 }

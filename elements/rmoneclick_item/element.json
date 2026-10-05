@@ -1,0 +1,143 @@
+{
+  "@import": "./element.php",
+  "name": "rmoneclick_item",
+  "title": "Field",
+  "width": 500,
+  "defaults": {
+    "field_type": "text",
+    "field_name": "field",
+    "label": "Поле",
+    "label_link": "",
+    "label_link_text": "",
+    "label_link_target": false,
+    "placeholder": "",
+    "value": "",
+    "value_source": "custom",
+    "required": false,
+    "checked": false,
+    "show_label": true,
+    "autocomplete": "",
+    "pattern": "",
+    "min": "",
+    "max": "",
+    "step": "",
+    "rows": 3,
+    "options": "",
+    "show_when_field": "",
+    "show_when_value": "",
+    "width": "full",
+    "error_text": ""
+  },
+  "templates": {
+    "render": "./templates/template.php",
+    "content": "./templates/content.php"
+  },
+  "fields": {
+    "field_type": {
+      "label": "Field type",
+      "type": "select",
+      "options": {"Text": "text", "Phone": "tel", "Email": "email", "Number": "number", "Textarea": "textarea", "Select": "select", "Checkbox": "checkbox", "Hidden": "hidden"}
+    },
+    "field_name": {
+      "label": "Field name",
+      "description": "The name RadicalForm receives. Do not use Joomla or RadicalForm reserved names.",
+      "type": "text",
+      "source": true
+    },
+    "label": {"label": "Label", "type": "text", "source": true, "show": "field_type != 'hidden'"},
+    "label_link": {
+      "label": "Label link",
+      "description": "Optional destination for a consent or field label. Relative and absolute URLs are supported.",
+      "type": "link",
+      "show": "field_type != 'hidden'"
+    },
+    "label_link_text": {
+      "label": "Linked part of label",
+      "description": "Only this exact fragment becomes a link. Leave empty to link the complete label.",
+      "type": "text",
+      "source": true,
+      "show": "field_type != 'hidden' && label_link"
+    },
+    "label_link_target": {"type": "checkbox", "text": "Open label link in a new tab", "show": "field_type != 'hidden' && label_link"},
+    "placeholder": {"label": "Placeholder", "type": "text", "source": true, "show": "field_type != 'hidden' && field_type != 'checkbox'"},
+    "value": {"label": "Default value", "type": "text", "source": true},
+    "value_source": {
+      "label": "Value source",
+      "description": "Product values follow the selected RadicalMart variant automatically.",
+      "type": "select",
+      "options": {"Custom value": "custom", "Product ID": "product_id", "Product name": "product_title", "Product code": "product_code", "Product URL": "product_url", "Final price": "product_price", "Product minimum quantity": "product_quantity"}
+    },
+    "required": {"type": "checkbox", "text": "Required field", "show": "field_type != 'hidden'"},
+    "checked": {"type": "checkbox", "text": "Checked by default", "show": "field_type == 'checkbox'"},
+    "show_label": {"type": "checkbox", "text": "Show this field label", "show": "field_type != 'hidden' && field_type != 'checkbox'"},
+    "autocomplete": {
+      "label": "Autocomplete",
+      "type": "select",
+      "options": {"Automatic": "", "Name": "name", "Given name": "given-name", "Family name": "family-name", "Phone": "tel", "Email": "email", "Organization": "organization", "Street address": "street-address", "Postal code": "postal-code", "Disabled": "off"},
+      "show": "field_type == 'text' || field_type == 'tel' || field_type == 'email'"
+    },
+    "pattern": {"label": "Validation pattern", "type": "text", "source": true, "show": "field_type == 'text' || field_type == 'tel'"},
+    "min": {"label": "Minimum", "type": "text", "source": true, "show": "field_type == 'number' && value_source != 'product_quantity'"},
+    "max": {"label": "Maximum", "type": "text", "source": true, "show": "field_type == 'number' && value_source != 'product_quantity'"},
+    "step": {"label": "Step", "type": "text", "source": true, "show": "field_type == 'number' && value_source != 'product_quantity'"},
+    "rows": {"label": "Rows", "type": "range", "attrs": {"min": 2, "max": 12, "step": 1}, "show": "field_type == 'textarea'"},
+    "options": {
+      "label": "Select options",
+      "description": "One available delivery method or option per line. Use value|Label or only Label. Add |disabled as the third part to show an unavailable option.",
+      "type": "textarea",
+      "source": true,
+      "show": "field_type == 'select'"
+    },
+    "show_when_field": {
+      "label": "Controlling field name",
+      "description": "Show this field only when another field with this name has the expected value. Example: delivery.",
+      "type": "text"
+    },
+    "show_when_value": {
+      "label": "Expected value",
+      "description": "The exact option value that makes this field visible. Example: courier.",
+      "type": "text",
+      "show": "show_when_field"
+    },
+    "width": {
+      "label": "Field width",
+      "type": "select",
+      "options": {"Full": "full", "Half from phone landscape": "half", "One third from phone landscape": "third", "Two thirds from phone landscape": "two-thirds", "Auto": "auto"},
+      "show": "field_type != 'hidden'"
+    },
+    "error_text": {
+      "label": "Validation message",
+      "description": "Shown when RadicalForm marks the field invalid.",
+      "type": "text",
+      "source": true,
+      "show": "field_type != 'hidden'"
+    },
+    "status": "${builder.statusItem}",
+    "source": "${builder.source}",
+    "id": "${builder.id}",
+    "class": "${builder.cls}",
+    "attributes": "${builder.attrs}",
+    "css": {
+      "label": "CSS",
+      "description": "Custom CSS for this RadicalForm field.",
+      "type": "editor",
+      "editor": "code",
+      "mode": "css",
+      "attrs": {"debounce": 500, "hints": [".el-item", ".rm-oneclick-order__field", ".rm-oneclick-order__control", ".rf-field-error"]}
+    }
+  },
+  "fieldset": {
+    "default": {
+      "type": "tabs",
+      "fields": [
+        {"title": "Content", "fields": ["field_type", "field_name", "label", "label_link", "label_link_text", "label_link_target", "placeholder", "value", "value_source", "options"]},
+        {"title": "Settings", "fields": [
+          {"label": "Validation", "type": "group", "fields": ["required", "checked", "error_text", "pattern", "min", "max", "step"]},
+          {"label": "Conditional display", "type": "group", "fields": ["show_when_field", "show_when_value"]},
+          {"label": "Presentation", "type": "group", "fields": ["show_label", "autocomplete", "rows", "width"]}
+        ]},
+        "${builder.advancedItem}"
+      ]
+    }
+  }
+}

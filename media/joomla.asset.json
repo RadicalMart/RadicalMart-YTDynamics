@@ -9,7 +9,7 @@
       "name": "plg_system_ytdynamics.gallery",
       "type": "style",
       "uri": "plg_system_ytdynamics/gallery.min.css",
-      "version": "1.4.0-dev.9"
+      "version": "1.4.0-dev.12"
     },
     {
       "name": "plg_system_ytdynamics.gallery",
@@ -19,7 +19,7 @@
         "defer": true,
         "type": "module"
       },
-      "version": "1.4.0-dev.9"
+      "version": "1.4.0-dev.12"
     },
     {
       "name": "plg_system_ytdynamics.picker-product",
@@ -35,13 +35,13 @@
       "name": "plg_system_ytdynamics.product-interactions",
       "type": "style",
       "uri": "plg_system_ytdynamics/product-interactions.min.css",
-      "version": "1.4.0-dev.31"
+      "version": "1.4.0-dev.37"
     },
     {
       "name": "plg_system_ytdynamics.catalog-navigation",
       "type": "style",
       "uri": "plg_system_ytdynamics/catalog-navigation.min.css",
-      "version": "1.4.0-dev.8"
+      "version": "1.4.0-dev.12"
     },
     {
       "name": "plg_system_ytdynamics.catalog-navigation",
@@ -51,7 +51,7 @@
         "defer": true,
         "type": "module"
       },
-      "version": "1.4.0-dev.7"
+      "version": "1.4.0-dev.12"
     },
     {
       "name": "plg_system_ytdynamics.product-interactions",
@@ -61,13 +61,13 @@
         "defer": true,
         "type": "module"
       },
-      "version": "1.4.0-dev.20"
+      "version": "1.4.0-dev.25"
     },
     {
       "name": "plg_system_ytdynamics.table",
       "type": "style",
       "uri": "plg_system_ytdynamics/table.min.css",
-      "version": "1.4.0-dev.1"
+      "version": "1.4.0-dev.2"
     },
     {
       "name": "plg_system_ytdynamics.table",
@@ -77,13 +77,13 @@
         "defer": true,
         "type": "module"
       },
-      "version": "1.4.0-dev.1"
+      "version": "1.4.0-dev.2"
     },
     {
       "name": "plg_system_ytdynamics.toolbar",
       "type": "style",
       "uri": "plg_system_ytdynamics/toolbar.min.css",
-      "version": "1.4.0-dev.3"
+      "version": "1.4.0-dev.4"
     },
     {
       "name": "plg_system_ytdynamics.toolbar",
@@ -93,13 +93,13 @@
         "defer": true,
         "type": "module"
       },
-      "version": "1.4.0-dev.3"
+      "version": "1.4.0-dev.4"
     },
     {
       "name": "plg_system_ytdynamics.lazy-pagination",
       "type": "style",
       "uri": "plg_system_ytdynamics/lazy-pagination.min.css",
-      "version": "1.4.0-dev.3"
+      "version": "1.4.0-dev.4"
     },
     {
       "name": "plg_system_ytdynamics.lazy-pagination",
@@ -109,7 +109,23 @@
         "defer": true,
         "type": "module"
       },
-      "version": "1.4.0-dev.3"
+      "version": "1.4.0-dev.4"
+    },
+    {
+      "name": "plg_system_ytdynamics.floating-navigation",
+      "type": "style",
+      "uri": "plg_system_ytdynamics/floating-navigation.min.css",
+      "version": "1.4.0-dev.10"
+    },
+    {
+      "name": "plg_system_ytdynamics.floating-navigation",
+      "type": "script",
+      "uri": "plg_system_ytdynamics/floating-navigation.min.js",
+      "attributes": {
+        "defer": true,
+        "type": "module"
+      },
+      "version": "1.4.0-dev.10"
     }
   ]
 }

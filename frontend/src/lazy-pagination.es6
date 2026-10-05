@@ -1,4 +1,5 @@
 import './lazy-pagination.scss';
+import {observeDynamicContent} from './runtime.es6';
 
 const ROOT_SELECTOR = '[data-rm-lazy-pagination]';
 
@@ -145,9 +146,7 @@ const init = (scope = document) => {
 
 const start = () => {
     init();
-    new MutationObserver((records) => records.forEach(({addedNodes}) => addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) init(node);
-    }))).observe(document.documentElement, {childList: true, subtree: true});
+    observeDynamicContent(init);
 };
 
 if (document.readyState === 'loading') {

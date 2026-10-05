@@ -1,4 +1,5 @@
 import './catalog-navigation.scss';
+import {observeDynamicContent} from './runtime.es6';
 
 const filterItems = (filter) => filter.querySelectorAll('.accordion-item, .uk-accordion-default > li');
 const itemButton = (item) => item.querySelector('.accordion-button, .uk-accordion-title');
@@ -6,6 +7,78 @@ const itemContent = (item) => item.querySelector('.accordion-collapse, .uk-accor
 const itemInputs = (item) => Array.from(itemContent(item)?.querySelectorAll(
     'input:not([type="hidden"]):not([type="submit"]):not([data-rm-price-range-control]), select, textarea'
 ) || []);
+const desktopDrops = new WeakMap();
+const mobileAccordions = new WeakMap();
+
+const destroyComponent = (component) => {
+    try {
+        component?.$destroy?.(false);
+    } catch (error) {
+        // The source filter may have been replaced by RadicalMart already.
+    }
+};
+
+const destroyDesktopDrops = (filter) => {
+    filterItems(filter).forEach((item) => {
+        destroyComponent(desktopDrops.get(item));
+        desktopDrops.delete(item);
+        item.classList.remove('is-open');
+    });
+};
+
+const alignDesktopDrop = (item, content) => {
+    const itemRect = item.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    const viewportInset = 20;
+    const overflowRight = itemRect.left + contentRect.width - (window.innerWidth - viewportInset);
+    const minimumShift = viewportInset - itemRect.left;
+    const shift = Math.max(minimumShift, Math.min(0, -overflowRight));
+    content.style.setProperty('--rm-filter-drop-shift', `${Math.round(shift)}px`);
+};
+
+const setupDesktopDrops = (filter) => {
+    if (!window.UIkit?.drop) return;
+
+    filterItems(filter).forEach((item) => {
+        const button = itemButton(item);
+        const content = itemContent(item);
+        if (!button || !content || desktopDrops.has(item)) return;
+
+        const drop = window.UIkit.drop(content, {
+            toggle: button,
+            mode: 'click',
+            pos: 'bottom-left',
+            offset: 8,
+            flip: true,
+            shift: true,
+            container: false,
+        });
+        content.addEventListener('show', () => {
+            item.classList.add('is-open');
+            window.requestAnimationFrame(() => alignDesktopDrop(item, content));
+        });
+        content.addEventListener('shown', () => alignDesktopDrop(item, content));
+        content.addEventListener('hide', () => item.classList.remove('is-open'));
+        desktopDrops.set(item, drop);
+    });
+};
+
+const setupMobileAccordion = (filter) => {
+    if (!window.UIkit?.accordion) return;
+    filter.querySelectorAll('.uk-accordion-default').forEach((accordion) => {
+        if (mobileAccordions.has(accordion)) return;
+        accordion.setAttribute('uk-accordion', 'multiple: true; collapsible: true');
+        mobileAccordions.set(accordion, window.UIkit.accordion(accordion, {multiple: true, collapsible: true}));
+    });
+};
+
+const destroyMobileAccordions = (filter) => {
+    filter.querySelectorAll('.uk-accordion-default').forEach((accordion) => {
+        destroyComponent(mobileAccordions.get(accordion));
+        mobileAccordions.delete(accordion);
+        accordion.removeAttribute('uk-accordion');
+    });
+};
 
 const parseNumber = (value) => {
     const normalized = String(value || '').replace(/[^0-9,.-]/g, '').replace(',', '.');
@@ -125,6 +198,11 @@ const omitEmptyFormControls = (form) => {
 const closeFilterItems = (filter, except = null) => {
     filter.querySelectorAll('.accordion-item.is-open, .uk-accordion-default > li.is-open').forEach((item) => {
         if (item === except) return;
+        const drop = desktopDrops.get(item);
+        if (drop) {
+            drop.hide?.(false);
+            return;
+        }
         item.classList.remove('is-open');
         itemButton(item)?.setAttribute('aria-expanded', 'false');
         itemContent(item)?.setAttribute('aria-hidden', 'true');
@@ -135,6 +213,13 @@ const setFilterMode = (filter, desktop) => {
     filter.classList.toggle('rm-filter--desktop', desktop);
     filter.classList.toggle('rm-filter--mobile', !desktop);
     closeFilterItems(filter);
+
+    if (desktop) {
+        destroyMobileAccordions(filter);
+        setupDesktopDrops(filter);
+    } else {
+        destroyDesktopDrops(filter);
+    }
 
     filter.querySelectorAll('.accordion-collapse, .uk-accordion-content').forEach((collapse) => {
         collapse.style.removeProperty('height');
@@ -166,6 +251,8 @@ const setFilterMode = (filter, desktop) => {
             });
         }
     }
+
+    if (!desktop) setupMobileAccordion(filter);
 };
 
 const initFilter = (filter) => {
@@ -188,9 +275,10 @@ const initFilter = (filter) => {
         const button = event.target.closest('.accordion-button, .uk-accordion-title');
         if (!button || !filter.contains(button) || !desktopMode()) return;
 
+        const item = button.closest('.accordion-item, .uk-accordion-default > li');
+        if (desktopDrops.has(item)) return;
         event.preventDefault();
         event.stopPropagation();
-        const item = button.closest('.accordion-item, .uk-accordion-default > li');
         const willOpen = !item.classList.contains('is-open');
         closeFilterItems(filter, willOpen ? item : null);
         item.classList.toggle('is-open', willOpen);
@@ -266,9 +354,7 @@ const start = () => {
         });
     });
 
-    new MutationObserver((records) => records.forEach(({addedNodes}) => addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) initAll(node);
-    }))).observe(document.documentElement, {childList: true, subtree: true});
+    observeDynamicContent(initAll);
 };
 
 if (document.readyState === 'loading') {
